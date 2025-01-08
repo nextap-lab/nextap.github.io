@@ -1,477 +1,614 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nextap AI - Premium Academic Solutions</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #171717;
-            --secondary-color: #404040;
-            --accent-color: #3b82f6;
-            --text-color: #f3f4f6;
-        }
-
-        .hero-gradient {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)), url('/api/placeholder/1920/1080');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .hover-scale {
-            transition: transform 0.3s ease;
-        }
-
-        .hover-scale:hover {
-            transform: scale(1.02);
-        }
-
-        /* Roadmap styling */
-        .roadmap {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 0;
-        }
-
-        .roadmap-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--accent-color);
-            transform: translateX(-50%);
-        }
-
-        .roadmap-item {
-            position: relative;
-            margin-bottom: 30px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .roadmap-bead {
-            width: 20px;
-            height: 20px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-        }
-
-        .roadmap-content {
-            width: calc(50% - 30px);
-            padding: 15px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 8px;
-        }
-
-        /* Adjust odd (left) items to be right-aligned */
-        .roadmap-item:nth-child(odd) .roadmap-content {
-          margin-right: auto; /* Remove or override the existing margin-right property */
-          margin-left: 0;     /* Ensure it stays on the left side from the pivot */
-          text-align: right;  /* Text is right-aligned */
-        }
-        
-        /* Adjust even (right) items to be left-aligned */
-        .roadmap-item:nth-child(even) .roadmap-content {
-          margin-left: auto;  /* Remove or override existing margin-left if necessary */
-          text-align: left;   /* Text is left-aligned */
-        }
-
-        @media (max-width: 768px) {
-            .roadmap-line {
-                left: 20px;
-            }
-
-            .roadmap-bead {
-                left: 20px;
-            }
-
-            .roadmap-content {
-                width: calc(100% - 50px);
-                margin-left: 40px !important;
-            }
-        }
-
-        /* Price disclaimer */
-        .price-disclaimer {
-            font-size: 0.65rem;
-            color: #9ca3af;
-        }
-
-        /* Consultation Timer */
-        .consultation-timer {
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 8px;
-            padding: 8px 16px;
-            font-size: 0.875rem;
-            color: var(--accent-color);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .timer-icon {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Mobile menu adjustments */
-        @media (max-width: 768px) {
-            .mobile-menu {
-                position: fixed;
-                top: 64px;
-                left: 0;
-                right: 0;
-                background: var(--primary-color);
-                padding: 1rem;
-                transform: translateY(-100%);
-                transition: transform 0.3s ease;
-            }
-
-            .mobile-menu.active {
-                transform: translateY(0);
-            }
-        }
-    </style>
-</head>
-<body class="bg-black text-gray-100">
-    <!-- Currency Switch -->
-    <div class="currency-switch glass-card p-2 rounded-lg fixed top-4 right-4 z-50">
-        <select id="currencySelect" class="bg-transparent border border-gray-600 rounded p-1 text-white">
-            <option value="INR">INR</option>
-            <option value="USD">USD</option>
-        </select>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="fixed w-full z-40 bg-black bg-opacity-90 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between h-16 items-center">
-                <a href="#" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text">
-                    Nextap AI
-                </a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#services" class="text-gray-300 hover:text-white">Services</a>
-                    <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
-                    <div class="consultation-timer">
-                        <svg class="timer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Schedule within 12hrs
-                    </div>
-                </div>
-                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div class="mobile-menu md:hidden">
-            <div class="flex flex-col space-y-4 px-4">
-                <a href="#services" class="text-gray-300 hover:text-white">Services</a>
-                <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
-                <div class="consultation-timer">
-                    <svg class="timer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Schedule within 12hrs
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <div class="hero-gradient min-h-screen flex items-center pt-16">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-7xl font-bold mb-6 leading-tight">
-                Your Success.<br>Our Commitment.
-            </h1>
-            <p class="text-xl md:text-2xl mb-8 text-gray-300">100% Learning on You. Full Work on Us.</p>
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <button onclick="scrollToCalculator()" class="bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition-all">
-                    Get Custom Quote
-                </button>
-                <button onclick="navigateToSchedule()" class="bg-transparent border border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-black transition-all">
-                    Schedule Consultation
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Services Section with Price Ranges -->
-    <section id="services" class="py-20 bg-gray-900">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-16">Premium Services</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Report Writing -->
-                <div class="glass-card p-8 rounded-xl hover-scale">
-                    <h3 class="text-2xl font-semibold mb-4">Report Writing</h3>
-                    <p class="mb-4 text-gray-400">Professional reports crafted with thorough research and impeccable attention to detail</p>
-                    <p class="text-xl font-semibold mb-2">₹3-8/word</p>
-                    <p class="price-disclaimer mb-6">*Prices may vary based on complexity and requirements</p>
-                    <button onclick="scrollToCalculator()" class="w-full bg-transparent border border-blue-500 text-blue-500 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all">
-                        Get Quote
-                    </button>
-                </div>
-
-                <!-- Coding Assistance -->
-                <div class="glass-card p-8 rounded-xl hover-scale">
-                    <h3 class="text-2xl font-semibold mb-4">Coding Projects</h3>
-                    <p class="mb-4 text-gray-400">Expert programming assistance across all major languages and frameworks</p>
-                    <p class="text-xl font-semibold mb-2">Custom Quote</p>
-                    <p class="price-disclaimer mb-6">*Based on project scope and technical requirements</p>
-                    <button onclick="scrollToCalculator()" class="w-full bg-transparent border border-blue-500 text-blue-500 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all">
-                        Get Quote
-                    </button>
-                </div>
-
-                <!-- Presentation Design -->
-                <div class="glass-card p-8 rounded-xl hover-scale">
-                    <h3 class="text-2xl font-semibold mb-4">Presentations</h3>
-                    <p class="mb-4 text-gray-400">Captivating PowerPoint presentations designed to leave lasting impressions</p>
-                    <p class="text-xl font-semibold mb-2">₹500-1000/slide</p>
-                    <p class="price-disclaimer mb-6">*Varies by design complexity and research required</p>
-                    <button onclick="scrollToCalculator()" class="w-full bg-transparent border border-blue-500 text-blue-500 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all">
-                        Get Quote
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Project Roadmap -->
-    <section class="py-20 bg-black">
-        <h2 class="text-4xl font-bold text-center mb-16">Project Journey</h2>
-        <div class="roadmap">
-            <div class="roadmap-line"></div>
-            <div class="roadmap-item">
-                <div class="roadmap-bead"></div>
-                <div class="roadmap-content">
-                    <h3 class="font-semibold text-lg mb-2">1. Get Quote</h3>
-                    <p class="text-gray-400">Calculate your investment based on project requirements</p>
-                </div>
-            </div>
-            <div class="roadmap-item">
-                <div class="roadmap-bead"></div>
-                <div class="roadmap-content">
-                    <h3 class="font-semibold text-lg mb-2">2. One-to-One Consultation</h3>
-                    <p class="text-gray-400">Detailed discussion of your project needs and expectations</p>
-                </div>
-            </div>
-            <div class="roadmap-item">
-                <div class="roadmap-bead"></div>
-                <div class="roadmap-content">
-                    <h3 class="font-semibold text-lg mb-2">3. Project Work Live</h3>
-                    <p class="text-gray-400">Begin working on your project with regular updates</p>
-                </div>
-            </div>
-            <div class="roadmap-item">
-                <div class="roadmap-bead"></div>
-                <div class="roadmap-content">
-                    <h3 class="font-semibold text-lg mb-2">4. Live Monitoring Status</h3>
-                    <p class="text-gray-400">Track progress in real-time through our dashboard</p>
-                </div>
-            </div>
-            <div class="roadmap-item">
-                <div class="roadmap-bead"></div>
-                <div class="roadmap-content">
-                    <h3 class="font-semibold text-lg mb-2">5. Project Delivery</h3>
-                    <p class="text-gray-400">Receive your completed project on time</p>
-                </div>
-            </div>
-            <div class="roadmap-item">
-                <div class="roadmap-bead"></div>
-                <div class="roadmap-content">
-                    <h3 class="font-semibold text-lg mb-2">6. Changes</h3>
-                    <p class="text-gray-400">Up to 5 minor revisions included</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Calculator Section -->
-    <section id="calculator" class="py-20 bg-black">
-        <div class="max-w-3xl mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-16">Get Your Custom Quote</h2>
-            <div class="glass-card p-8 rounded-xl">
-                <div class="mb-6">
-                    <label class="block mb-2 text-gray-300">Service Type</label>
-                    <select id="serviceType" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white">
-                        <option value="report">Report Writing</option>
-                        <option value="presentation">Presentation Design</option>
-                        <option value="coding">Coding Project</option>
-                    </select>
-                </div>
-                <div id="wordCountDiv" class="mb-6">
-                    <label class="block mb-2 text-gray-300">Project Scope</label>
-                    <input type="number" id="wordCount" placeholder="Number of words" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" min="1">
-                </div>
-                <div id="slideCountDiv" class="mb-6 hidden">
-                    <label class="block mb-2 text-gray-300">Number of Slides</label>
-                    <input type="number" id="slideCount" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" min="1">
-                </div>
-                <div class="mb-6">
-                    <label class="block mb-2 text-gray-300">Quality Level</label>
-                    <select id="qualityLevel" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white">
-                        <option value="standard">Standard Quality</option>
-                        <option value="premium">Premium Quality</option>
-                        <option value="enterprise">Enterprise Quality</option>
-                    </select>
-                </div>
-                <div class="text-2xl font-semibold mb-6 text-center">
-                    Estimated Investment: <span id="estimatedCost" class="text-blue-500">₹0</span>
-                </div>
-                <button onclick="navigateToSchedule()" class="w-full bg-blue-600 text-white py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition-all">
-                    Proceed with Order
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Trust Badges Section -->
-    <section class="py-16 bg-gray-900">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="flex flex-col items-center">
-                    <div class="text-4xl font-bold text-blue-500 mb-2">100%</div>
-                    <div class="text-gray-400">Satisfaction Rate</div>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="text-4xl font-bold text-blue-500 mb-2">24/7</div>
-                    <div class="text-gray-400">Support Available</div>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="text-4xl font-bold text-blue-500 mb-2">5000+</div>
-                    <div class="text-gray-400">Projects Completed</div>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="text-4xl font-bold text-blue-500 mb-2">98%</div>
-                    <div class="text-gray-400">On-Time Delivery</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-  // Global variable to store the conversion rate
-  let conversionRate = 85.5; // Default fallback rate
-
-  // Fetch live currency conversion rate on window load
-  window.onload = function () {
-    fetch('https://api.frankfurter.app/latest?from=USD&to=INR')
-      .then((response) => response.json())
-      .then((data) => {
-        // Update conversionRate with fetched data
-        if (data.rates && data.rates.INR) {
-          conversionRate = data.rates.INR;
-          console.log('Fetched conversion rate:', conversionRate);
-        } else {
-          console.error('Invalid API response:', data);
-        }
-        // Trigger updateCalculator to initialize cost display
-        updateCalculator();
-      })
-      .catch((error) => {
-        console.error('Error fetching conversion rate:', error);
-        // Use default conversionRate if fetch fails
-        updateCalculator();
-      });
-  };
-
-  // Select HTML elements
-  const currencySelect = document.getElementById('currencySelect');
-  const serviceType = document.getElementById('serviceType');
-  const wordCount = document.getElementById('wordCount');
-  const slideCount = document.getElementById('slideCount');
-  const qualityLevel = document.getElementById('qualityLevel');
-  const wordCountDiv = document.getElementById('wordCountDiv');
-  const slideCountDiv = document.getElementById('slideCountDiv');
-  const estimatedCost = document.getElementById('estimatedCost');
-
-  // Update calculator function to use live conversion rate
-  function updateCalculator() {
-    const currency = currencySelect.value;
-    let cost = 0;
-    const type = serviceType.value;
-
-    // Define pricing data
-    const pricingData = {
-      report: { standard: 3, premium: 5, enterprise: 8 },
-      presentation: { slide: 500 },
-      coding: { quote: 'custom' },
-    };
-
-    if (type === 'report') {
-      const rates = pricingData.report;
-      cost = wordCount.value * rates[qualityLevel.value];
-    } else if (type === 'presentation') {
-      cost = slideCount.value * pricingData.presentation.slide;
-    } else if (type === 'coding') {
-      estimatedCost.textContent = 'Custom Quote';
-      return;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nextap AI - Premium Academic Solutions</title>
+  <!-- Tailwind CSS -->
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --primary-color: #171717;
+      --secondary-color: #404040;
+      --accent-color: #3b82f6;
+      --text-color: #f3f4f6;
     }
 
-    if (type !== 'coding') {
-      if (currency === 'USD') {
-        // Convert cost to USD using the live conversion rate
-        estimatedCost.textContent = '$' + (cost / conversionRate).toFixed(2);
-      } else {
-        // Display cost in INR
-        estimatedCost.textContent = '₹' + cost.toFixed(2);
+    /* Hero background image (replace the URL with your preferred image) */
+    .hero-gradient {
+      background: linear-gradient(
+          rgba(0, 0, 0, 0.7),
+          rgba(0, 0, 0, 0.9)
+        ),
+        url('https://via.placeholder.com/1920x1080');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .hover-scale {
+      transition: transform 0.3s ease;
+    }
+    .hover-scale:hover {
+      transform: scale(1.02);
+    }
+
+    /* Roadmap styling */
+    .roadmap {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 0;
+    }
+
+    .roadmap-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--accent-color);
+      transform: translateX(-50%);
+    }
+
+    .roadmap-item {
+      position: relative;
+      margin-bottom: 30px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      opacity: 0;              /* Start invisible for animation */
+      transform: translateY(30px); /* Start slightly shifted down */
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .roadmap-item.visible {
+      opacity: 1;             /* Fade in */
+      transform: translateY(0);  /* Slide up */
+    }
+
+    .roadmap-bead {
+      width: 20px;
+      height: 20px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    .roadmap-content {
+      width: calc(50% - 30px);
+      padding: 15px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 8px;
+    }
+
+    /* Align left items to the right, right items to the left */
+    .roadmap-item:nth-child(odd) .roadmap-content {
+      margin-right: 30px;
+      text-align: right;
+    }
+    .roadmap-item:nth-child(even) .roadmap-content {
+      margin-left: auto;
+      text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      .roadmap-line {
+        left: 20px;
+      }
+      .roadmap-bead {
+        left: 20px;
+      }
+      .roadmap-content {
+        width: calc(100% - 50px);
+        margin-left: 40px !important;
       }
     }
-  }
 
-  // Event listeners
-  [currencySelect, serviceType, wordCount, slideCount, qualityLevel].forEach((element) => {
-    if (element) {
-      element.addEventListener('input', updateCalculator);
+    /* Price disclaimer */
+    .price-disclaimer {
+      font-size: 0.65rem;
+      color: #9ca3af;
     }
-  });
 
-  // Service type change event handler
-  serviceType.addEventListener('change', () => {
-    const type = serviceType.value;
-    wordCountDiv.style.display = type === 'report' ? 'block' : 'none';
-    slideCountDiv.style.display = type === 'presentation' ? 'block' : 'none';
-    qualityLevel.style.display = type === 'report' ? 'block' : 'none';
-
-    if (type === 'coding') {
-      estimatedCost.textContent = 'Custom Quote';
-    } else {
-      updateCalculator();
+    /* Consultation Timer */
+    .consultation-timer {
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      color: var(--accent-color);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
-  });
 
-  // Navigation functions
-  function scrollToCalculator() {
-    document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
-  }
+    .timer-icon {
+      width: 16px;
+      height: 16px;
+    }
 
-  function navigateToSchedule() {
-    window.location.href = 'schedule.html';
-  }
+    /* Mobile menu adjustments */
+    @media (max-width: 768px) {
+      .mobile-menu {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--primary-color);
+        padding: 1rem;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+      }
 
-  // Add mobile menu toggle
-  function toggleMobileMenu() {
-    const mobileMenu = document.querySelector('.mobile-menu');
-    mobileMenu.classList.toggle('active');
-  }
-</script>
+      .mobile-menu.active {
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-black text-gray-100">
+  <!-- Currency Switch -->
+  <div class="currency-switch glass-card p-2 rounded-lg fixed top-4 right-4 z-50">
+    <select id="currencySelect" class="bg-transparent border border-gray-600 rounded p-1 text-white">
+      <option value="INR">INR</option>
+      <option value="USD">USD</option>
+    </select>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="fixed w-full z-40 bg-black bg-opacity-90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex justify-between h-16 items-center">
+        <a
+          href="#"
+          class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text"
+        >
+          Nextap AI
+        </a>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#services" class="text-gray-300 hover:text-white">Services</a>
+          <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
+          <div class="consultation-timer">
+            <svg
+              class="timer-icon"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            Schedule within 12hrs
+          </div>
+        </div>
+        <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu md:hidden">
+      <div class="flex flex-col space-y-4 px-4">
+        <a href="#services" class="text-gray-300 hover:text-white">Services</a>
+        <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
+        <div class="consultation-timer">
+          <svg
+            class="timer-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          Schedule within 12hrs
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero-gradient min-h-screen flex items-center pt-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-7xl font-bold mb-6 leading-tight">
+        Your Success.<br />Our Commitment.
+      </h1>
+      <p class="text-xl md:text-2xl mb-8 text-gray-300">
+        100% Learning on You. Full Work on Us.
+      </p>
+      <div class="flex flex-col md:flex-row justify-center gap-4">
+        <button
+          onclick="scrollToCalculator()"
+          class="bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition-all"
+        >
+          Get Custom Quote
+        </button>
+        <button
+          onclick="navigateToSchedule()"
+          class="bg-transparent border border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-black transition-all"
+        >
+          Schedule Consultation
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Services Section with Price Ranges -->
+  <section id="services" class="py-20 bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-4xl font-bold text-center mb-16">Premium Services</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Report Writing -->
+        <div class="glass-card p-8 rounded-xl hover-scale">
+          <h3 class="text-2xl font-semibold mb-4">Report Writing</h3>
+          <p class="mb-4 text-gray-400">
+            Professional reports crafted with thorough research and impeccable
+            attention to detail
+          </p>
+          <p class="text-xl font-semibold mb-2">₹3-8/word</p>
+          <p class="price-disclaimer mb-6">
+            *Prices may vary based on complexity and requirements
+          </p>
+          <button
+            onclick="scrollToCalculator()"
+            class="w-full bg-transparent border border-blue-500 text-blue-500 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all"
+          >
+            Get Quote
+          </button>
+        </div>
+
+        <!-- Coding Assistance -->
+        <div class="glass-card p-8 rounded-xl hover-scale">
+          <h3 class="text-2xl font-semibold mb-4">Coding Projects</h3>
+          <p class="mb-4 text-gray-400">
+            Expert programming assistance across all major languages and
+            frameworks
+          </p>
+          <p class="text-xl font-semibold mb-2">Custom Quote</p>
+          <p class="price-disclaimer mb-6">
+            *Based on project scope and technical requirements
+          </p>
+          <button
+            onclick="scrollToCalculator()"
+            class="w-full bg-transparent border border-blue-500 text-blue-500 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all"
+          >
+            Get Quote
+          </button>
+        </div>
+
+        <!-- Presentation Design -->
+        <div class="glass-card p-8 rounded-xl hover-scale">
+          <h3 class="text-2xl font-semibold mb-4">Presentations</h3>
+          <p class="mb-4 text-gray-400">
+            Captivating PowerPoint presentations designed to leave lasting
+            impressions
+          </p>
+          <p class="text-xl font-semibold mb-2">₹500-1000/slide</p>
+          <p class="price-disclaimer mb-6">
+            *Varies by design complexity and research required
+          </p>
+          <button
+            onclick="scrollToCalculator()"
+            class="w-full bg-transparent border border-blue-500 text-blue-500 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all"
+          >
+            Get Quote
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Project Roadmap -->
+  <section class="py-20 bg-black">
+    <h2 class="text-4xl font-bold text-center mb-16">Project Journey</h2>
+    <div class="roadmap">
+      <div class="roadmap-line"></div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-bead"></div>
+        <div class="roadmap-content">
+          <h3 class="font-semibold text-lg mb-2">1. Get Quote</h3>
+          <p class="text-gray-400">
+            Calculate your investment based on project requirements
+          </p>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-bead"></div>
+        <div class="roadmap-content">
+          <h3 class="font-semibold text-lg mb-2">2. One-to-One Consultation</h3>
+          <p class="text-gray-400">
+            Detailed discussion of your project needs and expectations
+          </p>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-bead"></div>
+        <div class="roadmap-content">
+          <h3 class="font-semibold text-lg mb-2">3. Project Work Live</h3>
+          <p class="text-gray-400">
+            Begin working on your project with regular updates
+          </p>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-bead"></div>
+        <div class="roadmap-content">
+          <h3 class="font-semibold text-lg mb-2">4. Live Monitoring Status</h3>
+          <p class="text-gray-400">
+            Track progress in real-time through our dashboard
+          </p>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-bead"></div>
+        <div class="roadmap-content">
+          <h3 class="font-semibold text-lg mb-2">5. Project Delivery</h3>
+          <p class="text-gray-400">
+            Receive your completed project on time
+          </p>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-bead"></div>
+        <div class="roadmap-content">
+          <h3 class="font-semibold text-lg mb-2">6. Changes</h3>
+          <p class="text-gray-400">
+            Up to 5 minor revisions included
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator Section -->
+  <section id="calculator" class="py-20 bg-black">
+    <div class="max-w-3xl mx-auto px-4">
+      <h2 class="text-4xl font-bold text-center mb-16">Get Your Custom Quote</h2>
+      <div class="glass-card p-8 rounded-xl">
+        <div class="mb-6">
+          <label class="block mb-2 text-gray-300">Service Type</label>
+          <select
+            id="serviceType"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white"
+          >
+            <option value="report">Report Writing</option>
+            <option value="presentation">Presentation Design</option>
+            <option value="coding">Coding Project</option>
+          </select>
+        </div>
+        <div id="wordCountDiv" class="mb-6">
+          <label class="block mb-2 text-gray-300">Project Scope</label>
+          <input
+            type="number"
+            id="wordCount"
+            placeholder="Number of words"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white"
+            min="1"
+          />
+        </div>
+        <div id="slideCountDiv" class="mb-6 hidden">
+          <label class="block mb-2 text-gray-300">Number of Slides</label>
+          <input
+            type="number"
+            id="slideCount"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white"
+            min="1"
+          />
+        </div>
+        <div class="mb-6">
+          <label class="block mb-2 text-gray-300">Quality Level</label>
+          <select
+            id="qualityLevel"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white"
+          >
+            <option value="standard">Standard Quality</option>
+            <option value="premium">Premium Quality</option>
+            <option value="enterprise">Enterprise Quality</option>
+          </select>
+        </div>
+        <div class="text-2xl font-semibold mb-6 text-center">
+          Estimated Investment:
+          <span id="estimatedCost" class="text-blue-500">₹0</span>
+        </div>
+        <button
+          onclick="navigateToSchedule()"
+          class="w-full bg-blue-600 text-white py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition-all"
+        >
+          Proceed with Order
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Badges Section -->
+  <section class="py-16 bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="flex flex-col items-center">
+          <div class="text-4xl font-bold text-blue-500 mb-2">100%</div>
+          <div class="text-gray-400">Satisfaction Rate</div>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="text-4xl font-bold text-blue-500 mb-2">24/7</div>
+          <div class="text-gray-400">Support Available</div>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="text-4xl font-bold text-blue-500 mb-2">5000+</div>
+          <div class="text-gray-400">Projects Completed</div>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="text-4xl font-bold text-blue-500 mb-2">98%</div>
+          <div class="text-gray-400">On-Time Delivery</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Global variable to store the conversion rate
+    let conversionRate = 85.5; // Default fallback rate
+
+    // Fetch live currency conversion rate on window load
+    window.onload = function () {
+      fetch('https://api.frankfurter.app/latest?from=USD&to=INR')
+        .then((response) => response.json())
+        .then((data) => {
+          // Update conversionRate with fetched data
+          if (data.rates && data.rates.INR) {
+            conversionRate = data.rates.INR;
+            console.log('Fetched conversion rate:', conversionRate);
+          } else {
+            console.error('Invalid API response:', data);
+          }
+          // Trigger updateCalculator to initialize cost display
+          updateCalculator();
+        })
+        .catch((error) => {
+          console.error('Error fetching conversion rate:', error);
+          // Use default conversionRate if fetch fails
+          updateCalculator();
+        });
+    };
+
+    // Select HTML elements
+    const currencySelect = document.getElementById('currencySelect');
+    const serviceType = document.getElementById('serviceType');
+    const wordCount = document.getElementById('wordCount');
+    const slideCount = document.getElementById('slideCount');
+    const qualityLevel = document.getElementById('qualityLevel');
+    const wordCountDiv = document.getElementById('wordCountDiv');
+    const slideCountDiv = document.getElementById('slideCountDiv');
+    const estimatedCost = document.getElementById('estimatedCost');
+
+    // Update calculator function to use live conversion rate
+    function updateCalculator() {
+      const currency = currencySelect.value;
+      let cost = 0;
+      const type = serviceType.value;
+
+      // Define pricing data
+      const pricingData = {
+        report: { standard: 3, premium: 5, enterprise: 8 },
+        presentation: { slide: 500 },
+        coding: { quote: 'custom' },
+      };
+
+      if (type === 'report') {
+        const rates = pricingData.report;
+        cost = wordCount.value * rates[qualityLevel.value];
+      } else if (type === 'presentation') {
+        cost = slideCount.value * pricingData.presentation.slide;
+      } else if (type === 'coding') {
+        estimatedCost.textContent = 'Custom Quote';
+        return;
+      }
+
+      if (type !== 'coding') {
+        if (currency === 'USD') {
+          // Convert cost to USD using the live conversion rate
+          estimatedCost.textContent = '$' + (cost / conversionRate).toFixed(2);
+        } else {
+          // Display cost in INR
+          estimatedCost.textContent = '₹' + cost.toFixed(2);
+        }
+      }
+    }
+
+    // Event listeners
+    [currencySelect, serviceType, wordCount, slideCount, qualityLevel].forEach(
+      (element) => {
+        if (element) {
+          element.addEventListener('input', updateCalculator);
+        }
+      }
+    );
+
+    // Service type change event handler
+    serviceType.addEventListener('change', () => {
+      const type = serviceType.value;
+      wordCountDiv.style.display = type === 'report' ? 'block' : 'none';
+      slideCountDiv.style.display = type === 'presentation' ? 'block' : 'none';
+      qualityLevel.style.display = type === 'report' ? 'block' : 'none';
+
+      if (type === 'coding') {
+        estimatedCost.textContent = 'Custom Quote';
+      } else {
+        updateCalculator();
+      }
+    });
+
+    // Navigation functions
+    function scrollToCalculator() {
+      document.getElementById('calculator').scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+
+    function navigateToSchedule() {
+      // Replace with your actual schedule page or link
+      window.location.href = 'schedule.html';
+    }
+
+    // Toggle for mobile menu
+    function toggleMobileMenu() {
+      const mobileMenu = document.querySelector('.mobile-menu');
+      mobileMenu.classList.toggle('active');
+    }
+
+    // Intersection Observer to animate roadmap items
+    const roadmapItems = document.querySelectorAll('.roadmap-item');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Adjust for earlier/later triggers
+      }
+    );
+    roadmapItems.forEach((item) => observer.observe(item));
+  </script>
 </body>
 </html>

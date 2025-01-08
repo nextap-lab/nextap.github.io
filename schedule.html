@@ -293,36 +293,95 @@
         document.getElementById('appointmentForm').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Replace the existing fetchAndGenerateTimeSlots function with this:
-    async function fetchAndGenerateTimeSlots() {
-        const timeSlotsContainer = document.getElementById('timeSlots');
-        timeSlotsContainer.innerHTML = '<div class="text-center">Loading available slots...</div>';
-    
-        try {
-            const formattedDate = selectedDate.toISOString().split('T')[0];
-            const response = await fetch(`${WEBAPP_URL}?date=${formattedDate}`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Origin': window.location.origin
-                },
-                mode: 'cors'  // Explicitly set CORS mode
-            });
-    
-            if (!response.ok) {
-                // If CORS fails, fallback to JSONP approach
-                return await fetchTimeSlotsFallback(formattedDate);
-            }
-    
-            const data = await response.json();
-            if (data.success) generateTimeSlots(data.slots);
-            else timeSlotsContainer.innerHTML = `<div class="text-red-500">${data.message}</div>`;
-        } catch (error) {
-            console.error('Error fetching time slots:', error);
-            // Try fallback method if main request fails
-            await fetchTimeSlotsFallback(formattedDate);
+    // First, let's create a utility function to handle the JSONP requests
+function loadJSONP(url) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        const callbackName = 'jsonp_callback_' + Date.now();
+
+        // Create the callback function
+        window[callbackName] = (data) => {
+            resolve(data);
+            document.body.removeChild(script);
+            delete window[callbackName];
+        };
+
+        // Add the callback parameter to the URL
+        const urlWithCallback = `${url}${url.includes('?') ? '&' : '?'}callback=${callbackName}`;
+        
+        // Configure the script tag
+        script.src = urlWithCallback;
+        script.onerror = () => {
+            reject(new Error('Failed to load JSONP'));
+            document.body.removeChild(script);
+            delete window[callbackName];
+        };
+
+        // Add the script tag to the page
+        document.body.appendChild(script);
+    });
+}
+
+// Update the fetch time slots function
+async function fetchAndGenerateTimeSlots() {
+    const timeSlotsContainer = document.getElementById('timeSlots');
+    timeSlotsContainer.innerHTML = '<div class="text-center">Loading available slots...</div>';
+
+    try {
+        const formattedDate = selectedDate.toISOString().split('T')[0];
+        
+        // Use JSONP approach directly since we know CORS isn't working
+        const data = await loadJSONP(`${WEBAPP_URL}?date=${formattedDate}`);
+        
+        if (data.success) {
+            generateTimeSlots(data.slots);
+        } else {
+            timeSlotsContainer.innerHTML = `<div class="text-red-500">${data.message || 'Failed to load time slots'}</div>`;
         }
+    } catch (error) {
+        console.error('Error fetching time slots:', error);
+        timeSlotsContainer.innerHTML = '<div class="text-red-500">Failed to load time slots. Please try again later.</div>';
     }
+}
+
+// Update the form submission function to use JSONP for POST requests
+async function handleFormSubmit(event) {
+    event.preventDefault();
+    const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        date: selectedDate.toISOString().split('T')[0],
+        time: selectedTime,
+        message: document.getElementById('message').value || ''
+    };
+
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+    submitButton.textContent = 'Scheduling...';
+    submitButton.disabled = true;
+
+    try {
+        // Encode the form data into the URL for JSONP
+        const queryString = Object.entries(formData)
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
+        
+        const data = await loadJSONP(`${WEBAPP_URL}?${queryString}&action=submit`);
+        
+        if (data.success) {
+            alert('Appointment scheduled successfully!');
+            window.location.reload();
+        } else {
+            throw new Error(data.message || 'Failed to schedule appointment');
+        }
+    } catch (error) {
+        console.error('Error scheduling appointment:', error);
+        alert(`Failed to schedule appointment: ${error.message}`);
+    } finally {
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+    }
+}
     
     // Add this fallback function using JSONP approach
     function fetchTimeSlotsFallback(date) {
@@ -350,50 +409,6 @@
     
             document.body.appendChild(script);
         });
-    }
-    
-    // Also update the form submission function to handle CORS:
-    async function handleFormSubmit(event) {
-        event.preventDefault();
-        const formData = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            date: selectedDate.toISOString().split('T')[0],
-            time: selectedTime,
-            message: document.getElementById('message').value || ''
-        };
-    
-        const submitButton = event.target.querySelector('button[type="submit"]');
-        const originalText = submitButton.textContent;
-        submitButton.textContent = 'Scheduling...';
-        submitButton.disabled = true;
-    
-        try {
-            const response = await fetch(WEBAPP_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Origin': window.location.origin
-                },
-                mode: 'cors',
-                body: JSON.stringify(formData)
-            });
-    
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    
-            const result = await response.json();
-            if (result.success) {
-                alert('Appointment scheduled successfully!');
-                window.location.reload();
-            } else throw new Error(result.message);
-        } catch (error) {
-            console.error('Error scheduling appointment:', error);
-            alert(`Failed to schedule appointment: ${error.message}`);
-        } finally {
-            submitButton.textContent = originalText;
-            submitButton.disabled = false;
-        }
     }
         
 

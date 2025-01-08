@@ -206,7 +206,7 @@
     </div>
 
     <script>
-    const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwdcIpCKqD3SQTcMIhCaOKz47idcnDUMZtFM0FXxPaoM2KaP94NaiGBfC-vmXkIcw4/exec';
+    const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwWW2Mukm1BF6WaSCwbQ3jySsSm62FOZ7w36STJudQd0YAb4tlYRmMDMxscsFNnuhYf/exec';
     let currentDate = new Date();
     let selectedDate = null;
     let selectedTime = null;
@@ -388,9 +388,10 @@
             const response = await fetch(WEBAPP_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'text/plain;charset=utf-8' // Set to text/plain to avoid CORS preflight
+                    'Content-Type': 'application/json' // Set to application/json for proper CORS handling
                 },
                 body: JSON.stringify(formData),
+                mode: 'cors', // Ensure CORS is enabled
                 redirect: 'follow' // Ensure redirects are followed
             });
 

@@ -43,6 +43,10 @@
             cursor: not-allowed;
         }
 
+        .calendar-day.today {
+            border: 2px solid var(--accent-color);
+        }
+
         .time-slot {
             transition: all 0.3s ease;
             cursor: pointer;
@@ -88,13 +92,15 @@
                 <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text">
                     Nextap AI
                 </a>
-                <h1 class="text-lg text-white">Nextap AI | Schedule One-to-One</h1>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
     <div class="pt-20 max-w-6xl mx-auto px-4">
+        <!-- Heading -->
+        <h1 class="text-center text-3xl font-bold mb-8">Nextap AI | Schedule One-to-one</h1>
+
         <!-- Progress Bar -->
         <div class="mb-8">
             <div class="h-2 bg-gray-800 rounded-full">
@@ -140,7 +146,7 @@
             <div class="bg-gray-800 p-6 rounded-xl">
                 <h3 class="text-xl font-semibold mb-4">Confirm Your Appointment</h3>
                 <div class="space-y-4">
-                    <p>Selected Date: <span id="selectedDateDisplay"></span></p>
+                    <p>Selected Date: <span id="selectedDateDisplay"></span> (<span id="selectedDayDisplay"></span>)</p>
                     <p>Selected Time: <span id="selectedTimeDisplay"></span></p>
                     <button onclick="confirmAppointment()" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-all">
                         Confirm Appointment
@@ -166,10 +172,10 @@
         function generateCalendar() {
             const daysContainer = document.getElementById('calendarDays');
             const monthDisplay = document.getElementById('currentMonth');
-            
+
             const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
             const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-            
+
             monthDisplay.textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
             daysContainer.innerHTML = '';
 
@@ -184,6 +190,9 @@
                 dayElement.className = 'calendar-day p-2 rounded-lg text-center';
 
                 const dateToCheck = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+                if (dateToCheck.toDateString() === new Date().toDateString()) {
+                    dayElement.classList.add('today');
+                }
                 if (dateToCheck < new Date().setHours(0,0,0,0)) {
                     dayElement.classList.add('disabled');
                 } else {
@@ -205,7 +214,7 @@
         function generateTimeSlots() {
             const timeSlotsContainer = document.getElementById('timeSlots');
             timeSlotsContainer.innerHTML = '';
-            
+
             const times = [
                 '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
                 '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'
@@ -226,11 +235,10 @@
             selectedTime = time;
             document.getElementById('confirmation').classList.remove('hidden');
             document.getElementById('selectedDateDisplay').textContent = selectedDate.toLocaleDateString();
+            document.getElementById('selectedDayDisplay').textContent = selectedDate.toLocaleString('default', { weekday: 'long' });
             document.getElementById('selectedTimeDisplay').textContent = time;
             updateProgressBar();
-
-            // Scroll to the confirmation section
-            document.getElementById('confirmation').scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
         function confirmAppointment() {

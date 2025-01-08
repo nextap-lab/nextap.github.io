@@ -206,219 +206,233 @@
     </div>
 
     <script>
-        const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby_mzKUD1mOBCyVQL64sXmDXRd4_oNEcVNjIefxWb8a2VarEPc0zQVYOIKtuZUrsEdx/exec';
-        let currentDate = new Date();
-        let selectedDate = null;
-        let selectedTime = null;
-        let progress = 0;
-        
-        // Update progress bar based on user actions
-        function updateProgressBar() {
-            const progressBar = document.querySelector('.progress-bar');
-            if (selectedDate && !selectedTime) progress = 33;
-            else if (selectedDate && selectedTime) progress = 66;
-            else if (document.getElementById('appointmentForm').classList.contains('active')) progress = 100;
-            progressBar.style.width = `${progress}%`;
+    const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby_mzKUD1mOBCyVQL64sXmDXRd4_oNEcVNjIefxWb8a2VarEPc0zQVYOIKtuZUrsEdx/exec';
+    let currentDate = new Date();
+    let selectedDate = null;
+    let selectedTime = null;
+    let progress = 0;
+
+    // Update progress bar based on user actions
+    function updateProgressBar() {
+        const progressBar = document.querySelector('.progress-bar');
+        if (selectedDate && !selectedTime) progress = 33;
+        else if (selectedDate && selectedTime) progress = 66;
+        else if (document.getElementById('appointmentForm').classList.contains('active')) progress = 100;
+        progressBar.style.width = `${progress}%`;
+    }
+
+    // Generate calendar UI
+    function generateCalendar() {
+        const daysContainer = document.getElementById('calendarDays');
+        const monthDisplay = document.getElementById('currentMonth');
+
+        const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+        monthDisplay.textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+        daysContainer.innerHTML = '';
+
+        // Add empty cells for days before the first day of the month
+        for (let i = 0; i < firstDay.getDay(); i++) {
+            daysContainer.appendChild(document.createElement('div'));
         }
-        
-        // Generate calendar UI
-        function generateCalendar() {
-            const daysContainer = document.getElementById('calendarDays');
-            const monthDisplay = document.getElementById('currentMonth');
-        
-            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-        
-            monthDisplay.textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-            daysContainer.innerHTML = '';
-        
-            // Add empty cells for days before the first day of the month
-            for (let i = 0; i < firstDay.getDay(); i++) {
-                daysContainer.appendChild(document.createElement('div'));
+
+        for (let day = 1; day <= lastDay.getDate(); day++) {
+            const dayElement = document.createElement('div');
+            dayElement.textContent = day;
+            dayElement.className = 'calendar-day p-2 rounded-lg text-center';
+
+            const dateToCheck = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+            if (dateToCheck.toDateString() === new Date().toDateString()) {
+                dayElement.classList.add('today');
             }
-        
-            for (let day = 1; day <= lastDay.getDate(); day++) {
-                const dayElement = document.createElement('div');
-                dayElement.textContent = day;
-                dayElement.className = 'calendar-day p-2 rounded-lg text-center';
-        
-                const dateToCheck = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-                if (dateToCheck.toDateString() === new Date().toDateString()) {
-                    dayElement.classList.add('today');
-                }
-                if (dateToCheck < new Date().setHours(0,0,0,0)) {
-                    dayElement.classList.add('disabled');
-                } else {
-                    dayElement.addEventListener('click', () => selectDate(day));
-                }
-        
-                daysContainer.appendChild(dayElement);
+            if (dateToCheck < new Date().setHours(0,0,0,0)) {
+                dayElement.classList.add('disabled');
+            } else {
+                dayElement.addEventListener('click', () => selectDate(day));
             }
+
+            daysContainer.appendChild(dayElement);
         }
-        
-        // Handle date selection
-        async function selectDate(day) {
-            document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('selected'));
-            selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-            event.target.classList.add('selected');
-            await fetchAndGenerateTimeSlots();
-            updateProgressBar();
-        }
-        
-        // Fetch available time slots from the backend
-        async function fetchAndGenerateTimeSlots() {
-            const timeSlotsContainer = document.getElementById('timeSlots');
-            timeSlotsContainer.innerHTML = '<div class="text-center">Loading available slots...</div>';
-        
-            try {
-                const formattedDate = selectedDate.toISOString().split('T')[0];
-                const response = await fetch(`${WEBAPP_URL}?date=${formattedDate}`);
-                const data = await response.json();
-        
-                if (data.success) {
-                    generateTimeSlots(data.slots);
-                } else {
-                    timeSlotsContainer.innerHTML = '<div class="text-red-500">Failed to load time slots. Please try again.</div>';
-                }
-            } catch (error) {
-                console.error('Error fetching time slots:', error);
-                generateTimeSlots(); // Fallback to showing all slots if API fails
-            }
-        }
-        
-        // Generate time slot UI
-        function generateTimeSlots(availableSlots = null) {
-            const timeSlotsContainer = document.getElementById('timeSlots');
-            timeSlotsContainer.innerHTML = '';
-        
-            const times = [
-                '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
-                '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'
-            ];
-        
-            const slotsToShow = availableSlots || times;
-        
-            slotsToShow.forEach(time => {
-                const slot = document.createElement('div');
-                slot.className = 'time-slot p-4 rounded-lg slide-in';
-                slot.textContent = time;
-                slot.addEventListener('click', () => selectTime(time));
-                timeSlotsContainer.appendChild(slot);
+    }
+
+    // Handle date selection
+    async function selectDate(day) {
+        document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('selected'));
+        selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+        event.target.classList.add('selected');
+        await fetchAndGenerateTimeSlots();
+        updateProgressBar();
+    }
+
+    // Fetch available time slots from the backend
+    async function fetchAndGenerateTimeSlots() {
+        const timeSlotsContainer = document.getElementById('timeSlots');
+        timeSlotsContainer.innerHTML = '<div class="text-center">Loading available slots...</div>';
+
+        try {
+            const formattedDate = selectedDate.toISOString().split('T')[0];
+            const response = await fetch(`${WEBAPP_URL}?date=${formattedDate}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: 'follow' // Ensure redirects are followed
             });
+            const data = await response.json();
+
+            if (data.success) {
+                generateTimeSlots(data.slots);
+            } else {
+                timeSlotsContainer.innerHTML = `<div class="text-red-500">${data.message}</div>`;
+            }
+        } catch (error) {
+            console.error('Error fetching time slots:', error);
+            timeSlotsContainer.innerHTML = '<div class="text-red-500">Failed to load time slots. Please try again.</div>';
         }
+    }
+
+    // Generate time slot UI
+    function generateTimeSlots(availableSlots = null) {
+        const timeSlotsContainer = document.getElementById('timeSlots');
+        timeSlotsContainer.innerHTML = '';
+
+        const times = [
+            '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
+            '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'
+        ];
+
+        const slotsToShow = availableSlots || times;
+
+        slotsToShow.forEach(time => {
+            const slot = document.createElement('div');
+            slot.className = 'time-slot p-4 rounded-lg slide-in';
+            slot.textContent = time;
+            slot.addEventListener('click', () => selectTime(time));
+            timeSlotsContainer.appendChild(slot);
+        });
+    }
+
+    // Handle time slot selection
+    function selectTime(time) {
+        document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+        event.target.classList.add('selected');
+        selectedTime = time;
         
-        // Handle time slot selection
-        function selectTime(time) {
-            document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
-            event.target.classList.add('selected');
-            selectedTime = time;
-            
-            // Show confirmation section with form
-            const confirmation = document.getElementById('confirmation');
-            confirmation.classList.remove('hidden');
-            confirmation.innerHTML = generateAppointmentForm();
-            
-            // Update displays
-            document.getElementById('selectedDateDisplay').textContent = selectedDate.toLocaleDateString();
-            document.getElementById('selectedDayDisplay').textContent = selectedDate.toLocaleString('default', { weekday: 'long' });
-            document.getElementById('selectedTimeDisplay').textContent = time;
-            
-            updateProgressBar();
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        }
+        // Show confirmation section with form
+        const confirmation = document.getElementById('confirmation');
+        confirmation.classList.remove('hidden');
+        confirmation.innerHTML = generateAppointmentForm();
         
-        // Generate appointment form HTML
-        function generateAppointmentForm() {
-            return `
-                <div class="bg-gray-800 p-6 rounded-xl">
-                    <h3 class="text-xl font-semibold mb-4">Schedule Your Appointment</h3>
-                    <form id="appointmentForm" class="space-y-4">
-                        <div class="space-y-4">
-                            <div>
-                                <label for="name" class="block text-sm font-medium mb-1">Name</label>
-                                <input type="text" id="name" required class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white">
-                            </div>
-                            <div>
-                                <label for="email" class="block text-sm font-medium mb-1">Email</label>
-                                <input type="email" id="email" required class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white">
-                            </div>
-                            <div>
-                                <label for="message" class="block text-sm font-medium mb-1">Message (Optional)</label>
-                                <textarea id="message" rows="3" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white"></textarea>
-                            </div>
+        // Update displays
+        document.getElementById('selectedDateDisplay').textContent = selectedDate.toLocaleDateString();
+        document.getElementById('selectedDayDisplay').textContent = selectedDate.toLocaleString('default', { weekday: 'long' });
+        document.getElementById('selectedTimeDisplay').textContent = time;
+        
+        updateProgressBar();
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Generate appointment form HTML
+    function generateAppointmentForm() {
+        return `
+            <div class="bg-gray-800 p-6 rounded-xl">
+                <h3 class="text-xl font-semibold mb-4">Schedule Your Appointment</h3>
+                <form id="appointmentForm" class="space-y-4">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-sm font-medium mb-1">Name</label>
+                            <input type="text" id="name" required class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white">
                         </div>
-                        <div class="mt-4">
-                            <p class="mb-2">Selected Time Slot:</p>
-                            <p>Date: <span id="selectedDateDisplay"></span> (<span id="selectedDayDisplay"></span>)</p>
-                            <p>Time: <span id="selectedTimeDisplay"></span></p>
+                        <div>
+                            <label for="email" class="block text-sm font-medium mb-1">Email</label>
+                            <input type="email" id="email" required class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white">
                         </div>
-                        <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-all mt-4">
-                            Confirm Appointment
-                        </button>
-                    </form>
-                </div>
-            `;
-        }
+                        <div>
+                            <label for="message" class="block text-sm font-medium mb-1">Message (Optional)</label>
+                            <textarea id="message" rows="3" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="mb-2">Selected Time Slot:</p>
+                        <p>Date: <span id="selectedDateDisplay"></span> (<span id="selectedDayDisplay"></span>)</p>
+                        <p>Time: <span id="selectedTimeDisplay"></span></p>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-all mt-4">
+                        Confirm Appointment
+                    </button>
+                </form>
+            </div>
+        `;
+    }
+
+    // Handle form submission
+    async function confirmAppointment(event) {
+        event.preventDefault();
         
-        // Handle form submission
-        async function confirmAppointment(event) {
-            event.preventDefault();
-            
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                date: selectedDate.toISOString().split('T')[0],
-                time: selectedTime,
-                message: document.getElementById('message').value || ''
-            };
-        
-            // Show loading state
-            const submitButton = event.target.querySelector('button[type="submit"]');
-            const originalText = submitButton.textContent;
-            submitButton.textContent = 'Scheduling...';
-            submitButton.disabled = true;
-        
-            try {
-                const response = await fetch(WEBAPP_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(formData),
-                    mode: 'no-cors'
-                });
-        
-                // Show success message
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            date: selectedDate.toISOString().split('T')[0],
+            time: selectedTime,
+            message: document.getElementById('message').value || ''
+        };
+
+        // Show loading state
+        const submitButton = event.target.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Scheduling...';
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch(WEBAPP_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8' // Set to text/plain to avoid CORS preflight
+                },
+                body: JSON.stringify(formData),
+                redirect: 'follow' // Ensure redirects are followed
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
                 alert('Appointment scheduled successfully! You will receive a confirmation email shortly.');
                 window.location.href = 'index.html';
-            } catch (error) {
-                console.error('Error scheduling appointment:', error);
-                alert('Failed to schedule appointment. Please try again.');
-                
-                // Reset button state
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
+            } else {
+                throw new Error(result.message);
             }
+        } catch (error) {
+            console.error('Error scheduling appointment:', error);
+            alert(`Failed to schedule appointment: ${error.message}`);
+            
+            // Reset button state
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
         }
-        
-        // Initialize event listeners
-        document.getElementById('prevMonth').addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            generateCalendar();
-        });
-        
-        document.getElementById('nextMonth').addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            generateCalendar();
-        });
-        
-        // Add form submission listener
-        document.addEventListener('submit', function(e) {
-            if (e.target.id === 'appointmentForm') {
-                e.preventDefault();
-                confirmAppointment(e);
-            }
-        });
-        
-        // Initialize calendar
+    }
+
+    // Initialize event listeners
+    document.getElementById('prevMonth').addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
         generateCalendar();
-    </script>
+    });
+
+    document.getElementById('nextMonth').addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        generateCalendar();
+    });
+
+    // Add form submission listener
+    document.addEventListener('submit', function(e) {
+        if (e.target.id === 'appointmentForm') {
+            e.preventDefault();
+            confirmAppointment(e);
+        }
+    });
+
+    // Initialize calendar
+    generateCalendar();
+</script>
 </body>
 </html>

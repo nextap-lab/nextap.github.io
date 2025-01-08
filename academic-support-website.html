@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nextap AI - Academic Support Services</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #1E40AF 0%, #0D9488 100%);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        .pricing-calculator {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        #schedulingPage {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .mobile-menu {
+                position: fixed;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 1rem;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-blue-800">Nextap AI</span>
+                </div>
+                <div class="flex items-center">
+                    <select id="currency" class="mr-4 p-2 rounded border border-gray-300">
+                        <option value="INR">INR</option>
+                        <option value="USD">USD</option>
+                    </select>
+                    <button class="md:hidden mobile-menu-button">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#features" class="text-gray-700 hover:text-blue-800">Features</a>
+                        <a href="#pricing" class="text-gray-700 hover:text-blue-800">Pricing</a>
+                        <button onclick="showSchedulingPage()" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600">
+                            Schedule Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu hidden md:hidden">
+            <a href="#features" class="block py-2 px-4 text-gray-700 hover:bg-gray-100">Features</a>
+            <a href="#pricing" class="block py-2 px-4 text-gray-700 hover:bg-gray-100">Pricing</a>
+            <button onclick="showSchedulingPage()" class="w-full text-left py-2 px-4 text-gray-700 hover:bg-gray-100">
+                Schedule Session
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Page Content -->
+    <div id="mainPage">
+        <!-- Hero Section -->
+        <section class="hero-gradient min-h-screen flex items-center pt-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                        Expert Academic Solutions with AI
+                    </h1>
+                    <p class="text-xl text-blue-100 mb-8">
+                        Professional Report Writing, Coding Projects, and PowerPoint Presentations
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="scrollToPricing()" class="bg-orange-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-600">
+                            Calculate Cost
+                        </button>
+                        <button onclick="showSchedulingPage()" class="bg-white text-blue-800 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50">
+                            Schedule Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cost Calculator -->
+        <section id="pricing" class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+                    Instant Price Calculator
+                </h2>
+                <div class="pricing-calculator max-w-2xl mx-auto p-8 rounded-xl shadow-lg">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 mb-2">Service Type</label>
+                            <select id="serviceType" class="w-full p-3 border rounded-lg">
+                                <option value="report">Report Writing</option>
+                                <option value="coding">Coding Project</option>
+                                <option value="ppt">PowerPoint Presentation</option>
+                            </select>
+                        </div>
+                        <div id="wordCountSection">
+                            <label class="block text-gray-700 mb-2">Word Count</label>
+                            <input type="number" id="wordCount" class="w-full p-3 border rounded-lg" placeholder="Enter number of words">
+                        </div>
+                        <div id="slideCountSection" style="display: none;">
+                            <label class="block text-gray-700 mb-2">Number of Slides</label>
+                            <input type="number" id="slideCount" class="w-full p-3 border rounded-lg" placeholder="Enter number of slides">
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-lg font-semibold text-blue-800">Estimated Cost: <span id="estimatedCost">0</span></p>
+                        </div>
+                        <button onclick="showSchedulingPage()" class="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600">
+                            Proceed with Order
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+                    Our Services
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-md">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Report Writing</h3>
+                        <p class="text-gray-600 mb-4">Professional reports with thorough research and analysis.</p>
+                        <button onclick="selectService('report')" class="text-blue-800 hover:text-blue-900 font-semibold">
+                            Calculate Cost →
+                        </button>
+                    </div>
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-md">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Coding Projects</h3>
+                        <p class="text-gray-600 mb-4">Custom coding solutions with detailed documentation.</p>
+                        <button onclick="selectService('coding')" class="text-blue-800 hover:text-blue-900 font-semibold">
+                            Calculate Cost →
+                        </button>
+                    </div>
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-md">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">PowerPoint Presentations</h3>
+                        <p class="text-gray-600 mb-4">Engaging presentations with professional design.</p>
+                        <button onclick="selectService('ppt')" class="text-blue-800 hover:text-blue-900 font-semibold">
+                            Calculate Cost →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scheduling Page -->
+    <div id="schedulingPage" class="min-h-screen bg-gray-50 pt-20">
+        <div class="max-w-3xl mx-auto px-4 py-8">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Schedule Your Session</h2>
+                    <button onclick="hideSchedulingPage()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <form class="space-y-6">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Service Type</label>
+                        <select class="w-full p-3 border rounded-lg">
+                            <option>Report Writing</option>
+                            <option>Coding Project</option>
+                            <option>PowerPoint Presentation</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Preferred Date</label>
+                        <input type="date" class="w-full p-3 border rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Preferred Time</label>
+                        <input type="time" class="w-full p-3 border rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Project Details</label>
+                        <textarea class="w-full p-3 border rounded-lg h-32" placeholder="Describe your project requirements..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600">
+                        Confirm Session
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Define all functions first
+        function updatePrice() {
+            const currencySelect = document.getElementById('currency');
+            const wordCount = document.getElementById('wordCount');
+            const slideCount = document.getElementById('slideCount');
+            const serviceType = document.getElementById('serviceType');
+            const estimatedCost = document.getElementById('estimatedCost');
+
+            const EXCHANGE_RATE = 85.5; // INR/USD
+            const WORD_RATE_MIN = 3; // INR
+            const WORD_RATE_MAX = 8; // INR
+            const SLIDE_RATE = 500; // INR
+
+            let cost = 0;
+            if (serviceType.value === 'ppt') {
+                const slides = parseInt(slideCount.value) || 0;
+                cost = slides * SLIDE_RATE;
+            } else {
+                const words = parseInt(wordCount.value) || 0;
+                const rate = (WORD_RATE_MIN + WORD_RATE_MAX) / 2;
+                cost = words * rate;
+            }
+
+            if (currencySelect.value === 'USD') {
+                cost = cost / EXCHANGE_RATE;
+                estimatedCost.textContent = `${cost.toFixed(2)} USD`;
+            } else {
+                estimatedCost.textContent = `₹${cost.toFixed(2)} INR`;
+            }
+        }
+
+        function showSchedulingPage() {
+            document.getElementById('mainPage').style.display = 'none';
+            document.getElementById('schedulingPage').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function hideSchedulingPage() {
+            document.getElementById('mainPage').style.display = 'block';
+            document.getElementById('schedulingPage').style.display = 'none';
+        }
+
+        function scrollToPricing() {
+            document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function selectService(service) {
+            const serviceType = document.getElementById('serviceType');
+            serviceType.value = service;
+            serviceType.dispatchEvent(new Event('change'));
+            scrollToPricing();
+        }
+
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const currencySelect = document.getElementById('currency');
+            const wordCount = document.getElementById('wordCount');
+            const slideCount = document.getElementById('slideCount');
+            const serviceType = document.getElementById('serviceType');
+            const wordCountSection = document.getElementById('wordCountSection');
+            const slideCountSection = document.getElementById('slideCountSection');
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.querySelector('.mobile-menu');
+
+        function updatePrice() {
+            let cost = 0;
+            if (serviceType.value === 'ppt') {
+                const slides = parseInt(slideCount.value) || 0;
+                cost = slides * SLIDE_RATE;
+            } else {
+                const words = parseInt(wordCount.value) || 0;
+                const rate = (WORD_RATE_MIN + WORD_RATE_MAX) / 2;
+                cost = words * rate;
+            }
+
+            if (currencySelect.value === 'USD') {
+                cost = cost / EXCHANGE_RATE;
+                estimatedCost.textContent = `${cost.toFixed(2)}`;
+            } else {
+                estimatedCost.textContent = `₹${cost.toFixed(2)}`;
+            }
+        }
+
+        // Event listeners for price calculator
+        currencySelect.addEventListener('change', updatePrice);
+        wordCount.addEventListener('input', updatePrice);
+        slideCount.addEventListener('input', updatePrice);
+        serviceType.addEventListener('change', () => {
+            if (serviceType.value === 'ppt') {
+                wordCountSection.style.display = 'none';
+                slideCountSection.style.display = 'block';
+            } else {
+                wordCountSection.style.display = 'block';
+                slideCountSection.style.display = 'none';
+            }
+            updatePrice();
+        });
+
+        // Navigation and page management
+        function showSchedulingPage() {
+            document.getElementById('mainPage').style.display = 'none';
+            document.getElementById('schedulingPage').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function hideSchedulingPage() {
+            document.getElementById('mainPage').style.display = 'block';
+            document.getElementById('schedulingPage').style.display = 'none';
+        }
+
+        function scrollToPricing() {
+            document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function selectService(service) {
+            serviceType.value = service;
+            serviceType.dispatchEvent(new Event('change'));
+            scrollToPricing();
+        }
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenuButton?.contains(e.target) && !mobileMenu?.contains(e.target)) {
+                mobileMenu?.classList.add('hidden');
+            }
+        });
+
+        // Add scroll animation for features
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.feature-card').forEach((feature) => {
+            feature.classList.add('opacity-0', 'translate-y-4', 'transition-all', 'duration-500');
+            observer.observe(feature);
+        });

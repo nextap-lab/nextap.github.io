@@ -363,69 +363,110 @@
     </section>
 
     <script>
-        // Currency conversion logic
-        const currencySelect = document.getElementById('currencySelect');
-        const USD_RATE = 85.5;
-        
-        function updateCalculator() {
-            const currency = currencySelect.value;
-            let cost = 0;
-            const type = serviceType.value;
-            
-            if (type === 'report') {
-                const rates = {
-                    'standard': 3,
-                    'premium': 5,
-                    'enterprise': 8
-                };
-                cost = wordCount.value * rates[qualityLevel.value];
-            } else if (type === 'presentation') {
-                cost = slideCount.value * 500;
-            } else {
-                cost = 0; // Custom quote for coding projects
-            }
+  // Global variable to store the conversion rate
+  let conversionRate = 85.5; // Default fallback rate
 
-            if (currency === 'USD') {
-                estimatedCost.textContent = '$' + (cost / USD_RATE).toFixed(2);
-            } else {
-                estimatedCost.textContent = '₹' + cost.toFixed(2);
-            }
+  // Fetch live currency conversion rate on window load
+  window.onload = function () {
+    fetch('https://api.frankfurter.app/latest?from=USD&to=INR')
+      .then((response) => response.json())
+      .then((data) => {
+        // Update conversionRate with fetched data
+        if (data.rates && data.rates.INR) {
+          conversionRate = data.rates.INR;
+          console.log('Fetched conversion rate:', conversionRate);
+        } else {
+          console.error('Invalid API response:', data);
         }
+        // Trigger updateCalculator to initialize cost display
+        updateCalculator();
+      })
+      .catch((error) => {
+        console.error('Error fetching conversion rate:', error);
+        // Use default conversionRate if fetch fails
+        updateCalculator();
+      });
+  };
 
-        // Event listeners
-        [currencySelect, serviceType, wordCount, slideCount, qualityLevel].forEach(element => {
-            if (element) {
-                element.addEventListener('input', updateCalculator);
-            }
-        });
+  // Select HTML elements
+  const currencySelect = document.getElementById('currencySelect');
+  const serviceType = document.getElementById('serviceType');
+  const wordCount = document.getElementById('wordCount');
+  const slideCount = document.getElementById('slideCount');
+  const qualityLevel = document.getElementById('qualityLevel');
+  const wordCountDiv = document.getElementById('wordCountDiv');
+  const slideCountDiv = document.getElementById('slideCountDiv');
+  const estimatedCost = document.getElementById('estimatedCost');
 
-        serviceType.addEventListener('change', () => {
-            const type = serviceType.value;
-            wordCountDiv.style.display = type === 'report' ? 'block' : 'none';
-            slideCountDiv.style.display = type === 'presentation' ? 'block' : 'none';
-            qualityLevel.style.display = type === 'report' ? 'block' : 'none';
-            
-            if (type === 'coding') {
-                estimatedCost.textContent = 'Custom Quote';
-            } else {
-                updateCalculator();
-            }
-        });
+  // Update calculator function to use live conversion rate
+  function updateCalculator() {
+    const currency = currencySelect.value;
+    let cost = 0;
+    const type = serviceType.value;
 
-        // Navigation functions
-        function scrollToCalculator() {
-            document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
-        }
+    // Define pricing data
+    const pricingData = {
+      report: { standard: 3, premium: 5, enterprise: 8 },
+      presentation: { slide: 500 },
+      coding: { quote: 'custom' },
+    };
 
-        function navigateToSchedule() {
-            window.location.href = 'schedule.html';
-        }
-        
-        // Add mobile menu toggle
-        function toggleMobileMenu() {
-            const mobileMenu = document.querySelector('.mobile-menu');
-            mobileMenu.classList.toggle('active');
-        }
-    </script>
+    if (type === 'report') {
+      const rates = pricingData.report;
+      cost = wordCount.value * rates[qualityLevel.value];
+    } else if (type === 'presentation') {
+      cost = slideCount.value * pricingData.presentation.slide;
+    } else if (type === 'coding') {
+      estimatedCost.textContent = 'Custom Quote';
+      return;
+    }
+
+    if (type !== 'coding') {
+      if (currency === 'USD') {
+        // Convert cost to USD using the live conversion rate
+        estimatedCost.textContent = '$' + (cost / conversionRate).toFixed(2);
+      } else {
+        // Display cost in INR
+        estimatedCost.textContent = '₹' + cost.toFixed(2);
+      }
+    }
+  }
+
+  // Event listeners
+  [currencySelect, serviceType, wordCount, slideCount, qualityLevel].forEach((element) => {
+    if (element) {
+      element.addEventListener('input', updateCalculator);
+    }
+  });
+
+  // Service type change event handler
+  serviceType.addEventListener('change', () => {
+    const type = serviceType.value;
+    wordCountDiv.style.display = type === 'report' ? 'block' : 'none';
+    slideCountDiv.style.display = type === 'presentation' ? 'block' : 'none';
+    qualityLevel.style.display = type === 'report' ? 'block' : 'none';
+
+    if (type === 'coding') {
+      estimatedCost.textContent = 'Custom Quote';
+    } else {
+      updateCalculator();
+    }
+  });
+
+  // Navigation functions
+  function scrollToCalculator() {
+    document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function navigateToSchedule() {
+    window.location.href = 'schedule.html';
+  }
+
+  // Add mobile menu toggle
+  function toggleMobileMenu() {
+    const mobileMenu = document.querySelector('.mobile-menu');
+    mobileMenu.classList.toggle('active');
+  }
+</script>
 </body>
 </html>

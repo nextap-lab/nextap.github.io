@@ -33,47 +33,118 @@
             transform: scale(1.02);
         }
 
-        .animated-border {
+        /* Roadmap styling */
+        .roadmap {
             position: relative;
-            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 0;
         }
 
-        .animated-border::after {
-            content: '';
+        .roadmap-line {
             position: absolute;
+            left: 50%;
+            top: 0;
             bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
+            width: 2px;
             background: var(--accent-color);
-            transition: width 0.3s ease;
+            transform: translateX(-50%);
         }
 
-        .animated-border:hover::after {
+        .roadmap-item {
+            position: relative;
+            margin-bottom: 30px;
             width: 100%;
+            display: flex;
+            align-items: center;
         }
 
-        .currency-switch {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 1000;
+        .roadmap-bead {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .roadmap-content {
+            width: calc(50% - 30px);
+            padding: 15px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+        }
+
+        .roadmap-item:nth-child(odd) .roadmap-content {
+            margin-right: 30px;
+        }
+
+        .roadmap-item:nth-child(even) .roadmap-content {
+            margin-left: auto;
         }
 
         @media (max-width: 768px) {
-            .mobile-menu {
-                display: none;
+            .roadmap-line {
+                left: 20px;
             }
-            
+
+            .roadmap-bead {
+                left: 20px;
+            }
+
+            .roadmap-content {
+                width: calc(100% - 50px);
+                margin-left: 40px !important;
+            }
+        }
+
+        /* Price disclaimer */
+        .price-disclaimer {
+            font-size: 0.65rem;
+            color: #9ca3af;
+        }
+
+        /* Consultation Timer */
+        .consultation-timer {
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            color: var(--accent-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Mobile menu adjustments */
+        @media (max-width: 768px) {
+            .mobile-menu {
+                position: fixed;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: var(--primary-color);
+                padding: 1rem;
+                transform: translateY(-100%);
+                transition: transform 0.3s ease;
+            }
+
             .mobile-menu.active {
-                display: block;
+                transform: translateY(0);
             }
         }
     </style>
 </head>
 <body class="bg-black text-gray-100">
     <!-- Currency Switch -->
-    <div class="currency-switch glass-card p-2 rounded-lg">
+    <div class="currency-switch glass-card p-2 rounded-lg fixed top-4 right-4 z-50">
         <select id="currencySelect" class="bg-transparent border border-gray-600 rounded p-1 text-white">
             <option value="INR">INR</option>
             <option value="USD">USD</option>
@@ -81,16 +152,39 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-black bg-opacity-90 backdrop-blur-md">
+    <nav class="fixed w-full z-40 bg-black bg-opacity-90 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <a href="#" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text">Nextap AI</a>
-                </div>
+            <div class="flex justify-between h-16 items-center">
+                <a href="#" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text">
+                    Nextap AI
+                </a>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#services" class="text-gray-300 hover:text-white animated-border">Services</a>
-                    <a href="#calculator" class="text-gray-300 hover:text-white animated-border">Get Quote</a>
-                    <a href="#" onclick="navigateToSchedule()" class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-all">Book Session</a>
+                    <a href="#services" class="text-gray-300 hover:text-white">Services</a>
+                    <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
+                    <div class="consultation-timer">
+                        <svg class="timer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Schedule within 12hrs
+                    </div>
+                </div>
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu md:hidden">
+            <div class="flex flex-col space-y-4 px-4">
+                <a href="#services" class="text-gray-300 hover:text-white">Services</a>
+                <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
+                <div class="consultation-timer">
+                    <svg class="timer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Schedule within 12hrs
                 </div>
             </div>
         </div>
@@ -99,7 +193,7 @@
     <!-- Hero Section -->
     <div class="hero-gradient min-h-screen flex items-center pt-16">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+            <h1 class="text-4xl md:text-7xl font-bold mb-6 leading-tight">
                 Your Success.<br>Our Commitment.
             </h1>
             <p class="text-xl md:text-2xl mb-8 text-gray-300">100% Learning on You. Full Work on Us.</p>
@@ -114,7 +208,7 @@
         </div>
     </div>
 
-    <!-- Services Section -->
+    <!-- Services Section with Price Ranges -->
     <section id="services" class="py-20 bg-gray-900">
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-16">Premium Services</h2>
@@ -122,7 +216,9 @@
                 <!-- Report Writing -->
                 <div class="glass-card p-8 rounded-xl hover-scale">
                     <h3 class="text-2xl font-semibold mb-4">Report Writing</h3>
-                    <p class="mb-6 text-gray-400">Professional reports crafted with thorough research and impeccable attention to detail</p>
+                    <p class="mb-4 text-gray-400">Professional reports crafted with thorough research and impeccable attention to detail</p>
+                    <p class="text-xl font-semibold mb-2">₹3-8/word</p>
+                    <p class="price-disclaimer mb-6">*Prices may vary based on complexity and requirements</p>
                     <button onclick="scrollToCalculator()" class="w-full bg-transparent border border-blue-500 text-blue-500 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all">
                         Get Quote
                     </button>
@@ -131,7 +227,9 @@
                 <!-- Coding Assistance -->
                 <div class="glass-card p-8 rounded-xl hover-scale">
                     <h3 class="text-2xl font-semibold mb-4">Coding Projects</h3>
-                    <p class="mb-6 text-gray-400">Expert programming assistance across all major languages and frameworks</p>
+                    <p class="mb-4 text-gray-400">Expert programming assistance across all major languages and frameworks</p>
+                    <p class="text-xl font-semibold mb-2">Custom Quote</p>
+                    <p class="price-disclaimer mb-6">*Based on project scope and technical requirements</p>
                     <button onclick="scrollToCalculator()" class="w-full bg-transparent border border-blue-500 text-blue-500 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all">
                         Get Quote
                     </button>
@@ -140,10 +238,62 @@
                 <!-- Presentation Design -->
                 <div class="glass-card p-8 rounded-xl hover-scale">
                     <h3 class="text-2xl font-semibold mb-4">Presentations</h3>
-                    <p class="mb-6 text-gray-400">Captivating PowerPoint presentations designed to leave lasting impressions</p>
+                    <p class="mb-4 text-gray-400">Captivating PowerPoint presentations designed to leave lasting impressions</p>
+                    <p class="text-xl font-semibold mb-2">₹500-1000/slide</p>
+                    <p class="price-disclaimer mb-6">*Varies by design complexity and research required</p>
                     <button onclick="scrollToCalculator()" class="w-full bg-transparent border border-blue-500 text-blue-500 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all">
                         Get Quote
                     </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Roadmap -->
+    <section class="py-20 bg-black">
+        <h2 class="text-4xl font-bold text-center mb-16">Project Journey</h2>
+        <div class="roadmap">
+            <div class="roadmap-line"></div>
+            <div class="roadmap-item">
+                <div class="roadmap-bead"></div>
+                <div class="roadmap-content">
+                    <h3 class="font-semibold text-lg mb-2">1. Get Quote</h3>
+                    <p class="text-gray-400">Calculate your investment based on project requirements</p>
+                </div>
+            </div>
+            <div class="roadmap-item">
+                <div class="roadmap-bead"></div>
+                <div class="roadmap-content">
+                    <h3 class="font-semibold text-lg mb-2">2. One-to-One Consultation</h3>
+                    <p class="text-gray-400">Detailed discussion of your project needs and expectations</p>
+                </div>
+            </div>
+            <div class="roadmap-item">
+                <div class="roadmap-bead"></div>
+                <div class="roadmap-content">
+                    <h3 class="font-semibold text-lg mb-2">3. Project Work Live</h3>
+                    <p class="text-gray-400">Begin working on your project with regular updates</p>
+                </div>
+            </div>
+            <div class="roadmap-item">
+                <div class="roadmap-bead"></div>
+                <div class="roadmap-content">
+                    <h3 class="font-semibold text-lg mb-2">4. Live Monitoring Status</h3>
+                    <p class="text-gray-400">Track progress in real-time through our dashboard</p>
+                </div>
+            </div>
+            <div class="roadmap-item">
+                <div class="roadmap-bead"></div>
+                <div class="roadmap-content">
+                    <h3 class="font-semibold text-lg mb-2">5. Project Delivery</h3>
+                    <p class="text-gray-400">Receive your completed project on time</p>
+                </div>
+            </div>
+            <div class="roadmap-item">
+                <div class="roadmap-bead"></div>
+                <div class="roadmap-content">
+                    <h3 class="font-semibold text-lg mb-2">6. Changes</h3>
+                    <p class="text-gray-400">Up to 5 minor revisions included</p>
                 </div>
             </div>
         </div>
@@ -270,6 +420,12 @@
         function navigateToSchedule() {
             // In a real implementation, this would navigate to a new page
             alert('Redirecting to scheduling page...');
+        }
+        
+        // Add mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            mobileMenu.classList.toggle('active');
         }
     </script>
 </body>

@@ -230,218 +230,139 @@
         progressBar.style.width = `${progress}%`;
     }
 
-    // Generate calendar UI
-    function generateCalendar() {
-        const daysContainer = document.getElementById('calendarDays');
-        const monthDisplay = document.getElementById('currentMonth');
-        const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-        const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-
-        monthDisplay.textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-        daysContainer.innerHTML = '';
-
-        // Fill in empty days for alignment
-        for (let i = 0; i < firstDay.getDay(); i++) {
-            daysContainer.appendChild(document.createElement('div'));
-        }
-
-        for (let day = 1; day <= lastDay.getDate(); day++) {
-            const dayElement = document.createElement('div');
-            dayElement.textContent = day;
-            dayElement.className = 'calendar-day p-2 rounded-lg text-center';
-
-            const dateToCheck = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-            if (dateToCheck.toDateString() === new Date().toDateString()) dayElement.classList.add('today');
-            if (dateToCheck < new Date().setHours(0, 0, 0, 0)) dayElement.classList.add('disabled');
-            else dayElement.addEventListener('click', () => selectDate(dateToCheck, dayElement));
-
-            daysContainer.appendChild(dayElement);
-        }
-    }
-
-    // Handle date selection
-    async function selectDate(date, element) {
-        document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('selected'));
-        selectedDate = date;
-        element.classList.add('selected');
-        await fetchAndGenerateTimeSlots();
-        updateProgressBar();
-    }
-
-    // Generate time slots UI
-    function generateTimeSlots(availableSlots) {
+        // Fetch and display available time slots for a selected date
+    function fetchAvailableSlots(date) {
         const timeSlotsContainer = document.getElementById('timeSlots');
-        timeSlotsContainer.innerHTML = '';
+        timeSlotsContainer.innerHTML = '<p>Loading time slots...</p>';
 
-        const slots = availableSlots.length ? availableSlots : ['No slots available'];
-        slots.forEach(time => {
-            const slot = document.createElement('div');
-            slot.className = 'time-slot p-4 rounded-lg slide-in';
-            slot.textContent = time;
-            if (time !== 'No slots available') {
-                slot.addEventListener('click', () => selectTime(time));
-            }
-            timeSlotsContainer.appendChild(slot);
-        });
+        fetch(`${WEBAPP_URL}?date=${date}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    timeSlotsContainer.innerHTML = '';
+                    data.slots.forEach(slot => {
+                        const slotButton = document.createElement('button');
+                        slotButton.textContent = slot;
+                        slotButton.className = 'w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-blue-500';
+                        slotButton.onclick = () => selectTimeSlot(slot);
+                        timeSlotsContainer.appendChild(slotButton);
+                    });
+                } else {
+                    timeSlotsContainer.innerHTML = `<p class="text-red-500">${data.message}</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching time slots:', error);
+                timeSlotsContainer.innerHTML = '<p class="text-red-500">Failed to load time slots.</p>';
+            });
     }
 
-    // Handle time slot selection
-    function selectTime(time) {
-        document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+    // Select a time slot
+    function selectTimeSlot(time) {
         selectedTime = time;
-        event.target.classList.add('selected');
-        document.getElementById('appointmentForm').classList.remove('hidden');
-        document.getElementById('appointmentForm').classList.add('active');
-
-        document.querySelectorAll('#selectedDateDisplay').forEach(el => el.textContent = selectedDate.toLocaleDateString());
-        document.querySelectorAll('#selectedTimeDisplay').forEach(el => el.textContent = time);
-
+        document.getElementById('selectedTimeDisplay').textContent = time;
         updateProgressBar();
-        document.getElementById('appointmentForm').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('appointmentForm').classList.remove('hidden');
     }
 
-    // First, let's create a utility function to handle the JSONP requests
-function loadJSONP(url) {
-    return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        const callbackName = 'jsonp_callback_' + Date.now();
-
-        // Create the callback function
-        window[callbackName] = (data) => {
-            resolve(data);
-            document.body.removeChild(script);
-            delete window[callbackName];
-        };
-
-        // Add the callback parameter to the URL
-        const urlWithCallback = `${url}${url.includes('?') ? '&' : '?'}callback=${callbackName}`;
-        
-        // Configure the script tag
-        script.src = urlWithCallback;
-        script.onerror = () => {
-            reject(new Error('Failed to load JSONP'));
-            document.body.removeChild(script);
-            delete window[callbackName];
-        };
-
-        // Add the script tag to the page
-        document.body.appendChild(script);
-    });
-}
-
-// Update the fetch time slots function
-async function fetchAndGenerateTimeSlots() {
-    const timeSlotsContainer = document.getElementById('timeSlots');
-    timeSlotsContainer.innerHTML = '<div class="text-center">Loading available slots...</div>';
-
-    try {
-        const formattedDate = selectedDate.toISOString().split('T')[0];
-        
-        // Use JSONP approach directly since we know CORS isn't working
-        const data = await loadJSONP(`${WEBAPP_URL}?date=${formattedDate}`);
-        
-        if (data.success) {
-            generateTimeSlots(data.slots);
-        } else {
-            timeSlotsContainer.innerHTML = `<div class="text-red-500">${data.message || 'Failed to load time slots'}</div>`;
+    // Confirm the appointment
+    function confirmAppointment() {
+        if (!selectedDate || !selectedTime) {
+            alert('Please select a date and time before confirming.');
+            return;
         }
-    } catch (error) {
-        console.error('Error fetching time slots:', error);
-        timeSlotsContainer.innerHTML = '<div class="text-red-500">Failed to load time slots. Please try again later.</div>';
-    }
-}
 
-// Update the form submission function to use JSONP for POST requests
-async function handleFormSubmit(event) {
-    event.preventDefault();
-    const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        date: selectedDate.toISOString().split('T')[0],
-        time: selectedTime,
-        message: document.getElementById('message').value || ''
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            date: selectedDate,
+            time: selectedTime,
+            message: document.getElementById('message').value
+        };
+
+        document.getElementById('loadingSpinner').classList.remove('hidden');
+
+        fetch(WEBAPP_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loadingSpinner').classList.add('hidden');
+                if (data.success) {
+                    alert(data.message);
+                    resetForm();
+                } else {
+                    alert(`Error: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error confirming appointment:', error);
+                document.getElementById('loadingSpinner').classList.add('hidden');
+                alert('Failed to confirm appointment.');
+            });
+    }
+
+    // Reset the form and progress
+    function resetForm() {
+        selectedDate = null;
+        selectedTime = null;
+        document.getElementById('appointmentForm').reset();
+        document.getElementById('appointmentForm').classList.add('hidden');
+        updateProgressBar();
+    }
+
+    // Generate the calendar for the current month
+    function generateCalendar(date) {
+        const calendarDays = document.getElementById('calendarDays');
+        const currentMonth = document.getElementById('currentMonth');
+        calendarDays.innerHTML = '';
+
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        currentMonth.textContent = date.toLocaleDateString('default', { month: 'long', year: 'numeric' });
+
+        const firstDayOfMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(year, month + 1, 0);
+
+        for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
+            const emptyCell = document.createElement('div');
+            calendarDays.appendChild(emptyCell);
+        }
+
+        for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+            const dayCell = document.createElement('button');
+            dayCell.textContent = day;
+            dayCell.className = 'p-2 bg-gray-800 text-white rounded-lg hover:bg-blue-500';
+            dayCell.onclick = () => selectDate(new Date(year, month, day));
+            calendarDays.appendChild(dayCell);
+        }
+    }
+
+    // Select a date
+    function selectDate(date) {
+        selectedDate = date.toISOString().split('T')[0];
+        document.getElementById('selectedDateDisplay').textContent = selectedDate;
+        updateProgressBar();
+        fetchAvailableSlots(selectedDate);
+    }
+
+    // Initialize the calendar
+    document.getElementById('prevMonth').onclick = () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        generateCalendar(currentDate);
     };
 
-    const submitButton = event.target.querySelector('button[type="submit"]');
-    const originalText = submitButton.textContent;
-    submitButton.textContent = 'Scheduling...';
-    submitButton.disabled = true;
+    document.getElementById('nextMonth').onclick = () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        generateCalendar(currentDate);
+    };
 
-    try {
-        // Encode the form data into the URL for JSONP
-        const queryString = Object.entries(formData)
-            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-            .join('&');
-        
-        const data = await loadJSONP(`${WEBAPP_URL}?${queryString}&action=submit`);
-        
-        if (data.success) {
-            alert('Appointment scheduled successfully!');
-            window.location.reload();
-        } else {
-            throw new Error(data.message || 'Failed to schedule appointment');
-        }
-    } catch (error) {
-        console.error('Error scheduling appointment:', error);
-        alert(`Failed to schedule appointment: ${error.message}`);
-    } finally {
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
-    }
-}
-    
-    // Add this fallback function using JSONP approach
-    function fetchTimeSlotsFallback(date) {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            const callbackName = 'jsonpCallback_' + Math.random().toString(36).substr(2, 9);
-            
-            window[callbackName] = function(data) {
-                delete window[callbackName];
-                document.body.removeChild(script);
-                if (data.success) {
-                    generateTimeSlots(data.slots);
-                    resolve(data);
-                } else {
-                    reject(new Error(data.message));
-                }
-            };
-    
-            script.src = `${WEBAPP_URL}?date=${date}&callback=${callbackName}`;
-            script.onerror = () => {
-                delete window[callbackName];
-                document.body.removeChild(script);
-                reject(new Error('Failed to load time slots'));
-            };
-    
-            document.body.appendChild(script);
-        });
-    }
-        
-
-    // Initialize event listeners
-    function initializeEventListeners() {
-        document.getElementById('prevMonth').addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            generateCalendar();
-        });
-
-        document.getElementById('nextMonth').addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            generateCalendar();
-        });
-
-        const form = document.getElementById('appointmentForm');
-        if (form) form.addEventListener('submit', handleFormSubmit);
-    }
-
-    // Initialize the application
-    document.addEventListener('DOMContentLoaded', () => {
-        generateCalendar();
-        initializeEventListeners();
-        updateProgressBar();
-    });
-</script>
-
+    generateCalendar(currentDate);
+    </script>
 </body>
 </html>

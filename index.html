@@ -931,11 +931,16 @@ function scheduleConsultation() {
     // Save current chat state if needed
     sessionStorage.setItem('chatPending', 'true');
     
-    // Get the base URL from the current location
-    const baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
-    
-    // Navigate to scheduling page with the correct path
-    window.location.href = baseUrl + 'schedule/index.html';
+    // Use the same navigation function as the main site buttons
+    const mainButton = document.querySelector('button[onclick="navigateToSchedule()"]');
+    if (mainButton) {
+        navigateToSchedule();
+    } else {
+        // Fallback if main navigation function isn't available
+        const currentPath = window.location.pathname;
+        const targetUrl = currentPath.substring(0, currentPath.lastIndexOf('/')) + '/schedule.html';
+        window.location.href = targetUrl;
+    }
 }
 
 function showCalculator() {

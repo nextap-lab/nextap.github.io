@@ -931,8 +931,11 @@ function scheduleConsultation() {
     // Save current chat state if needed
     sessionStorage.setItem('chatPending', 'true');
     
-    // Navigate to scheduling page
-    window.location.href = 'schedule.html';
+    // Get the base URL from the current location
+    const baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+    
+    // Navigate to scheduling page with the correct path
+    window.location.href = baseUrl + 'schedule/index.html';
 }
 
 function showCalculator() {

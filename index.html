@@ -379,36 +379,17 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-40 bg-black bg-opacity-90 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between h-16 items-center">
-                <a href="#" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text">
-                    Nextap AI
-                </a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#services" class="text-gray-300 hover:text-white">Services</a>
-                    <a href="#testimonials" class="text-gray-300 hover:text-white">Testimonials</a>
-                    <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
-                    <div class="consultation-timer">
-                        <svg class="timer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Schedule within 12hrs
-                    </div>
-                </div>
-                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div class="mobile-menu md:hidden">
-            <div class="flex flex-col space-y-4 px-4">
+<nav class="fixed w-full z-40 bg-black bg-opacity-90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between h-16 items-center">
+            <a href="#" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text">
+                Nextap AI
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
                 <a href="#services" class="text-gray-300 hover:text-white">Services</a>
                 <a href="#testimonials" class="text-gray-300 hover:text-white">Testimonials</a>
                 <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
+                <a href="javascript:void(0)" onclick="navigateToBlogs()" class="text-gray-300 hover:text-white">Blogs</a>
                 <div class="consultation-timer">
                     <svg class="timer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -416,8 +397,31 @@
                     Schedule within 12hrs
                 </div>
             </div>
+            <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
         </div>
-    </nav>
+    </div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu md:hidden">
+        <div class="flex flex-col space-y-4 px-4">
+            <a href="#services" class="text-gray-300 hover:text-white">Services</a>
+            <a href="#testimonials" class="text-gray-300 hover:text-white">Testimonials</a>
+            <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
+            <a href="javascript:void(0)" onclick="navigateToBlogs()" class="text-gray-300 hover:text-white">Blogs</a>
+            <div class="consultation-timer">
+                <svg class="timer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Schedule within 12hrs
+            </div>
+        </div>
+    </div>
+</nav>
+
+
 
     <!-- Hero Section -->
     <div class="relative min-h-screen flex items-center pt-16">
@@ -1328,6 +1332,11 @@ function handleMobileTestimonialClick() {
     if (mobileMenu && mobileMenu.classList.contains('active')) {
         mobileMenu.classList.remove('active');
     }
+}
+function navigateToBlogs() {
+    const currentPath = window.location.pathname;
+    const targetUrl = currentPath.substring(0, currentPath.lastIndexOf('/')) + '/blogs.html';
+    window.location.href = targetUrl;
 }
 
 // Error handling for failed API calls

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +11,12 @@
             --secondary-color: #404041;
             --accent-color: #3b82f6;
             --text-color: #f3f4f6;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-family: 'Gotham Book', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         .hero-gradient {
@@ -80,15 +85,15 @@
 
         /* Adjust odd (left) items to be right-aligned */
         .roadmap-item:nth-child(odd) .roadmap-content {
-          margin-right: auto; /* Remove or override the existing margin-right property */
-          margin-left: 0;     /* Ensure it stays on the left side from the pivot */
-          text-align: right;  /* Text is right-aligned */
+          margin-right: auto;
+          margin-left: 0;
+          text-align: right;
         }
         
         /* Adjust even (right) items to be left-aligned */
         .roadmap-item:nth-child(even) .roadmap-content {
-          margin-left: auto;  /* Remove or override existing margin-left if necessary */
-          text-align: left;   /* Text is left-aligned */
+          margin-left: auto;
+          text-align: left;
         }
 
         @media (max-width: 768px) {
@@ -112,23 +117,6 @@
             color: #9ca3af;
         }
 
-        /* Consultation Timer */
-        .consultation-timer {
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 8px;
-            padding: 8px 16px;
-            font-size: 0.875rem;
-            color: var(--accent-color);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .timer-icon {
-            width: 16px;
-            height: 16px;
-        }
-
         /* Mobile menu adjustments */
         @media (max-width: 768px) {
             .mobile-menu {
@@ -140,6 +128,7 @@
                 padding: 1rem;
                 transform: translateY(-100%);
                 transition: transform 0.3s ease;
+                z-index: 50;
             }
 
             .mobile-menu.active {
@@ -367,398 +356,182 @@
             50% { opacity: 1; }
             100% { opacity: 0.5; }
         }
-    </style>
-</head>
-<body class="bg-black text-gray-100">
-    <!-- Currency Switch -->
-    <div class="currency-switch glass-card p-2 rounded-lg fixed top-4 right-4 z-50">
-        <select id="currencySelect" class="bg-transparent border border-gray-600 rounded p-1 text-white">
-            <option value="INR">INR</option>
-            <option value="USD">USD</option>
-        </select>
-    </div>
 
-    <!-- Navigation -->
-<nav class="fixed w-full z-40 bg-black bg-opacity-90 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="flex justify-between h-16 items-center">
-            <a href="#" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text">
-                Nextap AI
-            </a>
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#services" class="text-gray-300 hover:text-white">Services</a>
-                <a href="#testimonials" class="text-gray-300 hover:text-white">Testimonials</a>
-                <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
-                <a href="dashboard.html" class="text-gray-300 hover:text-white">Dashboard</a>
-                <a href="admin.html" class="text-gray-300 hover:text-white">Admin</a>
-                <a href="javascript:void(0)" onclick="navigateToBlogs()" class="text-gray-300 hover:text-white">Blogs</a>
-                <div class="consultation-timer">
-                    <svg class="timer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Schedule within 12hrs
-                </div>
-            </div>
-            <button class="md:hidden text-white" onclick="toggleMobileMenu()">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
-        </div>
-    </div>
-    <!-- Mobile Menu -->
-    <div class="mobile-menu md:hidden">
-        <div class="flex flex-col space-y-4 px-4">
-            <a href="#services" class="text-gray-300 hover:text-white">Services</a>
-            <a href="#testimonials" class="text-gray-300 hover:text-white">Testimonials</a>
-            <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
-            <a href="javascript:void(0)" onclick="navigateToBlogs()" class="text-gray-300 hover:text-white">Blogs</a>
-            <div class="consultation-timer">
-                <svg class="timer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Schedule within 12hrs
-            </div>
-        </div>
-    </div>
-</nav>
-
-
-
-    <!-- Hero Section -->
-    <div class="relative min-h-screen flex items-center pt-16">
-      <video id="bgVideo" autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover">
-        <source src="https://github.com/nextap-lab/nextap.github.io/raw/refs/heads/main/site_temp.mp4" type="video/mp4">
-      </video>
-      <div class="absolute inset-0 bg-black opacity-70"></div>
-      <div class="relative max-w-7xl mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-7xl font-bold mb-6 leading-tight">
-          Your Success.<br>Our Commitment.
-        </h1>
-        <p class="text-xl md:text-2xl mb-8 text-gray-300">100% Learning on You. Full Work on Us.</p>
-        <div class="flex flex-col md:flex-row justify-center gap-4">
-          <button onclick="scrollToCalculator()" class="bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition-all">
-            Get Custom Quote
-          </button>
-          <button onclick="navigateToSchedule()" class="bg-transparent border border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-black transition-all">
-            Schedule Consultation  
-          </button>
-        </div>
-      </div>
-    </div>
-    
-    <style>
-      #bgVideo {
-        filter: brightness(70%);
-      }
-    </style>
-
-    <!-- Services Section with Enhanced Business-Focused Design -->
-<section id="services" class="py-24 bg-gradient-to-b from-gray-900 via-black to-gray-900 relative overflow-hidden">
-    <!-- Animated Background Elements -->
-    <div class="absolute inset-0">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.04),transparent_50%)]"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(59,130,246,0.03),transparent_40%)]"></div>
-    </div>
-
-    <!-- Floating Particles -->
-    <div class="particles absolute inset-0 opacity-20"></div>
-    
-    <div class="max-w-7xl mx-auto px-4 relative z-10">
-        <!-- Section Header -->
-        <div class="text-center mb-20">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
-                Enterprise Solutions
-            </h2>
-            <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-                Tailored academic services designed for professional excellence
-            </p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            <!-- Report Writing Card -->
-            <div class="group relative">
-                <!-- Highlight Effect -->
-                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl opacity-0 group-hover:opacity-20 blur transition duration-500"></div>
-                
-                <div class="relative p-8 rounded-2xl bg-gradient-to-b from-gray-800/80 to-gray-900/90 border border-gray-700/50 backdrop-blur-xl transition-all duration-300">
-                    <!-- Service Icon -->
-                    <div class="service-icon-wrapper mb-8">
-                        <div class="w-16 h-16 bg-blue-500/10 rounded-2xl p-4 relative">
-                            <div class="absolute inset-0 bg-blue-500/10 rounded-2xl animate-pulse"></div>
-                            <svg class="w-full h-full text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="space-y-6">
-                        <h3 class="text-2xl font-bold text-white tracking-tight">Report Writing</h3>
-                        <p class="text-gray-400 leading-relaxed min-h-[80px]">
-                            Professional documentation with comprehensive research and meticulous attention to industry standards
-                        </p>
-                        
-                        <!-- Pricing Tier -->
-                        <div class="pricing-tier space-y-2">
-                            <div class="flex items-baseline gap-2">
-                                <span class="text-3xl font-bold text-white">₹3-8</span>
-                                <span class="text-gray-400">/word</span>
-                            </div>
-                            <p class="text-sm text-gray-500">Enterprise-grade quality</p>
-                        </div>
-                        
-                        <!-- Features List -->
-                        <ul class="space-y-3">
-                            <li class="flex items-center text-sm text-gray-400">
-                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Professional Research
-                            </li>
-                            <li class="flex items-center text-sm text-gray-400">
-                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Industry Standard Format
-                            </li>
-                            <li class="flex items-center text-sm text-gray-400">
-                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Premium Support
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <!-- CTA Button -->
-                    <button onclick="scrollToCalculator()" class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5">
-                        Calculate Investment
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Coding Projects Card -->
-            <div class="group relative">
-                <!-- Highlight Effect -->
-                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl opacity-0 group-hover:opacity-20 blur transition duration-500"></div>
-                
-                <div class="relative p-8 rounded-2xl bg-gradient-to-b from-gray-800/80 to-gray-900/90 border border-gray-700/50 backdrop-blur-xl transition-all duration-300">
-                    <!-- Service Icon -->
-                    <div class="service-icon-wrapper mb-8">
-                        <div class="w-16 h-16 bg-blue-500/10 rounded-2xl p-4 relative">
-                            <div class="absolute inset-0 bg-blue-500/10 rounded-2xl animate-pulse"></div>
-                            <svg class="w-full h-full text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="space-y-6">
-                        <h3 class="text-2xl font-bold text-white tracking-tight">Coding Projects</h3>
-                        <p class="text-gray-400 leading-relaxed min-h-[80px]">
-                            Enterprise-level development solutions with scalable architecture and comprehensive documentation
-                        </p>
-                        
-                        <!-- Pricing Tier -->
-                        <div class="pricing-tier space-y-2">
-                            <div class="flex items-baseline gap-2">
-                                <span class="text-3xl font-bold text-white">Custom</span>
-                                <span class="text-gray-400">Quote</span>
-                            </div>
-                            <p class="text-sm text-gray-500">Project-based pricing</p>
-                        </div>
-                        
-                        <!-- Features List -->
-                        <ul class="space-y-3">
-                            <li class="flex items-center text-sm text-gray-400">
-                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Enterprise Architecture
-                            </li>
-                            <li class="flex items-center text-sm text-gray-400">
-                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Code Documentation
-                            </li>
-                            <li class="flex items-center text-sm text-gray-400">
-                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Technical Support
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <!-- CTA Button -->
-                    <button onclick="scrollToCalculator()" class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5">
-                        Request Quote
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Presentations Card -->
-            <div class="group relative">
-                <!-- Highlight Effect -->
-                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl opacity-0 group-hover:opacity-20 blur transition duration-500"></div>
-                
-                <div class="relative p-8 rounded-2xl bg-gradient-to-b from-gray-800/80 to-gray-900/90 border border-gray-700/50 backdrop-blur-xl transition-all duration-300">
-                    <!-- Service Icon -->
-                    <div class="service-icon-wrapper mb-8">
-                        <div class="w-16 h-16 bg-blue-500/10 rounded-2xl p-4 relative">
-                            <div class="absolute inset-0 bg-blue-500/10 rounded-2xl animate-pulse"></div>
-                            <svg class="w-full h-full text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="space-y-6">
-                        <h3 class="text-2xl font-bold text-white tracking-tight">Presentations</h3>
-                        <p class="text-gray-400 leading-relaxed min-h-[80px]">
-                            Strategic presentation design focused on impact and professional delivery
-                        </p>
-                        
-                        <!-- Pricing Tier -->
-                        <div class="pricing-tier space-y-2">
-                            <div class="flex items-baseline gap-2">
-                                <span class="text-3xl font-bold text-white">₹500-1000</span>
-                                <span class="text-gray-400">/slide</span>
-                            </div>
-                            <p class="text-sm text-gray-500">Professional design</p>
-                        </div>
-                        
-                        <!-- Features List -->
-                        <ul class="space-y-3">
-                            <li class="flex items-center text-sm text-gray-400">
-                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Custom Design
-                            </li>
-                            <li class="flex items-center text-sm text-gray-400">
-                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Engaging Visuals
-                            </li>
-                            <li class="flex items-center text-sm text-gray-400">
-                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Revision Support
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <!-- CTA Button -->
-                    <button onclick="scrollToCalculator()" class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5">
-                        Calculate Investment
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Animated Background Style -->
-    <style>
-        .particles {
-            background: linear-gradient(to bottom, transparent, transparent),
-                        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-                        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
-            background-size: 100% 100%, 550px 550px, 350px 350px, 250px 250px;
-            background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
-            animation: particlesAnimation 15s linear infinite;
+        /* Footer Styling */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            padding: 40px 20px;
         }
 
-        @keyframes particlesAnimation {
-            0% {
-                background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
-            }
-            100% {
-                background-position: 0 0, -510px -490px, -220px -80px, -180px -150px;
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+        }
+
+        /* Language and Currency Capsule */
+        .lang-currency-capsule {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            border-radius: 9999px;
+            padding: 6px 16px;
+            color: white;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .lang-currency-capsule select {
+            background: transparent;
+            border: none;
+            color: white;
+            appearance: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .lang-currency-capsule select:focus {
+            outline: none;
+        }
+
+        /* Highlight for Calculator Section */
+        .highlight-section {
+            animation: highlightFade 2s forwards;
+            background-color: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+        }
+
+        @keyframes highlightFade {
+            from { background-color: rgba(59, 130, 246, 0.3); }
+            to { background-color: rgba(59, 130, 246, 0.1); }
+        }
+
+        /* Ensure Google Translate dropdown fits well */
+        .goog-te-gadget {
+            display: none;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .lang-currency-capsule {
+                display: none;
             }
         }
 
-        /* Card Hover Effects */
-        .service-icon-wrapper {
-            position: relative;
-            isolation: isolate;
+        /* Calculator Section Styles */
+        .calculator-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #d1d5db;
         }
 
-        .service-icon-wrapper::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 1rem;
-            background: radial-gradient(
-                500px circle at var(--mouse-x) var(--mouse-y),
-                rgba(59, 130, 246, 0.1),
-                transparent 40%
-            );
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: -1;
+        .calculator-form input, .calculator-form select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #4b5563;
+            border-radius: 0.5rem;
+            background-color: #1f2937;
+            color: #f3f4f6;
+            margin-bottom: 1.5rem;
         }
 
-        .group:hover .service-icon-wrapper::after {
-            opacity: 1;
+        .calculator-form input:focus, .calculator-form select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: #111827;
         }
-    </style>
 
-    <!-- Mouse tracking for lighting effect -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.group');
-            
-            cards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    card.style.setProperty('--mouse-x', `${x}px`);
-                    card.style.setProperty('--mouse-y', `${y}px`);
-                });
-            });
-        });
+        .calculator-result {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            color: #3b82f6;
+            margin-bottom: 1.5rem;
+        }
 
-        // Intersection Observer for fade-in animation
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('fade-in');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
+        /* Request Quote Form Styles */
+        .quote-form {
+            display: none;
+        }
 
-            document.querySelectorAll('.group').forEach(card => {
-                observer.observe(card);
-            });
-        });
-    </script>
+        .quote-form.active {
+            display: block;
+        }
 
-    <!-- Additional Animations -->
-    <style>
-        /* Fade in animation for cards */
+        .quote-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #d1d5db;
+        }
+
+        .quote-form input, .quote-form textarea, .quote-form select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #4b5563;
+            border-radius: 0.5rem;
+            background-color: #1f2937;
+            color: #f3f4f6;
+            margin-bottom: 1.5rem;
+        }
+
+        .quote-form input:focus, .quote-form textarea:focus, .quote-form select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: #111827;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid white;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: #1f2937;
+        }
+
+        /* Animations */
         .group {
             opacity: 0;
             transform: translateY(20px);
@@ -770,7 +543,6 @@
             transform: translateY(0);
         }
 
-        /* Staggered animation delay for cards */
         .group:nth-child(1) {
             transition-delay: 0.1s;
         }
@@ -783,7 +555,6 @@
             transition-delay: 0.3s;
         }
 
-        /* Smooth hover state transitions */
         .group > div {
             transform: translateY(0);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -819,8 +590,546 @@
         .group:hover .pricing-tier::after {
             transform: translateX(100%);
         }
+
+        /* Responsive Typography */
+        @media (max-width: 768px) {
+            .text-4xl {
+                font-size: 2.25rem;
+            }
+            .text-7xl {
+                font-size: 3rem;
+            }
+        }
     </style>
-</section>
+</head>
+<body>
+    <!-- Google Translate Element -->
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+          {
+            pageLanguage: 'en',
+            includedLanguages: 'en,es,fr,de,zh,ar,hi,ja,ru,pt',
+            layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+          },
+          'google_translate_element'
+        );
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-40 bg-black bg-opacity-90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16 items-center">
+                <a href="#" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text notranslate">
+                    Nextap AI
+                </a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#services" class="text-gray-300 hover:text-white">Services</a>
+                    <a href="#testimonials" class="text-gray-300 hover:text-white">Testimonials</a>
+                    <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a>
+                    <a href="dashboard.html" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="admin.html" class="text-gray-300 hover:text-white">Admin</a>
+                    <a href="blogs.html" class="text-gray-300 hover:text-white">Blogs</a>
+                    <!-- Language and Currency Capsule -->
+                    <div class="lang-currency-capsule">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4v16m8-8H4" />
+                        </svg>
+                        <select id="currencySelect" onchange="changeCurrency(this.value)">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                            <option value="AUD">AUD</option>
+                            <option value="JPY">JPY</option>
+                            <option value="AED">AED</option>
+                            <option value="MYR">MYR</option>
+                            <option value="INR">INR</option>
+                            <option value="CAD">CAD</option>
+                            <option value="QAR">QAR</option>
+                            <option value="SAR">SAR</option>
+                            <option value="KWD">KWD</option>
+                            <!-- Add more currencies as needed -->
+                        </select>
+                        <select id="languageSelect" onchange="changeLanguage(this.value)">
+                            <option value="en">EN</option>
+                            <option value="es">ES</option>
+                            <option value="fr">FR</option>
+                            <option value="de">DE</option>
+                            <option value="zh">ZH</option>
+                            <option value="ar">AR</option>
+                            <option value="hi">HI</option>
+                            <option value="ja">JA</option>
+                            <option value="ru">RU</option>
+                            <option value="pt">PT</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu md:hidden">
+            <div class="flex flex-col space-y-4 px-4">
+                <a href="#services" class="text-gray-300 hover:text-white" onclick="toggleMobileMenu()">Services</a>
+                <a href="#testimonials" class="text-gray-300 hover:text-white" onclick="toggleMobileMenu()">Testimonials</a>
+                <a href="#calculator" class="text-gray-300 hover:text-white" onclick="toggleMobileMenu()">Get Quote</a>
+                <a href="dashboard.html" class="text-gray-300 hover:text-white" onclick="toggleMobileMenu()">Dashboard</a>
+                <a href="admin.html" class="text-gray-300 hover:text-white" onclick="toggleMobileMenu()">Admin</a>
+                <a href="blogs.html" class="text-gray-300 hover:text-white" onclick="toggleMobileMenu()">Blogs</a>
+                <!-- Language and Currency Selection in Mobile Menu -->
+                <div class="mt-4">
+                    <label class="block mb-2 text-gray-300">Currency</label>
+                    <select id="mobileCurrencySelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" onchange="changeCurrency(this.value)">
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                        <option value="AUD">AUD</option>
+                        <option value="JPY">JPY</option>
+                        <option value="AED">AED</option>
+                        <option value="MYR">MYR</option>
+                        <option value="INR">INR</option>
+                        <option value="CAD">CAD</option>
+                        <option value="QAR">QAR</option>
+                        <option value="SAR">SAR</option>
+                        <option value="KWD">KWD</option>
+                        <!-- Add more currencies as needed -->
+                    </select>
+                </div>
+                <div class="mt-4">
+                    <label class="block mb-2 text-gray-300">Language</label>
+                    <select id="mobileLanguageSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="zh">中文</option>
+                        <option value="ar">العربية</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="ja">日本語</option>
+                        <option value="ru">Русский</option>
+                        <option value="pt">Português</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative min-h-screen flex items-center pt-16">
+      <video id="bgVideo" autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover">
+        <source src="https://github.com/nextap-lab/nextap.github.io/raw/refs/heads/main/site_temp.mp4" type="video/mp4">
+      </video>
+      <div class="absolute inset-0 bg-black opacity-70"></div>
+      <div class="relative max-w-7xl mx-auto px-4 text-center z-10">
+        <h1 class="text-4xl md:text-7xl font-bold mb-6 leading-tight">
+          Your Success.<br>Our Commitment.
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 text-gray-300">100% Learning on You. Full Work on Us.</p>
+        <div class="flex flex-col md:flex-row justify-center gap-4">
+          <button onclick="scrollToCalculator()" class="bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition-all">
+            Get Custom Quote
+          </button>
+          <button onclick="navigateToSchedule()" class="bg-transparent border border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-black transition-all">
+            Schedule Consultation  
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <style>
+      #bgVideo {
+        filter: brightness(70%);
+      }
+    </style>
+
+    <!-- Services Section with Enhanced Business-Focused Design -->
+    <section id="services" class="py-24 bg-gradient-to-b from-gray-900 via-black to-gray-900 relative overflow-hidden">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.04),transparent_50%)]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(59,130,246,0.03),transparent_40%)]"></div>
+        </div>
+
+        <!-- Floating Particles -->
+        <div class="particles absolute inset-0 opacity-20"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <!-- Section Header -->
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                    Enterprise Solutions
+                </h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                    Tailored academic services designed for professional excellence
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                <!-- Report Writing Card -->
+                <div class="group relative">
+                    <!-- Highlight Effect -->
+                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl opacity-0 group-hover:opacity-20 blur transition duration-500"></div>
+                    
+                    <div class="relative p-8 rounded-2xl bg-gradient-to-b from-gray-800/80 to-gray-900/90 border border-gray-700/50 backdrop-blur-xl transition-all duration-300">
+                        <!-- Service Icon -->
+                        <div class="service-icon-wrapper mb-8">
+                            <div class="w-16 h-16 bg-blue-500/10 rounded-2xl p-4 relative">
+                                <div class="absolute inset-0 bg-blue-500/10 rounded-2xl animate-pulse"></div>
+                                <svg class="w-full h-full text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="space-y-6">
+                            <h3 class="text-2xl font-bold text-white tracking-tight">Report Writing</h3>
+                            <p class="text-gray-400 leading-relaxed min-h-[80px]">
+                                Professional documentation with comprehensive research and meticulous attention to industry standards.
+                            </p>
+                            
+                            <!-- Pricing Tier -->
+                            <div class="pricing-tier space-y-2">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-3xl font-bold text-white price" data-price-usd="0.035">₹0.035</span>
+                                    <span class="text-gray-400">-</span>
+                                    <span class="text-3xl font-bold text-white price" data-price-usd="0.092">₹0.092</span>
+                                    <span class="text-gray-400">/word</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Enterprise-grade quality</p>
+                            </div>
+                            
+                            <!-- Features List -->
+                            <ul class="space-y-3">
+                                <li class="flex items-center text-sm text-gray-400">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Professional Research
+                                </li>
+                                <li class="flex items-center text-sm text-gray-400">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Industry Standard Format
+                                </li>
+                                <li class="flex items-center text-sm text-gray-400">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Premium Support
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- CTA Button -->
+                        <button onclick="scrollToCalculator('report')" class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5">
+                            Calculate Investment
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Coding Projects Card -->
+                <div class="group relative">
+                    <!-- Highlight Effect -->
+                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl opacity-0 group-hover:opacity-20 blur transition duration-500"></div>
+                    
+                    <div class="relative p-8 rounded-2xl bg-gradient-to-b from-gray-800/80 to-gray-900/90 border border-gray-700/50 backdrop-blur-xl transition-all duration-300">
+                        <!-- Service Icon -->
+                        <div class="service-icon-wrapper mb-8">
+                            <div class="w-16 h-16 bg-blue-500/10 rounded-2xl p-4 relative">
+                                <div class="absolute inset-0 bg-blue-500/10 rounded-2xl animate-pulse"></div>
+                                <svg class="w-full h-full text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="space-y-6">
+                            <h3 class="text-2xl font-bold text-white tracking-tight">Coding Projects</h3>
+                            <p class="text-gray-400 leading-relaxed min-h-[80px]">
+                                Enterprise-level development solutions with scalable architecture and comprehensive documentation.
+                            </p>
+                            
+                            <!-- Pricing Tier -->
+                            <div class="pricing-tier space-y-2">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-3xl font-bold text-white">Custom</span>
+                                    <span class="text-gray-400">Quote</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Project-based pricing</p>
+                            </div>
+                            
+                            <!-- Features List -->
+                            <ul class="space-y-3">
+                                <li class="flex items-center text-sm text-gray-400">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Enterprise Architecture
+                                </li>
+                                <li class="flex items-center text-sm text-gray-400">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Code Documentation
+                                </li>
+                                <li class="flex items-center text-sm text-gray-400">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Technical Support
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- CTA Button -->
+                        <button onclick="showQuoteForm()" class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5">
+                            Request Quote
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Presentations Card -->
+                <div class="group relative">
+                    <!-- Highlight Effect -->
+                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl opacity-0 group-hover:opacity-20 blur transition duration-500"></div>
+                    
+                    <div class="relative p-8 rounded-2xl bg-gradient-to-b from-gray-800/80 to-gray-900/90 border border-gray-700/50 backdrop-blur-xl transition-all duration-300">
+                        <!-- Service Icon -->
+                        <div class="service-icon-wrapper mb-8">
+                            <div class="w-16 h-16 bg-blue-500/10 rounded-2xl p-4 relative">
+                                <div class="absolute inset-0 bg-blue-500/10 rounded-2xl animate-pulse"></div>
+                                <svg class="w-full h-full text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="space-y-6">
+                            <h3 class="text-2xl font-bold text-white tracking-tight">Presentations</h3>
+                            <p class="text-gray-400 leading-relaxed min-h-[80px]">
+                                Strategic presentation design focused on impact and professional delivery.
+                            </p>
+                            
+                            <!-- Pricing Tier -->
+                            <div class="pricing-tier space-y-2">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-3xl font-bold text-white price" data-price-usd="5.78">₹5.78</span>
+                                    <span class="text-gray-400">-</span>
+                                    <span class="text-3xl font-bold text-white price" data-price-usd="11.55">₹11.55</span>
+                                    <span class="text-gray-400">/slide</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Professional design</p>
+                            </div>
+                            
+                            <!-- Features List -->
+                            <ul class="space-y-3">
+                                <li class="flex items-center text-sm text-gray-400">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Custom Design
+                                </li>
+                                <li class="flex items-center text-sm text-gray-400">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Engaging Visuals
+                                </li>
+                                <li class="flex items-center text-sm text-gray-400">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Revision Support
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- CTA Button -->
+                        <button onclick="scrollToCalculator('presentation')" class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5">
+                            Calculate Investment
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animated Background Style -->
+        <style>
+            .particles {
+                background: linear-gradient(to bottom, transparent, transparent),
+                            radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+                background-size: 100% 100%, 550px 550px, 350px 350px, 250px 250px;
+                background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+                animation: particlesAnimation 15s linear infinite;
+            }
+
+            @keyframes particlesAnimation {
+                0% {
+                    background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+                }
+                100% {
+                    background-position: 0 0, -510px -490px, -220px -80px, -180px -150px;
+                }
+            }
+
+            /* Card Hover Effects */
+            .service-icon-wrapper {
+                position: relative;
+                isolation: isolate;
+            }
+
+            .service-icon-wrapper::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: 1rem;
+                background: radial-gradient(
+                    500px circle at var(--mouse-x) var(--mouse-y),
+                    rgba(59, 130, 246, 0.1),
+                    transparent 40%
+                );
+                opacity: 0;
+                transition: opacity 0.3s;
+                z-index: -1;
+            }
+
+            .group:hover .service-icon-wrapper::after {
+                opacity: 1;
+            }
+        </style>
+
+        <!-- Mouse tracking for lighting effect -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const cards = document.querySelectorAll('.group');
+                
+                cards.forEach(card => {
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        
+                        card.style.setProperty('--mouse-x', `${x}px`);
+                        card.style.setProperty('--mouse-y', `${y}px`);
+                    });
+                });
+            });
+
+            // Intersection Observer for fade-in animation
+            document.addEventListener('DOMContentLoaded', () => {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('fade-in');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.1
+                });
+
+                document.querySelectorAll('.group').forEach(card => {
+                    observer.observe(card);
+                });
+            });
+
+            // Function to toggle the mobile menu
+            function toggleMobileMenu() {
+                const mobileMenu = document.querySelector('.mobile-menu');
+                mobileMenu.classList.toggle('active');
+            }
+        </script>
+
+        <!-- Additional Animations -->
+        <style>
+            /* Fade in animation for cards */
+            .group {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+
+            .group.fade-in {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* Staggered animation delay for cards */
+            .group:nth-child(1) {
+                transition-delay: 0.1s;
+            }
+
+            .group:nth-child(2) {
+                transition-delay: 0.2s;
+            }
+
+            .group:nth-child(3) {
+                transition-delay: 0.3s;
+            }
+
+            /* Smooth hover state transitions */
+            .group > div {
+                transform: translateY(0);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .group:hover > div {
+                transform: translateY(-4px);
+            }
+
+            /* Pricing animation */
+            .pricing-tier {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .pricing-tier::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(
+                    45deg,
+                    transparent,
+                    rgba(59, 130, 246, 0.1),
+                    transparent
+                );
+                transform: translateX(-100%);
+                transition: transform 0.6s;
+            }
+
+            .group:hover .pricing-tier::after {
+                transform: translateX(100%);
+            }
+        </style>
+    </section>
 
     <!-- Project Roadmap -->
     <section class="py-20 bg-black">
@@ -831,42 +1140,42 @@
                 <div class="roadmap-bead"></div>
                 <div class="roadmap-content">
                     <h3 class="font-semibold text-lg mb-2">1. Get Quote</h3>
-                    <p class="text-gray-400">Calculate your investment based on project requirements</p>
+                    <p class="text-gray-400">Calculate your investment based on project requirements.</p>
                 </div>
             </div>
             <div class="roadmap-item">
                 <div class="roadmap-bead"></div>
                 <div class="roadmap-content">
                     <h3 class="font-semibold text-lg mb-2">2. One-to-One Consultation</h3>
-                    <p class="text-gray-400">Detailed discussion of your project needs and expectations</p>
+                    <p class="text-gray-400">Detailed discussion of your project needs and expectations.</p>
                 </div>
             </div>
             <div class="roadmap-item">
                 <div class="roadmap-bead"></div>
                 <div class="roadmap-content">
                     <h3 class="font-semibold text-lg mb-2">3. Project Work Live</h3>
-                    <p class="text-gray-400">Begin working on your project with regular updates</p>
+                    <p class="text-gray-400">Begin working on your project with regular updates.</p>
                 </div>
             </div>
             <div class="roadmap-item">
                 <div class="roadmap-bead"></div>
                 <div class="roadmap-content">
                     <h3 class="font-semibold text-lg mb-2">4. Live Monitoring Status</h3>
-                    <p class="text-gray-400">Track progress in real-time through our dashboard</p>
+                    <p class="text-gray-400">Track progress in real-time through our dashboard.</p>
                 </div>
             </div>
             <div class="roadmap-item">
                 <div class="roadmap-bead"></div>
                 <div class="roadmap-content">
                     <h3 class="font-semibold text-lg mb-2">5. Project Delivery</h3>
-                    <p class="text-gray-400">Receive your completed project on time</p>
+                    <p class="text-gray-400">Receive your completed project on time.</p>
                 </div>
             </div>
             <div class="roadmap-item">
                 <div class="roadmap-bead"></div>
                 <div class="roadmap-content">
                     <h3 class="font-semibold text-lg mb-2">6. Changes</h3>
-                    <p class="text-gray-400">Up to 5 minor revisions included</p>
+                    <p class="text-gray-400">Up to 5 minor revisions included.</p>
                 </div>
             </div>
         </div>
@@ -876,7 +1185,8 @@
     <section id="calculator" class="py-20 bg-black">
         <div class="max-w-3xl mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-16">Get Your Custom Quote</h2>
-            <div class="glass-card p-8 rounded-xl">
+            <!-- Report & Presentation Calculator -->
+            <div class="glass-card p-8 rounded-xl mb-8">
                 <div class="mb-6">
                     <label class="block mb-2 text-gray-300">Service Type</label>
                     <select id="serviceType" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white">
@@ -886,14 +1196,14 @@
                     </select>
                 </div>
                 <div id="wordCountDiv" class="mb-6">
-                    <label class="block mb-2 text-gray-300">Project Scope</label>
-                    <input type="number" id="wordCount" placeholder="Number of words" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" min="1">
+                    <label class="block mb-2 text-gray-300">Number of Words</label>
+                    <input type="number" id="wordCount" placeholder="Enter number of words" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" min="1">
                 </div>
                 <div id="slideCountDiv" class="mb-6 hidden">
                     <label class="block mb-2 text-gray-300">Number of Slides</label>
-                    <input type="number" id="slideCount" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" min="1">
+                    <input type="number" id="slideCount" placeholder="Enter number of slides" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" min="1">
                 </div>
-                <div class="mb-6">
+                <div id="qualityLevelDiv" class="mb-6">
                     <label class="block mb-2 text-gray-300">Quality Level</label>
                     <select id="qualityLevel" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white">
                         <option value="standard">Standard Quality</option>
@@ -901,12 +1211,40 @@
                         <option value="enterprise">Enterprise Quality</option>
                     </select>
                 </div>
-                <div class="text-2xl font-semibold mb-6 text-center">
+                <div class="calculator-result mb-6">
                     Estimated Investment: <span id="estimatedCost" class="text-blue-500">₹0</span>
                 </div>
                 <button onclick="navigateToSchedule()" class="w-full bg-blue-600 text-white py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition-all">
                     Proceed with Order
                 </button>
+            </div>
+
+            <!-- Coding Project Request Quote Form -->
+            <div id="quoteForm" class="glass-card p-8 rounded-xl quote-form">
+                <h3 class="text-2xl font-bold text-white mb-6 text-center">Request a Custom Quote</h3>
+                <form id="quoteRequestForm">
+                    <div class="mb-4">
+                        <label for="projectName" class="block mb-2 text-gray-300">Project Name</label>
+                        <input type="text" id="projectName" name="projectName" required class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" placeholder="Enter your project name">
+                    </div>
+                    <div class="mb-4">
+                        <label for="projectDetails" class="block mb-2 text-gray-300">Project Details</label>
+                        <textarea id="projectDetails" name="projectDetails" required class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" rows="5" placeholder="Describe your project"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="deadline" class="block mb-2 text-gray-300">Deadline</label>
+                        <input type="date" id="deadline" name="deadline" required class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white">
+                    </div>
+                    <div class="mb-4">
+                        <label for="contactEmail" class="block mb-2 text-gray-300">Contact Email</label>
+                        <input type="email" id="contactEmail" name="contactEmail" required class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white" placeholder="Enter your email">
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition-all">
+                            Submit Request
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
@@ -938,8 +1276,10 @@
     <!-- Chatbot Widget -->
     <div class="chatbot-widget">
         <div class="chatbot-button" onclick="toggleChat()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </svg>
         </div>
         
@@ -954,132 +1294,385 @@
                 <input type="text" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
                 <button onclick="sendMessage()">
                     <span>Send</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M22 2L11 13M22 2l-9 9M22 2v7l-9 9V11L22 2z" />
                     </svg>
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="footer-links">
+                <a href="Privacy Policy.html">Privacy Policy</a>
+                <a href="Terms of Service.html">Terms of Service</a>
+                <a href="Contact Us.html">Contact Us</a>
+                <a href="blogs.html">Blogs</a>
+                <a href="testimonials.html">Testimonials</a>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2023 Nextap AI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
     <script>
-  // Global variable to store the conversion rate
-  let conversionRate = 85.5; // Default fallback rate
+// Global object to store live exchange rates
+let exchangeRates = {};
+let baseCurrency = 'USD'; // Default value, can be changed
 
-  // Fetch live currency conversion rate on window load
-  window.onload = function () {
-    fetch('https://api.frankfurter.app/latest?from=USD&to=INR')
-      .then((response) => response.json())
-      .then((data) => {
-        // Update conversionRate with fetched data
-        if (data.rates && data.rates.INR) {
-          conversionRate = data.rates.INR;
-          console.log('Fetched conversion rate:', conversionRate);
+// Function to change base currency
+function changeBaseCurrency(newBaseCurrency) {
+    baseCurrency = newBaseCurrency;
+    loadExchangeRates().then(() => {
+        updateAllPrices();
+    });
+}
+
+// Initialize on page load
+window.onload = function() {
+    // Load exchange rates first, then detect location
+    loadExchangeRates().then(() => {
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                const countryCode = data.country;
+                const currency = countryToCurrency(countryCode);
+                if (currency) {
+                    if (document.getElementById('currencySelect')) {
+                        document.getElementById('currencySelect').value = currency;
+                    }
+                    if (document.getElementById('mobileCurrencySelect')) {
+                        document.getElementById('mobileCurrencySelect').value = currency;
+                    }
+                    updateAllPrices();
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching GeoIP data:', error);
+                updateAllPrices(); // Update with default currency
+            });
+    });
+};
+
+// Function to load live exchange rates with fixed Gulf rates
+async function loadExchangeRates() {
+    try {
+        const response = await fetch(`https://api.frankfurter.app/latest?from=${baseCurrency}`);
+        const data = await response.json();
+        if (data && data.rates) {
+            exchangeRates = data.rates;
+            
+            // Add fixed rates for Gulf currencies relative to USD
+            if (baseCurrency !== 'USD') {
+                // First get USD rate relative to base currency
+                const usdRate = exchangeRates.USD || (baseCurrency === 'USD' ? 1 : 0.01154);
+                // Then calculate Gulf currencies based on their USD pegs
+                exchangeRates.AED = usdRate * 3.67;
+                exchangeRates.SAR = usdRate * 3.75;
+            } else {
+                // If base is USD, use direct peg values
+                exchangeRates.AED = 3.67;
+                exchangeRates.SAR = 3.75;
+            }
+            
+            console.log('Exchange rates loaded with Gulf currencies:', exchangeRates);
         } else {
-          console.error('Invalid API response:', data);
+            throw new Error('Invalid exchange rate data');
         }
-        // Trigger updateCalculator to initialize cost display
-        updateCalculator();
-      })
-      .catch((error) => {
-        console.error('Error fetching conversion rate:', error);
-        // Use default conversionRate if fetch fails
-        updateCalculator();
-      });
-  };
+    } catch (error) {
+        console.error('Error loading exchange rates:', error);
+        // Fallback rates will be relative to current base currency
+        exchangeRates = {
+            'USD': baseCurrency === 'USD' ? 1 : 0.01154,
+            'AED': baseCurrency === 'USD' ? 3.67 : 0.042,
+            'SAR': baseCurrency === 'USD' ? 3.75 : 0.042,
+            'EUR': baseCurrency === 'USD' ? 0.95 : 0.011,
+            'GBP': baseCurrency === 'USD' ? 0.82 : 0.0095,
+            'JPY': baseCurrency === 'USD' ? 155.65 : 1.7963,
+            'KWD': baseCurrency === 'USD' ? 0.31 : 0.0036,
+        };
+    }
+}
 
-  // Select HTML elements
-  const currencySelect = document.getElementById('currencySelect');
-  const serviceType = document.getElementById('serviceType');
-  const wordCount = document.getElementById('wordCount');
-  const slideCount = document.getElementById('slideCount');
-  const qualityLevel = document.getElementById('qualityLevel');
-  const wordCountDiv = document.getElementById('wordCountDiv');
-  const slideCountDiv = document.getElementById('slideCountDiv');
-  const estimatedCost = document.getElementById('estimatedCost');
+// Update the conversion function to handle dynamic base currency
+function convertCurrency(amount, targetCurrency) {
+    if (targetCurrency === baseCurrency) {
+        return amount;
+    }
+    
+    let rate = exchangeRates[targetCurrency];
+    
+    // Special handling for Gulf currencies to ensure exact USD equivalence
+    if ((targetCurrency === 'AED' || targetCurrency === 'SAR') && baseCurrency === 'USD') {
+        rate = targetCurrency === 'AED' ? 3.67 : 3.75;
+    }
+    
+    if (!rate) {
+        console.error(`Exchange rate not found for ${targetCurrency}`);
+        return amount;
+    }
+    
+    return amount * rate;
+}
 
-  // Update calculator function to use live conversion rate
-  function updateCalculator() {
+// Map country codes to currency codes
+function countryToCurrency(countryCode) {
+    const mapping = {
+        'US': 'USD',
+        'GB': 'GBP',
+        'AU': 'AUD',
+        'JP': 'JPY',
+        'AE': 'AED',
+        'MY': 'MYR',
+        'IN': 'INR',
+        'CA': 'CAD',
+        'QA': 'QAR',
+        'SA': 'SAR',
+        'KW': 'KWD',
+    };
+    return mapping[countryCode] || baseCurrency;
+}
+
+// Select HTML elements
+const currencySelect = document.getElementById('currencySelect');
+const mobileCurrencySelect = document.getElementById('mobileCurrencySelect');
+const serviceType = document.getElementById('serviceType');
+const wordCount = document.getElementById('wordCount');
+const slideCount = document.getElementById('slideCount');
+const qualityLevel = document.getElementById('qualityLevel');
+const wordCountDiv = document.getElementById('wordCountDiv');
+const slideCountDiv = document.getElementById('slideCountDiv');
+const qualityLevelDiv = document.getElementById('qualityLevelDiv');
+const estimatedCost = document.getElementById('estimatedCost');
+const languageSelect = document.getElementById('languageSelect');
+const mobileLanguageSelect = document.getElementById('mobileLanguageSelect');
+const quoteForm = document.getElementById('quoteForm');
+const quoteRequestForm = document.getElementById('quoteRequestForm');
+
+// Update calculator function with live rates
+function updateCalculator(service = 'report') {
     const currency = currencySelect.value;
     let cost = 0;
     const type = serviceType.value;
 
-    // Define pricing data
     const pricingData = {
-      report: { standard: 3, premium: 5, enterprise: 8 },
-      presentation: { slide: 500 },
-      coding: { quote: 'custom' },
+        report: {
+            standard: 0.035,
+            premium: 0.058,
+            enterprise: 0.092
+        },
+        presentation: {
+            standard: 5.78,
+            premium: 8.66,
+            enterprise: 11.55
+        }
     };
 
     if (type === 'report') {
-      const rates = pricingData.report;
-      cost = wordCount.value * rates[qualityLevel.value];
+        const rates = pricingData.report;
+        const unitPrice = rates[qualityLevel.value];
+        const wordCountValue = parseInt(wordCount.value) || 0;
+        cost = wordCountValue * unitPrice;
     } else if (type === 'presentation') {
-      cost = slideCount.value * pricingData.presentation.slide;
+        const rates = pricingData.presentation;
+        const unitPrice = rates[qualityLevel.value] || 0.058;
+        const slideCountValue = parseInt(slideCount.value) || 0;
+        cost = slideCountValue * unitPrice;
     } else if (type === 'coding') {
-      estimatedCost.textContent = 'Custom Quote';
-      return;
+        estimatedCost.textContent = 'Custom Quote';
+        return;
     }
 
     if (type !== 'coding') {
-      if (currency === 'USD') {
-        // Convert cost to USD using the live conversion rate
-        estimatedCost.textContent = '$' + (cost / conversionRate).toFixed(2);
-      } else {
-        // Display cost in INR
-        estimatedCost.textContent = '₹' + cost.toFixed(2);
-      }
+        if (currency === baseCurrency) {
+            estimatedCost.textContent = getCurrencySymbol(currency) + cost.toFixed(2);
+        } else {
+            const convertedCost = convertCurrency(cost, currency);
+            estimatedCost.textContent = getCurrencySymbol(currency) + convertedCost.toFixed(2);
+        }
     }
-  }
+}
 
-  // Event listeners
-  [currencySelect, serviceType, wordCount, slideCount, qualityLevel].forEach((element) => {
+// Function to get currency symbol
+function getCurrencySymbol(currencyCode) {
+    const symbols = {
+        'USD': '$',
+        'EUR': '€',
+        'GBP': '£',
+        'AUD': 'A$',
+        'JPY': '¥',
+        'AED': 'د.إ',
+        'MYR': 'RM',
+        'INR': '₹',
+        'CAD': 'C$',
+        'QAR': 'ر.ق',
+        'SAR': '﷼',
+        'KWD': 'د.ك',
+    };
+    return symbols[currencyCode] || currencyCode + ' ';
+}
+
+// Update all price displays
+function updateAllPrices() {
+    const currency = currencySelect.value;
+    const priceElements = document.querySelectorAll('.price');
+    
+    priceElements.forEach(el => {
+        const basePriceUSD = parseFloat(el.getAttribute('data-price-usd'));
+        if (!isNaN(basePriceUSD)) {
+            if (currency === baseCurrency) {
+                el.textContent = getCurrencySymbol(currency) + basePriceUSD.toFixed(2);
+            } else {
+                const convertedPrice = convertCurrency(basePriceUSD, currency);
+                el.textContent = getCurrencySymbol(currency) + convertedPrice.toFixed(2);
+            }
+        }
+    });
+    
+    updateCalculator();
+}
+
+// Event listeners for currency selection
+[currencySelect, mobileCurrencySelect].forEach((element) => {
     if (element) {
-      element.addEventListener('input', updateCalculator);
+        element.addEventListener('change', (e) => {
+            const selectedCurrency = e.target.value;
+            loadExchangeRates().then(() => updateAllPrices());
+        });
     }
-  });
+});
 
-  // Service type change event handler
-  serviceType.addEventListener('change', () => {
+// Event listeners for calculator inputs
+[serviceType, wordCount, slideCount, qualityLevel].forEach((element) => {
+    if (element) {
+        element.addEventListener('input', () => {
+            const service = serviceType.value;
+            updateCalculator(service);
+        });
+    }
+});
+
+// Language selection function
+function changeLanguage(lang) {
+    const translateElement = document.querySelector('.goog-te-combo');
+    if (translateElement) {
+        translateElement.value = lang;
+        translateElement.dispatchEvent(new Event('change'));
+    }
+}
+
+// Language selection event listeners
+[languageSelect, mobileLanguageSelect].forEach((element) => {
+    if (element) {
+        element.addEventListener('change', (e) => {
+            changeLanguage(e.target.value);
+        });
+    }
+});
+
+// Service type change event handler
+serviceType.addEventListener('change', () => {
     const type = serviceType.value;
-    wordCountDiv.style.display = type === 'report' ? 'block' : 'none';
-    slideCountDiv.style.display = type === 'presentation' ? 'block' : 'none';
-    qualityLevel.style.display = type === 'report' ? 'block' : 'none';
-
-    if (type === 'coding') {
-      estimatedCost.textContent = 'Custom Quote';
-    } else {
-      updateCalculator();
+    if (type === 'report') {
+        wordCountDiv.style.display = 'block';
+        qualityLevelDiv.style.display = 'block';
+        slideCountDiv.style.display = 'none';
+    } else if (type === 'presentation') {
+        wordCountDiv.style.display = 'none';
+        qualityLevelDiv.style.display = 'block';
+        slideCountDiv.style.display = 'block';
+    } else if (type === 'coding') {
+        wordCountDiv.style.display = 'none';
+        qualityLevelDiv.style.display = 'none';
+        slideCountDiv.style.display = 'none';
+        estimatedCost.textContent = 'Custom Quote';
     }
-  });
+    updateCalculator();
+});
 
-  // Navigation functions
-  function scrollToCalculator() {
+// Scroll to calculator function
+function scrollToCalculator(service = 'report') {
     document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
-  }
+    const calculatorSection = document.getElementById('calculator');
+    calculatorSection.classList.add('highlight-section');
+    setTimeout(() => calculatorSection.classList.remove('highlight-section'), 2000);
+}
 
-  function navigateToSchedule() {
+// Navigation to schedule page
+function navigateToSchedule() {
     window.location.href = 'schedule.html';
-  }
+}
 
-  // Add mobile menu toggle
-  function toggleMobileMenu() {
-    const mobileMenu = document.querySelector('.mobile-menu');
-    mobileMenu.classList.toggle('active');
-  }
-  const API_KEY = "AIzaSyCE444N0GxkkQhfD5Hzws4jyvTV-bEuVJA";
-        // Initialize key variables
-let chatWindow;
-let chatMessages;
-let chatInput;
-let typingIndicator;
+// Show quote form function
+function showQuoteForm() {
+    quoteForm.classList.add('active');
+    quoteForm.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Handle mobile menu
+document.querySelectorAll('.mobile-menu a').forEach(menuItem => {
+    menuItem.addEventListener('click', toggleMobileMenu);
+});
+
+// Quote form submission handler
+quoteRequestForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const projectName = document.getElementById('projectName').value.trim();
+    const projectDetails = document.getElementById('projectDetails').value.trim();
+    const deadline = document.getElementById('deadline').value;
+    const contactEmail = document.getElementById('contactEmail').value.trim();
+
+    if (!projectName || !projectDetails || !deadline || !contactEmail) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    alert('Your request has been submitted. We will contact you shortly.');
+    quoteRequestForm.reset();
+    quoteForm.classList.remove('active');
+});
+
+// Window unload handler
+window.addEventListener('beforeunload', () => {
+    const chatMessages = document.querySelector('.chatbot-messages');
+    if (chatMessages.children.length > 0) {
+        sessionStorage.setItem('chatHistory', chatMessages.innerHTML);
+    }
+});
+
+// Refresh exchange rates periodically
+setInterval(loadExchangeRates, 3600000); // Refresh every hour
+</script>
+
+<!-- Calculator Logic -->
+<script>
+function changeCurrency(selectedCurrency) {
+    if (currencySelect) {
+        currencySelect.value = selectedCurrency;
+        currencySelect.dispatchEvent(new Event('change'));
+    }
+}
+</script>
+
+<!-- Chatbot Script -->
+<script>
+const API_KEY = "AIzaSyCE444N0GxkkQhfD5Hzws4jyvTV-bEuVJA";
+
+// Initialize key variables
+let chatWindow = document.querySelector('.chatbot-window');
+let chatMessages = document.querySelector('.chatbot-messages');
+let chatInputField = document.querySelector('.chatbot-input input');
+let typingIndicator = document.querySelector('.typing-indicator');
 let isProcessing = false;
-
 const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000; // 1 second
+const RETRY_DELAY = 1000;
 
-// System prompt for consistent AI behavior
+// System prompt
 const SYSTEM_PROMPT = `You are an AI assistant for our academic services website. Please help users with:
 - Questions about our services (report writing, coding projects, presentations)
 - Pricing inquiries and custom quotes
@@ -1095,34 +1688,29 @@ Guidelines:
 5. Provide clear next steps and actionable guidance
 6. Maintain ethical academic standards in responses`;
 
-// Initialize chatbot elements on DOM load
+// Initialize chatbot
 document.addEventListener('DOMContentLoaded', () => {
-    chatWindow = document.querySelector('.chatbot-window');
-    chatMessages = document.querySelector('.chatbot-messages');
-    chatInput = document.querySelector('.chatbot-input input');
-    typingIndicator = document.querySelector('.typing-indicator');
-    
-    // Add welcome message if chat is opened for first time
-    if (sessionStorage.getItem('chatInitialized') !== 'true') {
-        sessionStorage.setItem('chatInitialized', 'true');
+    if (sessionStorage.getItem('chatHistory')) {
+        chatMessages.innerHTML = sessionStorage.getItem('chatHistory');
+        chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
+    } else {
         addMessage("Hello! I'm your AI assistant. How can I help you with your academic project today?", 'bot');
     }
 });
 
-// Toggle chat window visibility
+// Toggle chat window
 function toggleChat() {
     const display = chatWindow.style.display;
     chatWindow.style.display = display === 'none' || display === '' ? 'flex' : 'none';
-    
     if (chatWindow.style.display === 'flex') {
-        chatInput.focus();
+        chatInputField.focus();
         if (chatMessages.children.length === 0) {
             addMessage("Hello! How can I assist you with your academic needs today?", 'bot');
         }
     }
 }
 
-// Handle Enter key press
+// Handle key press
 function handleKeyPress(event) {
     if (event.key === 'Enter' && !event.shiftKey && !isProcessing) {
         event.preventDefault();
@@ -1130,30 +1718,24 @@ function handleKeyPress(event) {
     }
 }
 
-// Add message to chat window
+// Add message to chat
 function addMessage(text, sender, isError = false) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', `${sender}-message`);
     if (isError) messageDiv.classList.add('error-message');
-    
-    // Process markdown-style formatting
+
     const formattedText = text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
         .replace(/`(.*?)`/g, '<code>$1</code>')
         .replace(/\n/g, '<br>');
-    
+
     messageDiv.innerHTML = formattedText;
     chatMessages.appendChild(messageDiv);
-    
-    // Smooth scroll to bottom
-    chatMessages.scrollTo({
-        top: chatMessages.scrollHeight,
-        behavior: 'smooth'
-    });
+    chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
 }
 
-// Add interactive buttons
+// Add action buttons
 function addActionButton(actionType) {
     const buttonDiv = document.createElement('div');
     buttonDiv.classList.add('chat-action-button');
@@ -1162,43 +1744,36 @@ function addActionButton(actionType) {
         schedule: {
             text: 'Schedule Consultation',
             onClick: 'scheduleConsultation()',
-            icon: '<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>'
-        },
-        calculator: {
-            text: 'View Pricing Calculator',
-            onClick: 'showCalculator()',
-            icon: '<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>'
+            icon: '<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m0 10v-3m-3 3H6"></path></svg>'
         }
     };
-    
+
     const config = buttonConfig[actionType];
     if (config) {
         buttonDiv.innerHTML = `
-            <button onclick="${config.onClick}" class="flex items-center justify-center">
+            <button onclick="${config.onClick}" class="flex items-center justify-center bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">
                 ${config.icon}
                 ${config.text}
             </button>
         `;
     }
-    
     chatMessages.appendChild(buttonDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// Main message sending function
+// Send message function
 async function sendMessage() {
     if (isProcessing) return;
-    
-    const message = chatInput.value.trim();
+
+    const message = chatInputField.value.trim();
     if (!message) return;
-    
+
     isProcessing = true;
     addMessage(message, 'user');
-    chatInput.value = '';
+    chatInputField.value = '';
     typingIndicator.style.display = 'block';
-    
+
     let retryCount = 0;
-    
     while (retryCount < MAX_RETRIES) {
         try {
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
@@ -1237,29 +1812,26 @@ async function sendMessage() {
             }
 
             const data = await response.json();
-            
+
             if (data.candidates && data.candidates[0].content.parts[0].text) {
                 const botResponse = data.candidates[0].content.parts[0].text;
                 
-                // Process response and add action buttons
                 const cleanResponse = botResponse.replace(/#schedule_consultation#|#show_calculator#/g, '').trim();
                 addMessage(cleanResponse, 'bot');
-                
+
                 if (botResponse.includes('#schedule_consultation#')) {
                     addActionButton('schedule');
                 }
                 if (botResponse.includes('#show_calculator#')) {
                     addActionButton('calculator');
                 }
-                
-                break; // Success, exit retry loop
+                break;
             } else {
                 throw new Error('Invalid API response format');
             }
         } catch (error) {
             console.error('Error:', error);
             retryCount++;
-            
             if (retryCount === MAX_RETRIES) {
                 addMessage("I apologize, but I'm having trouble connecting. Please try again later.", 'bot', true);
             } else {
@@ -1267,93 +1839,24 @@ async function sendMessage() {
             }
         }
     }
-    
+
     typingIndicator.style.display = 'none';
     isProcessing = false;
 }
 
 // Navigation functions
 function scheduleConsultation() {
-    // Save current chat state if needed
-    sessionStorage.setItem('chatPending', 'true');
-    
-    // Use the same navigation function as the main site buttons
-    const mainButton = document.querySelector('button[onclick="navigateToSchedule()"]');
-    if (mainButton) {
-        navigateToSchedule();
-    } else {
-        // Fallback if main navigation function isn't available
-        const currentPath = window.location.pathname;
-        const targetUrl = currentPath.substring(0, currentPath.lastIndexOf('/')) + '/schedule.html';
-        window.location.href = targetUrl;
-    }
+    navigateToSchedule();
 }
 
 function showCalculator() {
-    const calculator = document.getElementById('calculator');
-    if (calculator) {
-        calculator.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-        });
-        // Highlight calculator section briefly
-        calculator.classList.add('highlight-section');
-        setTimeout(() => calculator.classList.remove('highlight-section'), 2000);
-    }
+    scrollToCalculator();
 }
 
-        // Function to handle testimonial navigation
+// Function to handle testimonial navigation
 function navigateToTestimonials() {
-    const currentPath = window.location.pathname;
-    const targetUrl = currentPath.substring(0, currentPath.lastIndexOf('/')) + '/testimonial.html';
-    window.location.href = targetUrl;
+    window.location.href = 'testimonials.html';
 }
-
-// Add click event listeners to all testimonial links
-document.addEventListener('DOMContentLoaded', function() {
-    // Get all testimonial links in both desktop and mobile menus
-    const testimonialLinks = document.querySelectorAll('a[href="#testimonials"]');
-    
-    // Add click event listener to each link
-    testimonialLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent default anchor behavior
-            navigateToTestimonials();
-        });
-        
-        // Update href attribute to match the new behavior
-        link.setAttribute('href', 'testimonial.html');
-    });
-});
-
-// Handle mobile menu navigation
-function handleMobileTestimonialClick() {
-    navigateToTestimonials();
-    // Close mobile menu if it's open
-    const mobileMenu = document.querySelector('.mobile-menu');
-    if (mobileMenu && mobileMenu.classList.contains('active')) {
-        mobileMenu.classList.remove('active');
-    }
-}
-function navigateToBlogs() {
-    const currentPath = window.location.pathname;
-    const targetUrl = currentPath.substring(0, currentPath.lastIndexOf('/')) + '/blogs.html';
-    window.location.href = targetUrl;
-}
-
-// Error handling for failed API calls
-function handleApiError(error) {
-    console.error('API Error:', error);
-    addMessage("I apologize, but I'm experiencing technical difficulties. Please try again in a moment.", 'bot', true);
-}
-
-// Clean up function for page unload
-window.addEventListener('beforeunload', () => {
-    // Save chat state or perform cleanup if needed
-    if (chatMessages.children.length > 0) {
-        sessionStorage.setItem('chatHistory', chatMessages.innerHTML);
-    }
-});
-    </script>
+</script>
 </body>
 </html>

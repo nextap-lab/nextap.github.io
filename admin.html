@@ -279,6 +279,825 @@
             </div>
         </div>
     </div>
+    
+<div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Creation Engine</title>
+    <style>
+    /* CSS Variables for Theming */
+    :root {
+      --primary-color: #1e1e1e;
+      --secondary-color: #2c2c2c;
+      --accent-color: #3b82f6;
+      --accent-hover: #2563eb;
+      --text-color: #f3f4f6;
+      --border-color: #444;
+      --button-text-color: #f3f4f6;
+      --button-bg-color: #4f46e5;
+      --button-hover-bg-color: #4338ca;
+      --nav-background: rgba(0, 0, 0, 0.9);
+      --nav-text-color: #f3f4f6;
+      --nav-hover-color: #3b82f6;
+      --logo-gradient: linear-gradient(90deg, #60a5fa, #3b82f6);
+    }
+
+    /* Container Styling */
+    .blog-editor-container {
+      width: 100%;
+      min-height: 100vh;
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
+
+    /* Editor Wrapper */
+    .editor-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      background-color: var(--secondary-color);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .editor-wrapper:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Header */
+    .editor-header {
+      padding: 20px;
+      background-color: var(--accent-color);
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    /* Main Content */
+    .editor-content {
+      display: flex;
+      flex-direction: row;
+      height: 80vh;
+    }
+
+    /* Editor Section */
+    .editor-section {
+      width: 50%;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      border-right: 2px solid var(--border-color);
+      overflow-y: auto;
+    }
+
+    .editor-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    /* Textarea Styling */
+    #editor {
+      flex-grow: 1;
+      padding: 15px;
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      resize: none;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      line-height: 1.5;
+      overflow-y: auto;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #editor:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    /* Formatting Buttons */
+    .formatting-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .formatting-buttons button {
+      padding: 10px 15px;
+      background-color: var(--button-bg-color);
+      color: var(--button-text-color);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .formatting-buttons button:hover {
+      background-color: var(--button-hover-bg-color);
+      transform: translateY(-2px);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .action-buttons button {
+      flex: 1;
+      padding: 12px 20px;
+      background-color: var(--accent-color);
+      color: var(--button-text-color);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .action-buttons button:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Preview Section */
+    .preview-section {
+      width: 50%;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: var(--primary-color);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    .preview-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    /* Preview Template */
+    .blog-preview {
+      background-color: var(--secondary-color);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      color: var(--text-color);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    /* Navigation Bar in Preview */
+    .blog-preview nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: var(--nav-background);
+      border-bottom: 2px solid var(--border-color);
+      border-radius: 12px 12px 0 0;
+      position: relative;
+    }
+
+    .blog-preview nav .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: var(--logo-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .blog-preview nav .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .blog-preview nav .nav-links a {
+      color: var(--nav-text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .blog-preview nav .nav-links a:hover {
+      color: var(--nav-hover-color);
+    }
+
+    /* Hamburger Menu */
+    .blog-preview nav .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .blog-preview nav .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: var(--nav-text-color);
+      transition: all 0.3s ease;
+    }
+
+    /* Mobile Menu */
+    .blog-preview nav .mobile-nav {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      background-color: var(--nav-background);
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+    }
+
+    .blog-preview nav .mobile-nav a {
+      color: var(--nav-text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .blog-preview nav .mobile-nav a:hover {
+      color: var(--nav-hover-color);
+    }
+
+    /* Toggle Active Class for Hamburger */
+    .blog-preview nav .hamburger.active div:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .blog-preview nav .hamburger.active div:nth-child(2) {
+      opacity: 0;
+    }
+
+    .blog-preview nav .hamburger.active div:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Blog Content */
+    .blog-content {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .blog-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .blog-content blockquote {
+      border-left: 4px solid var(--accent-color);
+      padding-left: 16px;
+      color: #ccc;
+      font-style: italic;
+      margin: 10px 0;
+      background-color: #2c2c2c;
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .blog-content pre {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 10px 0;
+    }
+
+    .blog-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+
+    .blog-content th, .blog-content td {
+      border: 1px solid var(--accent-color);
+      padding: 8px;
+      text-align: left;
+    }
+
+    .blog-content ul, .blog-content ol {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+
+    .blog-content hr {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 20px 0;
+    }
+
+    /* Scrollbar Styling */
+    .editor-section::-webkit-scrollbar,
+    .preview-section::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .editor-section::-webkit-scrollbar-track,
+    .preview-section::-webkit-scrollbar-track {
+      background: var(--secondary-color);
+      border-radius: 4px;
+    }
+
+    .editor-section::-webkit-scrollbar-thumb,
+    .preview-section::-webkit-scrollbar-thumb {
+      background-color: var(--accent-color);
+      border-radius: 4px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .editor-content {
+        flex-direction: column;
+      }
+
+      .editor-section, .preview-section {
+        width: 100%;
+        border-right: none;
+        border-bottom: 2px solid var(--border-color);
+      }
+    }
+
+    /* Preview Navigation Responsive */
+    @media (max-width: 768px) {
+      .blog-preview nav .nav-links {
+        display: none;
+      }
+
+      .blog-preview nav .hamburger {
+        display: flex;
+      }
+
+      .blog-preview nav .mobile-nav {
+        display: flex;
+      }
+    }
+
+    /* Footer in Preview */
+    .blog-preview footer {
+      padding: 20px;
+      background-color: var(--nav-background);
+      border-top: 2px solid var(--border-color);
+      border-radius: 0 0 12px 12px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .blog-preview footer a {
+      color: var(--nav-text-color);
+      text-decoration: none;
+      margin: 0 10px;
+      transition: color 0.3s ease;
+    }
+
+    .blog-preview footer a:hover {
+      color: var(--nav-hover-color);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+    </style>
+</head>
+<body>
+    <div class="blog-editor-container">
+        <div class="editor-wrapper">
+            <div class="editor-header">Blog Creation Engine</div>
+            <div class="editor-content">
+                <div class="editor-section">
+                    <h2>Editor</h2>
+                    <textarea id="editor" placeholder="Enter your blog content here..."></textarea>
+                    <div class="formatting-buttons">
+                        <button onclick="insertFormatting('@')">Title</button>
+                        <button onclick="insertFormatting('@@')">Subtitle</button>
+                        <button onclick="insertFormatting('#')">H1</button>
+                        <button onclick="insertFormatting('##')">H2</button>
+                        <button onclick="insertFormatting('###')">H3</button>
+                        <button onclick="insertFormatting('>>>>')">Quote</button>
+                        <button onclick="insertCodeBlock()">Code</button>
+                        <button onclick="insertTable()">Table</button>
+                        <button onclick="insertImage()">Image</button>
+                        <button onclick="insertFormatting('~~')">HR</button>
+                        <button onclick="insertFormatting('++')">Bullet List</button>
+                        <button onclick="insertFormatting('***')">Number List</button>
+                    </div>
+                    <div class="action-buttons">
+                        <button onclick="processContent()">Process & Preview</button>
+                        <button onclick="saveContent()">Save Draft</button>
+                    </div>
+                </div>
+                <div class="preview-section">
+                    <h2>Preview</h2>
+                    <div class="blog-preview" id="preview">
+                        <nav>
+                            <div class="logo">Nextap AI</div>
+                            <div class="nav-links">
+                                <a href="#services">Services</a>
+                                <a href="#testimonials">Testimonials</a>
+                                <a href="#calculator">Get Quote</a>
+                                <a href="dashboard.html">Dashboard</a>
+                                <a href="admin.html">Admin</a>
+                                <a href="blogs.html">Blogs</a>
+                            </div>
+                            <div class="hamburger" onclick="togglePreviewMenu()">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div class="mobile-nav hidden">
+                                <a href="#services">Services</a>
+                                <a href="#testimonials">Testimonials</a>
+                                <a href="#calculator">Get Quote</a>
+                                <a href="dashboard.html">Dashboard</a>
+                                <a href="admin.html">Admin</a>
+                                <a href="blogs.html">Blogs</a>
+                            </div>
+                        </nav>
+                        <div class="blog-content" id="blogContent">
+                            <p>Your blog content will appear here after processing.</p>
+                        </div>
+                        <footer>
+                            <a href="Privacy Policy.html">Privacy Policy</a>
+                            <a href="Terms of Service.html">Terms of Service</a>
+                            <a href="Contact Us.html">Contact Us</a>
+                            <a href="blogs.html">Blogs</a>
+                            <a href="testimonials.html">Testimonials</a>
+                            <div class="footer-bottom">
+                                &copy; 2023 Nextap AI. All rights reserved.
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = "AIzaSyCE444N0GxkkQhfD5Hzws4jyvTV-bEuVJA";
+        let lastSavedContent = '';
+
+        // Initialize from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedDraft = localStorage.getItem('blogDraft');
+            if (savedDraft) {
+                document.getElementById('editor').value = savedDraft;
+                processContent();
+            }
+        });
+
+        // Auto-save every 30 seconds
+        setInterval(() => {
+            const currentContent = document.getElementById('editor').value;
+            if (currentContent !== lastSavedContent) {
+                saveContent();
+            }
+        }, 30000);
+
+        // Insert Formatting
+        function insertFormatting(format) {
+            const editor = document.getElementById('editor');
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const text = editor.value;
+            const selectedText = text.substring(start, end);
+            let newText = '';
+
+            switch(format) {
+                case '@':
+                    newText = `${format} ${selectedText}\n`;
+                    break;
+                case '@@':
+                    newText = `${format} ${selectedText}\n`;
+                    break;
+                case '#':
+                case '##':
+                case '###':
+                    newText = `${format} ${selectedText}\n`;
+                    break;
+                case '>>>>':
+                    newText = `${format} ${selectedText}\n`;
+                    break;
+                case '~~':
+                    newText = `${format}\n`;
+                    break;
+                case '++':
+                    newText = `${format} ${selectedText}\n`;
+                    break;
+                case '***':
+                    newText = `${format} ${selectedText}\n`;
+                    break;
+                default:
+                    newText = `${format} ${selectedText}\n`;
+            }
+
+            editor.setRangeText(newText, start, end, 'end');
+            editor.focus();
+        }
+
+        // Insert Code Block
+        function insertCodeBlock() {
+            const editor = document.getElementById('editor');
+            const selectText = window.getSelection().toString();
+            const selectedText = selectText ? selectText : 'Your code here';
+            const codeBlock = `[[[[\n${selectedText}\n]]]]\n`;
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            editor.setRangeText(codeBlock, start, end, 'end');
+            editor.focus();
+        }
+
+        // Insert Table
+        function insertTable() {
+            const tableTemplate = 'Header 1 | Header 2 | Header 3\n---|---|---\nCell 1 | Cell 2 | Cell 3\n';
+            const tableBlock = `<<T>>\n${tableTemplate}>>T<<\n`;
+            const editor = document.getElementById('editor');
+            const pos = editor.selectionStart;
+            editor.setRangeText(tableBlock, pos, pos, 'end');
+            editor.focus();
+        }
+
+        // Insert Image
+        function insertImage() {
+            const imageUrl = prompt('Enter image URL:');
+            if (imageUrl) {
+                const caption = prompt('Enter image caption:') || '';
+                const imageBlock = `[IMG_SRC]${imageUrl}[IMG_CAP]${caption}\n`;
+                const editor = document.getElementById('editor');
+                const pos = editor.selectionStart;
+                editor.setRangeText(imageBlock, pos, pos, 'end');
+                editor.focus();
+            }
+        }
+
+        // Process Content
+        async function processContent() {
+            const content = document.getElementById('editor').value;
+            if (!content.trim()) {
+                alert('Editor is empty. Please enter some content.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{ role: "user", parts: [{ text: content }] }],
+                        systemInstruction: {
+                            role: "user",
+                            parts: [{
+                                text: `Identify and mark text with these exact identifiers. Do not modify the content itself:
+                                Main Title before text [M_TITLE]
+                                Subtitle before text [S_TITLE]
+                                H1 Heading before text [H1]
+                                H2 Heading before text [H2]
+                                H3 Heading before text [H3]
+                                [QUOTE] before paragraph [QUOTE]
+                                Code Block start [CODE_START] Code Block end [CODE_END]
+                                Table start [TABLE_START] Table end [TABLE_END]
+                                Image link [IMG_SRC]
+                                Image caption [IMG_CAP]
+                                Horizontal Rule on its own line [HR]
+                                Bullet List item before text [BULLET]
+                                Numbered List item before text [NUMBER]
+                                
+                                Rules:
+                                Add marker immediately before relevant text
+                                Keep original text exactly as is
+                                Only add markers where formatting is clearly intended
+                                Do not add HTML or styling
+                                Do not modify spacing or line breaks
+                                Do not add any other markers or formatting`
+                            }]
+                        },
+                        generationConfig: {
+                            temperature: 0.01,
+                            topK: 40,
+                            topP: 0.95,
+                            maxOutputTokens: 8192,
+                            responseMimeType: "text/plain"
+                        }
+                    })
+                });
+
+                if (!response.ok) throw new Error('API request failed');
+
+                const data = await response.json();
+                const processedContent = data.candidates[0].content.parts[0].text;
+                const html = convertToHtml(processedContent);
+                document.getElementById('blogContent').innerHTML = html;
+
+                // Initialize the Preview Nav Menu
+                initializePreviewNav();
+            } catch (error) {
+                console.error('Error processing content:', error);
+                alert('Error processing content. Please try again.');
+                document.getElementById('blogContent').innerHTML = '<p style="color: red;">Failed to process content.</p>';
+            }
+
+            lastSavedContent = content;
+        }
+
+        // Convert Markdown-like Syntax to HTML
+        function convertToHtml(content) {
+            let html = content
+                // Headers
+                .replace(/\[M_TITLE\](.*?)(?=\n|$)/g, '<h1>$1</h1>')
+                .replace(/\[S_TITLE\](.*?)(?=\n|$)/g, '<h2>$1</h2>')
+                .replace(/\[H1\](.*?)(?=\n|$)/g, '<h3>$1</h3>')
+                .replace(/\[H2\](.*?)(?=\n|$)/g, '<h4>$1</h4>')
+                .replace(/\[H3\](.*?)(?=\n|$)/g, '<h5>$1</h5>')
+                // Block elements
+                .replace(/\[QUOTE\](.*?)(?=\n|$)/g, '<blockquote>$1</blockquote>')
+                .replace(/\[CODE_START\]([\s\S]*?)\[CODE_END\]/g, '<pre><code>$1</code></pre>')
+                .replace(/\[TABLE_START\]([\s\S]*?)\[TABLE_END\]/g, (match, table) => {
+                    const rows = table.trim().split('\n').map(row => {
+                        const cells = row.split('|').map(cell => `<td>${cell.trim()}</td>`).join('');
+                        return `<tr>${cells}</tr>`;
+                    });
+                    return `<table>${rows.join('')}</table>`;
+                })
+                // Images
+                .replace(/\[IMG_SRC\](.*?)\[IMG_CAP\](.*?)(?=\n|$)/g, '<figure><img src="$1" alt="$2"><figcaption>$2</figcaption></figure>')
+                // Lists
+                .replace(/\[BULLET\](.*?)(?=\n|$)/g, '<li>$1</li>')
+                .replace(/\[NUMBER\](.*?)(?=\n|$)/g, '<li>$1</li>')
+                // Horizontal Rule
+                .replace(/\[HR\]/g, '<hr>');
+
+            // Wrap Bullet Lists
+            html = html.replace(/(<li>.*?<\/li>)/g, (match) => {
+                return '<ul>' + match + '</ul>';
+            });
+
+            // Wrap Numbered Lists
+            html = html.replace(/(<li>.*?<\/li>)/g, (match) => {
+                return '<ol>' + match + '</ol>';
+            });
+
+            // Convert remaining plain text to paragraphs
+            html = html.replace(/^(?!<h[1-5]>|<blockquote>|<pre>|<table>|<figure>|<ul>|<ol>|<hr>)(.*?)(?=\n|$)/gm, '<p>$1</p>');
+
+            return html;
+        }
+
+        function saveContent() {
+  const content = document.getElementById('editor').value;
+  const previewElement = document.querySelector('.blog-preview');
+  const previewContent = previewElement ? previewElement.outerHTML : '';
+  
+  // Get all styles from the current document
+  const styleTags = document.querySelectorAll('style');
+  let styles = '';
+  styleTags.forEach(styleTag => {
+    styles += styleTag.textContent + '\n';
+  });
+
+  // Create a complete HTML document with the same styling as preview
+  const fullHtml = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Blog Post</title>
+      <style>
+        ${styles}
+        /* Additional styles for standalone page */
+        body {
+          margin: 0;
+          padding: 20px;
+          background-color: var(--primary-color);
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+        }
+        .blog-preview {
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+      </style>
+    </head>
+    <body>
+      ${previewContent}
+      <script>
+        // Initialize mobile menu functionality
+        function togglePreviewMenu() {
+          const previewNav = document.querySelector('.blog-preview nav');
+          if (previewNav) {
+            const hamburger = previewNav.querySelector('.hamburger');
+            const mobileNav = previewNav.querySelector('.mobile-nav');
+            if (hamburger && mobileNav) {
+              hamburger.classList.toggle('active');
+              mobileNav.classList.toggle('hidden');
+            }
+          }
+        }
+
+        // Initialize navigation
+        document.addEventListener('DOMContentLoaded', () => {
+          const hamburger = document.querySelector('.hamburger');
+          if (hamburger) {
+            hamburger.addEventListener('click', togglePreviewMenu);
+          }
+        });
+      <\/script> <!-- Escaped closing script tag -->
+    </body>
+    </html>
+  `;
+
+  // Create a Blob containing the HTML content
+  const blob = new Blob([fullHtml], { type: 'text/html' });
+
+  // Create a temporary link element
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'blog_post.html';
+
+  // Trigger the download
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  // Save to localStorage with timestamp
+  const timestamp = new Date().getTime();
+  const randomNumber = Math.floor(Math.random() * 900000) + 100000;
+  const draftID = `blogDraft_${timestamp}_${randomNumber}`;
+  localStorage.setItem(draftID, content);
+
+  // Assuming lastSavedContent is defined elsewhere in your code
+  if (typeof lastSavedContent !== 'undefined') {
+    lastSavedContent = content;
+  }
+
+  alert(`Draft saved successfully! Your Draft ID is: ${draftID}`);
+}
+
+// Handle Paste Events to Maintain Formatting
+const editor = document.getElementById('editor');
+if (editor) {
+  editor.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const text = e.clipboardData.getData('text/plain');
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    editor.setRangeText(text, start, end, 'end');
+  });
+}
+
+        // Initialize Preview Navigation Menu Function
+        function initializePreviewNav() {
+            const previewNav = document.querySelector('.blog-preview nav');
+            if (previewNav) {
+                const hamburger = previewNav.querySelector('.hamburger');
+                const mobileNav = previewNav.querySelector('.mobile-nav');
+
+                // Ensure no duplicate event listeners
+                hamburger.removeEventListener('click', togglePreviewMenu);
+                hamburger.addEventListener('click', togglePreviewMenu);
+            }
+        }
+
+        // Toggle Preview Mobile Menu
+        function togglePreviewMenu() {
+            const previewNav = document.querySelector('.blog-preview nav');
+            const hamburger = previewNav.querySelector('.hamburger');
+            const mobileNav = previewNav.querySelector('.mobile-nav');
+
+            hamburger.classList.toggle('active');
+            mobileNav.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</div>
 
     <script>
         // Constants

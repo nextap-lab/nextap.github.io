@@ -255,28 +255,28 @@
             margin: 0 auto; /* Center the hero section */
             padding: 2rem;
         }
-
+    
         .hero-content {
             flex: 1;
             padding-right: 2rem;
             z-index: 1;
         }
-
+    
         .hero-content h1 {
             color: #3b82f6;
         }
-
+    
         .hero-content p {
             color: #6b7280;
         }
-
+    
         .video-container {
             flex: 1;
             position: relative;
             width: 100%;
             padding-top: 56.25%; /* 16:9 aspect ratio */
         }
-
+    
         #heroVideo {
             position: absolute;
             top: 0;
@@ -404,12 +404,12 @@
             }
         }
 
-        /* New Styles for Film-like Horizontal Tape */
+        /* New Styles for Circular Film-like Horizontal Tape */
         .solutions-tape {
             position: relative;
             overflow: hidden;
             width: 100%;
-            padding: 2rem 0;
+            padding: 3rem 0;
         }
 
         .tape-controls {
@@ -427,13 +427,14 @@
             background-color: rgba(59, 130, 246, 0.8);
             border: none;
             color: white;
-            padding: 10px 15px;
+            padding: 15px 20px;
             border-radius: 50%;
             cursor: pointer;
             pointer-events: all; /* Enable pointer events for buttons */
             transition: background-color 0.3s ease;
             font-size: 1.5rem;
             line-height: 1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
         .tape-controls button:hover {
@@ -446,39 +447,50 @@
             justify-content: center;
             transition: transform 0.5s ease;
             will-change: transform;
+            /* Adjust the width based on the number of images */
+            width: 100%;
         }
 
         .tape-image {
             flex: 0 0 auto;
-            width: 300px;
-            height: 200px;
-            margin: 0 15px;
-            border-radius: 10px;
+            width: 400px;
+            height: 250px;
+            margin: 0 20px;
+            border-radius: 15px;
             transition: transform 0.5s ease, filter 0.5s ease, opacity 0.5s ease;
             position: relative;
             cursor: pointer;
             /* Initially non-active images are slightly darker and semi-transparent */
-            filter: brightness(0.7);
-            opacity: 0.6;
+            filter: brightness(0.6) blur(2px);
+            opacity: 0.5;
         }
 
         .tape-image.active {
-            transform: scale(1.2);
-            filter: brightness(1);
+            transform: scale(1.2) translateY(-20px);
+            filter: brightness(1) blur(0px);
             opacity: 1;
             z-index: 2;
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.5);
         }
 
         .tape-image.prev,
         .tape-image.next {
-            transform: scale(0.8);
-            filter: brightness(0.8);
+            transform: scale(1) translateY(0);
+            filter: brightness(0.8) blur(1px);
             opacity: 0.8;
             z-index: 1;
         }
 
         .tape-image.hidden {
             display: none;
+        }
+
+        @media (max-width: 1024px) {
+            .tape-image {
+                width: 300px;
+                height: 200px;
+                margin: 0 15px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -489,7 +501,12 @@
             }
 
             .tape-image.active {
-                transform: scale(1.1);
+                transform: scale(1.1) translateY(-15px);
+            }
+
+            .tape-controls button {
+                padding: 10px 15px;
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -694,7 +711,7 @@
             <button class="filter-chip" data-filter="research">Research</button>
         </div>
 
-        <!-- Film-like Horizontal Tape -->
+        <!-- Circular Film-like Horizontal Tape -->
         <div class="solutions-tape">
             <!-- Navigation Controls -->
             <div class="tape-controls">
@@ -741,79 +758,105 @@
             mobileMenuBtn.querySelector('#close').classList.toggle('block');
         });
 
-        // Automatic Scrolling Setup
+        // Circular Tape Functionality
         const tapeContainer = document.getElementById('tapeContainer');
         const tapeImages = document.querySelectorAll('.tape-image');
         let currentIndex = 0;
         const totalImages = tapeImages.length;
         let autoScrollInterval;
-        const autoScrollDelay = 4000; // 4 seconds
+        const autoScrollDelay = 4500; // 4.5 seconds
+
+        // Clone first and last images for seamless loop
+        function cloneImages() {
+            const firstClone = tapeImages[0].cloneNode(true);
+            const lastClone = tapeImages[totalImages - 1].cloneNode(true);
+            tapeContainer.appendChild(firstClone);
+            tapeContainer.insertBefore(lastClone, tapeImages[0]);
+        }
+
+        cloneImages();
+
+        // Adjust tapeContainer's initial position to the first original image
+        tapeContainer.style.transform = `translateX(-${currentIndex + 1}00%)`;
 
         function updateTape() {
-            tapeImages.forEach((img, index) => {
-                img.classList.remove('active', 'prev', 'next', 'hidden');
-                if (index === currentIndex) {
-                    img.classList.add('active');
-                } else if (index === currentIndex - 1) {
-                    img.classList.add('prev');
-                } else if (index === currentIndex + 1) {
-                    img.classList.add('next');
-                } else {
-                    img.classList.add('hidden');
-                }
-            });
+            tapeContainer.style.transition = 'transform 0.5s ease';
+            tapeContainer.style.transform = `translateX(-${currentIndex + 1}00%)`;
 
-            // Scroll the tape container to center the active image
-            const activeImage = tapeImages[currentIndex];
-            const containerRect = tapeContainer.getBoundingClientRect();
-            const activeRect = activeImage.getBoundingClientRect();
-            const scrollOffset = activeImage.offsetLeft - (tapeContainer.offsetWidth / 2) + (activeImage.offsetWidth / 2);
-            tapeContainer.scrollTo({
-                left: scrollOffset,
-                behavior: 'smooth'
-            });
+            // Update classes after transition
+            setTimeout(() => {
+                tapeImages.forEach((img, index) => {
+                    img.classList.remove('active', 'prev', 'next', 'hidden');
+                    if (index === currentIndex) {
+                        img.classList.add('active');
+                    } else if (index === currentIndex - 1) {
+                        img.classList.add('prev');
+                    } else if (index === currentIndex + 1) {
+                        img.classList.add('next');
+                    } else {
+                        img.classList.add('hidden');
+                    }
+                });
+            }, 500);
         }
 
         function prevImage() {
-            if (currentIndex > 0) {
-                currentIndex--;
-            } else {
-                // Loop to last image
-                currentIndex = totalImages - 1;
-            }
+            if (currentIndex <= 0) return;
+            currentIndex--;
             updateTape();
             resetAutoScroll();
         }
 
         function nextImage() {
-            if (currentIndex < totalImages - 1) {
-                currentIndex++;
-            } else {
-                // Loop back to first image
-                currentIndex = 0;
-            }
+            if (currentIndex >= totalImages - 1) return;
+            currentIndex++;
             updateTape();
             resetAutoScroll();
         }
 
+        // Handle transition end for looping
+        tapeContainer.addEventListener('transitionend', () => {
+            const clonedFirst = tapeContainer.children[0];
+            const clonedLast = tapeContainer.children[tapeContainer.children.length - 1];
+
+            if (tapeContainer.children[currentIndex + 1] === clonedFirst) {
+                tapeContainer.style.transition = 'none';
+                currentIndex = 0;
+                tapeContainer.style.transform = `translateX(-${currentIndex + 1}00%)`;
+            }
+
+            if (tapeContainer.children[currentIndex + 1] === clonedLast) {
+                tapeContainer.style.transition = 'none';
+                currentIndex = totalImages - 1;
+                tapeContainer.style.transform = `translateX(-${currentIndex + 1}00%)`;
+            }
+        });
+
+        // Automatic Scrolling
+        function autoScroll() {
+            autoScrollInterval = setInterval(() => {
+                nextImage();
+            }, autoScrollDelay);
+        }
+
         function resetAutoScroll() {
             clearInterval(autoScrollInterval);
-            autoScrollInterval = setInterval(nextImage, autoScrollDelay);
+            autoScroll();
         }
 
         // Initialize Tape
         document.addEventListener('DOMContentLoaded', () => {
             updateTape();
-            autoScrollInterval = setInterval(nextImage, autoScrollDelay);
-        });
+            autoScroll();
 
-        // Pause auto-scroll on mouse enter and resume on mouse leave
-        document.querySelector('.solutions-tape').addEventListener('mouseenter', () => {
-            clearInterval(autoScrollInterval);
-        });
+            // Pause auto-scroll on mouse enter and resume on mouse leave
+            document.querySelector('.solutions-tape').addEventListener('mouseenter', () => {
+                clearInterval(autoScrollInterval);
+            });
 
-        document.querySelector('.solutions-tape').addEventListener('mouseleave', () => {
-            resetAutoScroll();
+            document.querySelector('.solutions-tape').addEventListener('mouseleave', () => {
+                autoScroll();
+            });
         });
 
         // Modal functionality remains unchanged

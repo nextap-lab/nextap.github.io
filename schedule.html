@@ -859,131 +859,114 @@
         }
 
         // Form submission handler
-document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
+        document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
+    // Get the result div for displaying messages
+    const resultDiv = document.getElementById('result');
+    
     try {
-        // Show loading state
-        showSpinner('Scheduling appointment...');
+        // Show loading state in result div
+        resultDiv.textContent = 'Scheduling appointment...';
+        resultDiv.className = 'result';
         
-        // Validate form data
+        // Get form data
         const formData = new FormData(e.target);
-        const appointment = {
-            name: formData.get('name')?.trim(),
-            email: formData.get('email')?.trim(),
-            date: selectedDate.toISOString().split('T')[0],
-            time: selectedTime,
-            message: formData.get('message')?.trim() || ''
-        };
-
+        const params = new URLSearchParams();
+        
         // Basic validation
-        if (!appointment.name || !appointment.email || !appointment.date || !appointment.time) {
+        const name = formData.get('name')?.trim();
+        const email = formData.get('email')?.trim();
+        const date = formData.get('date');
+        const time = formData.get('time');
+        const message = formData.get('message')?.trim() || '';
+
+        // Validate required fields
+        if (!name || !email || !date || !time) {
             throw new Error('Please fill in all required fields');
         }
 
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(appointment.email)) {
+        if (!emailRegex.test(email)) {
             throw new Error('Please enter a valid email address');
         }
 
-        // Double-check slot availability
-        await fetchBookedSlots();
-        const availableSlots = getAvailableTimeSlotsForDate(selectedDate);
-        
-        if (!availableSlots.includes(selectedTime)) {
-            throw new Error('This time slot was just booked. Please select another time.');
-        }
+        // Add parameters including type=POST for our modified Apps Script
+        params.append('type', 'POST');
+        params.append('name', name);
+        params.append('email', email);
+        params.append('date', date);
+        params.append('time', time);
+        params.append('message', message);
 
-        // Prepare request parameters
-        const params = new URLSearchParams(appointment);
-
-        // Submit appointment
-        const response = await fetch(`${SCRIPT_URL}?${params.toString()}`, {
-            method: 'POST',
+        // Submit appointment using GET method (as per our working implementation)
+        const response = await fetch(`${scriptURL}?${params.toString()}`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Server error! status: ${response.status}`);
         }
 
-        const result = await response.json();
-
-        if (!result.success) {
-            throw new Error(result.message || 'Failed to schedule appointment');
+        const resultText = await response.text();
+        
+        // Check if operation was successful
+        if (resultText.includes('successfully')) {
+            // Show success message
+            resultDiv.textContent = resultText;
+            resultDiv.className = 'result success';
+            
+            // Reset form
+            e.target.reset();
+            
+            // Refresh appointments list if it exists
+            if (document.getElementById('getButton')) {
+                document.getElementById('getButton').click();
+            }
+        } else {
+            throw new Error(resultText || 'Failed to schedule appointment');
         }
-
-        // Show success message
-        showNotification('Success!', 'Your appointment has been scheduled. Check your email for confirmation.', 'success');
-        
-        // Reset form and update UI
-        e.target.reset();
-        updateTimeSlots();
-        
-        // Optional: Redirect after short delay
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
 
     } catch (error) {
         console.error('Appointment scheduling error:', error);
-        showNotification('Error', error.message || 'Failed to schedule appointment. Please try again.', 'error');
-        updateTimeSlots();
-    } finally {
-        hideSpinner();
+        resultDiv.textContent = error.message || 'Failed to schedule appointment. Please try again.';
+        resultDiv.className = 'result error';
     }
 });
 
-// Helper function to show notifications
-function showNotification(title, message, type = 'info') {
-    const notificationDiv = document.createElement('div');
-    notificationDiv.className = `notification notification-${type}`;
-    notificationDiv.innerHTML = `
-        <h4>${title}</h4>
-        <p>${message}</p>
-    `;
-    
-    document.body.appendChild(notificationDiv);
-    
-    // Remove notification after 5 seconds
-    setTimeout(() => {
-        notificationDiv.remove();
-    }, 5000);
-}
-
-// Add some basic CSS for notifications
+// Add CSS for better styling of result messages
 const style = document.createElement('style');
 style.textContent = `
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
+    .result {
+        margin-top: 20px;
         padding: 15px;
         border-radius: 4px;
-        max-width: 300px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        z-index: 1000;
-        animation: slideIn 0.3s ease-out;
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease;
     }
 
-    .notification-success {
+    .result.success {
+        color: #155724;
         background-color: #d4edda;
         border-color: #c3e6cb;
-        color: #155724;
+        animation: fadeIn 0.5s ease-out;
     }
 
-    .notification-error {
+    .result.error {
+        color: #721c24;
         background-color: #f8d7da;
         border-color: #f5c6cb;
-        color: #721c24;
+        animation: fadeIn 0.5s ease-out;
     }
 
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 `;
 document.head.appendChild(style);

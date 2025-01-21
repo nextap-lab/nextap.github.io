@@ -858,50 +858,135 @@
             setTimeout(() => spinner.classList.add('hidden'), 300);
         }
 
-        // Form submission
-        document.getElementById('appointmentForm').onsubmit = async function (e) {
-            e.preventDefault();
-            showSpinner('Scheduling appointment...');
-
-            // Double-check if slot is still available
-            await fetchBookedSlots();
-            const availableSlots = getAvailableTimeSlotsForDate(selectedDate);
-            if (!availableSlots.includes(selectedTime)) {
-                hideSpinner();
-                alert('Sorry, this time slot was just booked. Please select another time.');
-                updateTimeSlots();
-                return;
-            }
-
-            const formData = new FormData(e.target);
-            const params = new URLSearchParams({
-                name: formData.get('name'),
-                email: formData.get('email'),
-                date: selectedDate.toISOString().split('T')[0],
-                time: selectedTime,
-                message: formData.get('message') || ''
-            });
-
-            try {
-                const response = await fetch(`${SCRIPT_URL}?${params.toString()}`, {
-                    method: 'POST'
-                });
-                const result = await response.json();
-
-                if (result.success) {
-                    alert('Appointment scheduled successfully!');
-                    window.location.reload();
-                } else {
-                    alert(result.message || 'Failed to schedule appointment. Please try again.');
-                    updateTimeSlots();
-                }
-            } catch (error) {
-                console.error('Error scheduling appointment:', error);
-                alert('Failed to schedule appointment. Please try again.');
-            } finally {
-                hideSpinner();
-            }
+        // Form submission handler
+document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    try {
+        // Show loading state
+        showSpinner('Scheduling appointment...');
+        
+        // Validate form data
+        const formData = new FormData(e.target);
+        const appointment = {
+            name: formData.get('name')?.trim(),
+            email: formData.get('email')?.trim(),
+            date: selectedDate.toISOString().split('T')[0],
+            time: selectedTime,
+            message: formData.get('message')?.trim() || ''
         };
+
+        // Basic validation
+        if (!appointment.name || !appointment.email || !appointment.date || !appointment.time) {
+            throw new Error('Please fill in all required fields');
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(appointment.email)) {
+            throw new Error('Please enter a valid email address');
+        }
+
+        // Double-check slot availability
+        await fetchBookedSlots();
+        const availableSlots = getAvailableTimeSlotsForDate(selectedDate);
+        
+        if (!availableSlots.includes(selectedTime)) {
+            throw new Error('This time slot was just booked. Please select another time.');
+        }
+
+        // Prepare request parameters
+        const params = new URLSearchParams(appointment);
+
+        // Submit appointment
+        const response = await fetch(`${SCRIPT_URL}?${params.toString()}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || 'Failed to schedule appointment');
+        }
+
+        // Show success message
+        showNotification('Success!', 'Your appointment has been scheduled. Check your email for confirmation.', 'success');
+        
+        // Reset form and update UI
+        e.target.reset();
+        updateTimeSlots();
+        
+        // Optional: Redirect after short delay
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+
+    } catch (error) {
+        console.error('Appointment scheduling error:', error);
+        showNotification('Error', error.message || 'Failed to schedule appointment. Please try again.', 'error');
+        updateTimeSlots();
+    } finally {
+        hideSpinner();
+    }
+});
+
+// Helper function to show notifications
+function showNotification(title, message, type = 'info') {
+    const notificationDiv = document.createElement('div');
+    notificationDiv.className = `notification notification-${type}`;
+    notificationDiv.innerHTML = `
+        <h4>${title}</h4>
+        <p>${message}</p>
+    `;
+    
+    document.body.appendChild(notificationDiv);
+    
+    // Remove notification after 5 seconds
+    setTimeout(() => {
+        notificationDiv.remove();
+    }, 5000);
+}
+
+// Add some basic CSS for notifications
+const style = document.createElement('style');
+style.textContent = `
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px;
+        border-radius: 4px;
+        max-width: 300px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        z-index: 1000;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    .notification-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+    }
+
+    .notification-error {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+`;
+document.head.appendChild(style);
 
         // Event listeners for month navigation
         document.getElementById('prevMonth').onclick = () => {

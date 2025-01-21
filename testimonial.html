@@ -686,13 +686,6 @@
 
     <!-- Apple-style Solutions Section -->
 <div class="max-w-7xl mx-auto px-4 py-12">
-    <div class="flex flex-wrap gap-3 mb-8">
-        <button class="filter-chip active" data-filter="all">All</button>
-        <button class="filter-chip" data-filter="education">Education</button>
-        <button class="filter-chip" data-filter="technology">Technology</button>
-        <button class="filter-chip" data-filter="research">Research</button>
-    </div>
-
     <div class="carousel-wrapper">
         <div class="carousel" id="carousel">
             <div class="carousel-track" id="carouselTrack">
@@ -768,84 +761,129 @@
     .carousel-wrapper {
         position: relative;
         width: 100%;
-        height: 600px;
+        height: 70vh;
         overflow: hidden;
         background: rgb(0,0,0);
-        perspective: 1000px;
+        perspective: 2000px;
     }
 
     .carousel {
         position: relative;
         height: 100%;
-        overflow: visible;
         transform-style: preserve-3d;
     }
 
     .carousel-track {
-        display: flex;
+        position: absolute;
+        width: 100%;
         height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transform-style: preserve-3d;
         transition: transform 0.5s ease-out;
-        cursor: grab;
     }
 
     .carousel-slide {
-        position: relative;
-        flex: 0 0 800px;
-        height: 600px;
-        margin: 0 1rem;
+        position: absolute;
+        width: 60%;
+        height: 80%;
+        transition: all 0.5s ease;
         transform-style: preserve-3d;
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        opacity: 0;
-        transform: scale(0.8) translateZ(-200px);
-    }
-
-    .carousel-slide.pre-2 {
-        opacity: 0.2;
-        transform: scale(0.8) translateX(-160%) translateZ(-200px);
-    }
-
-    .carousel-slide.pre-1 {
-        opacity: 0.4;
-        transform: scale(0.85) translateX(-80%) translateZ(-100px);
-    }
-
-    .carousel-slide.active {
-        opacity: 1;
-        transform: scale(1) translateZ(0);
-    }
-
-    .carousel-slide.post-1 {
-        opacity: 0.4;
-        transform: scale(0.85) translateX(80%) translateZ(-100px);
-    }
-
-    .carousel-slide.post-2 {
-        opacity: 0.2;
-        transform: scale(0.8) translateX(160%) translateZ(-200px);
+        cursor: pointer;
     }
 
     .carousel-image {
         width: 100%;
         height: 100%;
-        object-fit: contain;
-        border-radius: 20px;
+        object-fit: cover;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    /* Active slide (center) */
+    .carousel-slide.active {
+        transform: translateX(0) translateZ(0) rotateY(0);
+        z-index: 10;
+        filter: blur(0);
+    }
+
+    /* First pre/post slides */
+    .carousel-slide.pre-1 {
+        transform: translateX(-75%) translateZ(-200px) rotateY(25deg);
+        z-index: 9;
+        filter: blur(2px);
+        opacity: 0.8;
+    }
+
+    .carousel-slide.post-1 {
+        transform: translateX(75%) translateZ(-200px) rotateY(-25deg);
+        z-index: 9;
+        filter: blur(2px);
+        opacity: 0.8;
+    }
+
+    /* Second pre/post slides */
+    .carousel-slide.pre-2 {
+        transform: translateX(-120%) translateZ(-400px) rotateY(35deg);
+        z-index: 8;
+        filter: blur(4px);
+        opacity: 0.6;
+    }
+
+    .carousel-slide.post-2 {
+        transform: translateX(120%) translateZ(-400px) rotateY(-35deg);
+        z-index: 8;
+        filter: blur(4px);
+        opacity: 0.6;
+    }
+
+    /* Hide other slides */
+    .carousel-slide:not(.active):not(.pre-1):not(.pre-2):not(.post-1):not(.post-2) {
+        opacity: 0;
+        pointer-events: none;
     }
 
     .slide-content {
         position: absolute;
-        bottom: 10%;
-        left: 5%;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
         color: white;
-        z-index: 2;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 20px;
+        border-radius: 10px;
         opacity: 0;
         transform: translateY(20px);
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.5s ease;
     }
 
     .carousel-slide.active .slide-content {
         opacity: 1;
         transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+        .carousel-slide {
+            width: 80%;
+        }
+        
+        .carousel-slide.pre-1 {
+            transform: translateX(-50%) translateZ(-150px) rotateY(20deg);
+        }
+        
+        .carousel-slide.post-1 {
+            transform: translateX(50%) translateZ(-150px) rotateY(-20deg);
+        }
+        
+        .carousel-slide.pre-2 {
+            transform: translateX(-90%) translateZ(-300px) rotateY(30deg);
+        }
+        
+        .carousel-slide.post-2 {
+            transform: translateX(90%) translateZ(-300px) rotateY(-30deg);
+        }
     }
 </style>
 
@@ -856,22 +894,24 @@
             this.track = element.querySelector('.carousel-track');
             this.slides = Array.from(this.track.children);
             this.currentIndex = 0;
-            this.slideWidth = 800; // Fixed width for slides
+            this.isMoving = false;
             this.autoPlayInterval = null;
+            this.touchStartX = 0;
+            this.touchEndX = 0;
 
             this.initializeCarousel();
-            this.addEventListeners();
             this.startAutoPlay();
+            this.addEventListeners();
         }
 
         initializeCarousel() {
-            this.updateSlideClasses();
-            this.centerActiveSlide();
+            this.updateSlidePositions();
         }
 
-        updateSlideClasses() {
+        updateSlidePositions() {
             this.slides.forEach((slide, index) => {
                 slide.classList.remove('active', 'pre-1', 'pre-2', 'post-1', 'post-2');
+                
                 const diff = (index - this.currentIndex + this.slides.length) % this.slides.length;
                 
                 if (diff === 0) slide.classList.add('active');
@@ -882,15 +922,11 @@
             });
         }
 
-        centerActiveSlide() {
-            const offset = -this.currentIndex * (this.slideWidth + 32);
-            this.track.style.transform = `translateX(${offset}px)`;
-        }
-
         startAutoPlay() {
+            this.stopAutoPlay(); // Clear any existing interval
             this.autoPlayInterval = setInterval(() => {
                 this.slideNext();
-            }, 5000);
+            }, 3000);
         }
 
         stopAutoPlay() {
@@ -901,14 +937,86 @@
         }
 
         slideNext() {
+            if (this.isMoving) return;
+            this.isMoving = true;
             this.currentIndex = (this.currentIndex + 1) % this.slides.length;
-            this.updateSlideClasses();
-            this.centerActiveSlide();
+            this.updateSlidePositions();
+            setTimeout(() => {
+                this.isMoving = false;
+            }, 500);
+        }
+
+        slidePrev() {
+            if (this.isMoving) return;
+            this.isMoving = true;
+            this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+            this.updateSlidePositions();
+            setTimeout(() => {
+                this.isMoving = false;
+            }, 500);
+        }
+
+        handleTouchStart(e) {
+            this.touchStartX = e.touches[0].clientX;
+        }
+
+        handleTouchMove(e) {
+            if (!this.touchStartX) return;
+            e.preventDefault();
+            this.touchEndX = e.touches[0].clientX;
+        }
+
+        handleTouchEnd() {
+            if (!this.touchStartX || !this.touchEndX) return;
+            
+            const diff = this.touchStartX - this.touchEndX;
+            if (Math.abs(diff) > 50) { // Minimum swipe distance
+                if (diff > 0) {
+                    this.slideNext();
+                } else {
+                    this.slidePrev();
+                }
+            }
+            
+            this.touchStartX = 0;
+            this.touchEndX = 0;
         }
 
         addEventListeners() {
-            this.track.addEventListener('mouseenter', () => this.stopAutoPlay());
-            this.track.addEventListener('mouseleave', () => this.startAutoPlay());
+            // Mouse click navigation
+            this.slides.forEach((slide, index) => {
+                slide.addEventListener('click', () => {
+                    const diff = (index - this.currentIndex + this.slides.length) % this.slides.length;
+                    if (diff === 1 || diff === this.slides.length - 1) {
+                        this.stopAutoPlay();
+                        if (diff === 1) this.slideNext();
+                        else this.slidePrev();
+                        this.startAutoPlay();
+                    }
+                });
+            });
+
+            // Touch events
+            this.carousel.addEventListener('touchstart', (e) => this.handleTouchStart(e));
+            this.carousel.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+            this.carousel.addEventListener('touchend', () => this.handleTouchEnd());
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    this.stopAutoPlay();
+                    this.slidePrev();
+                    this.startAutoPlay();
+                } else if (e.key === 'ArrowRight') {
+                    this.stopAutoPlay();
+                    this.slideNext();
+                    this.startAutoPlay();
+                }
+            });
+
+            // Pause on hover
+            this.carousel.addEventListener('mouseenter', () => this.stopAutoPlay());
+            this.carousel.addEventListener('mouseleave', () => this.startAutoPlay());
         }
     }
 

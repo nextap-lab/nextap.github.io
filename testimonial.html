@@ -113,6 +113,60 @@
             margin: 20px 0;
         }
 
+        .carousel {
+            position: relative;
+        }
+
+        .carousel img {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .carousel-buttons {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 10px;
+        }
+
+        .carousel-button {
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .dots {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            margin: 0 4px;
+            opacity: 0.5;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .dot.active {
+            opacity: 1;
+        }
+
         .filter-chip {
             background: rgba(59, 130, 246, 0.1);
             border: 1px solid rgba(59, 130, 246, 0.2);
@@ -341,7 +395,6 @@
             top: 0 !important;
         }
 
-
         @media (max-width: 768px) {
             .lang-currency-capsule {
                 display: none;
@@ -549,9 +602,58 @@
             <button class="filter-chip" data-filter="research">Research</button>
         </div>
 
-        <!-- Solutions Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="solutionsGrid">
-            <!-- Cards will be dynamically inserted here -->
+        <!-- Carousel Cards Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Proof of Work Card 1 -->
+            <div class="solution-card animate-fade-in" style="animation-delay: 0.1s;">
+                <div class="carousel">
+                    <img id="carouselImg1" src="path/to/your/image1a.jpg" alt="Carousel 1">
+                    <div class="carousel-buttons">
+                        <button class="carousel-button" onclick="prevImage(1)">&lt;</button>
+                        <button class="carousel-button" onclick="nextImage(1)">&gt;</button>
+                    </div>
+                </div>
+                <div class="dots" id="dots1">
+                    <!-- Dots will be dynamically generated -->
+                </div>
+                <h3 class="text-xl font-bold mt-4">Title 1</h3>
+                <p class="text-gray-400 mt-2">Short description about work 1.</p>
+                <p class="text-blue-400 mt-2 font-bold">Key line about what was significant in this work.</p>
+            </div>
+
+            <!-- Proof of Work Card 2 -->
+            <div class="solution-card animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="carousel">
+                    <img id="carouselImg2" src="path/to/your/image2a.jpg" alt="Carousel 2">
+                    <div class="carousel-buttons">
+                        <button class="carousel-button" onclick="prevImage(2)">&lt;</button>
+                        <button class="carousel-button" onclick="nextImage(2)">&gt;</button>
+                    </div>
+                </div>
+                <div class="dots" id="dots2">
+                    <!-- Dots will be dynamically generated -->
+                </div>
+                <h3 class="text-xl font-bold mt-4">Title 2</h3>
+                <p class="text-gray-400 mt-2">Short description about work 2.</p>
+                <p class="text-blue-400 mt-2 font-bold">Key line about what was significant in this work.</p>
+            </div>
+
+            <!-- Proof of Work Card 3 -->
+            <div class="solution-card animate-fade-in" style="animation-delay: 0.3s;">
+                <div class="carousel">
+                    <img id="carouselImg3" src="path/to/your/image3a.jpg" alt="Carousel 3">
+                    <div class="carousel-buttons">
+                        <button class="carousel-button" onclick="prevImage(3)">&lt;</button>
+                        <button class="carousel-button" onclick="nextImage(3)">&gt;</button>
+                    </div>
+                </div>
+                <div class="dots" id="dots3">
+                    <!-- Dots will be dynamically generated -->
+                </div>
+                <h3 class="text-xl font-bold mt-4">Title 3</h3>
+                <p class="text-gray-400 mt-2">Short description about work 3.</p>
+                <p class="text-blue-400 mt-2 font-bold">Key line about what was significant in this work.</p>
+            </div>
         </div>
     </div>
 
@@ -568,197 +670,83 @@
     </div>
 
     <script>
-        // Helper function to generate dot patterns
-        function generateDotPattern(width, height, spacing, color) {
-            let dots = '';
-            for (let x = 0; x < width; x += spacing) {
-                for (let y = 0; y < height; y += spacing) {
-                    dots += `<circle cx="${x}" cy="${y}" r="1" fill="${color}" opacity="0.3" />`;
-                }
-            }
-            return dots;
+        const imageSet = {
+            1: [
+                'path/to/your/image1a.jpg',
+                'path/to/your/image1b.jpg',
+                'path/to/your/image1c.jpg'
+            ],
+            2: [
+                'path/to/your/image2a.jpg',
+                'path/to/your/image2b.jpg',
+                'path/to/your/image2c.jpg'
+            ],
+            3: [
+                'path/to/your/image3a.jpg',
+                'path/to/your/image3b.jpg',
+                'path/to/your/image3c.jpg'
+            ]
+        };
+
+        let currentIndex = { 1: 0, 2: 0, 3: 0 };
+        let intervals = {};
+
+        function updateCarousel(cardId) {
+            const imgElement = document.getElementById(`carouselImg${cardId}`);
+            imgElement.src = imageSet[cardId][currentIndex[cardId]];
+            updateDots(cardId);
         }
 
-        // Helper function to generate clusters
-        function generateCluster(centerX, centerY, count, color, density) {
-            let cluster = '';
-            for (let i = 0; i < count; i++) {
-                const angle = (Math.PI * 2 * i) / count;
-                const distance = Math.random() * 15;
-                const x = centerX + Math.cos(angle) * distance;
-                const y = centerY + Math.sin(angle) * distance;
-                const opacity = Math.random() * 0.5 + 0.5;
-                cluster += `<circle cx="${x}" cy="${y}" r="1.5" fill="${color}" opacity="${opacity * density}" />`;
-            }
-            return cluster;
+        function updateDots(cardId) {
+            const dotsContainer = document.getElementById(`dots${cardId}`);
+            dotsContainer.innerHTML = imageSet[cardId].map((_, index) => `
+                <span class="dot ${index === currentIndex[cardId] ? 'active' : ''}" onclick="jumpToImage(${cardId}, ${index})"></span>
+            `).join('');
         }
-        // Mobile menu toggle function
-        function toggleMobileMenu() {
-            const mobileMenu = document.querySelector('.mobile-menu');
-            mobileMenu.classList.toggle('active');
+
+        function prevImage(cardId) {
+            currentIndex[cardId] = (currentIndex[cardId] - 1 + imageSet[cardId].length) % imageSet[cardId].length;
+            updateCarousel(cardId);
         }
-        
-        // Solution data
-        const solutions = [
-            {
-                id: 1,
-                title: "Advanced Report Generation System",
-                description: "Transform raw research data into comprehensive academic reports with AI-powered analysis and formatting.",
-                metrics: {
-                    accuracy: 98.7,
-                    timeReduction: 75,
-                    satisfaction: 4.9
-                },
-                tags: ["Research", "Education", "Quality"],
-                industry: "education",
-                features: [
-                    "Advanced plagiarism detection",
-                    "Automated citation management",
-                    "Smart formatting templates",
-                    "Real-time collaboration tools"
-                ],
-                caseStudy: {
-                    title: "University Research Department",
-                    results: "Improved report generation efficiency by 75% while maintaining 98.7% accuracy"
-                }
-            },
-            {
-                id: 2,
-                title: "Intelligent Code Analysis Platform",
-                description: "Advanced code review and optimization system powered by machine learning algorithms.",
-                metrics: {
-                    efficiency: 95.5,
-                    bugReduction: 82,
-                    satisfaction: 4.8
-                },
-                tags: ["Technology", "Quality", "Efficiency"],
-                industry: "technology",
-                features: [
-                    "Real-time code analysis",
-                    "Automated bug detection",
-                    "Performance optimization",
-                    "Security vulnerability scanning"
-                ],
-                caseStudy: {
-                    title: "Tech Startup Success Story",
-                    results: "Reduced bug rate by 82% and improved code quality scores by 95.5%"
-                }
-            },
-            {
-                id: 3,
-                title: "Research Data Analytics Suite",
-                description: "Comprehensive research data analysis and visualization platform for academic institutions.",
-                metrics: {
-                    accuracy: 97.2,
-                    timeReduction: 68,
-                    satisfaction: 4.7
-                },
-                tags: ["Research", "Analytics", "Education"],
-                industry: "research",
-                features: [
-                    "Statistical analysis tools",
-                    "Data visualization",
-                    "Machine learning models",
-                    "Collaborative research tools"
-                ],
-                caseStudy: {
-                    title: "Research Institute Implementation",
-                    results: "Accelerated research analysis by 68% with 97.2% accuracy rate"
-                }
-            }
-        ];
 
-        // Render solutions
-        function renderSolutions(filteredSolutions = solutions) {
-            const grid = document.getElementById('solutionsGrid');
-            grid.innerHTML = '';
+        function nextImage(cardId) {
+            currentIndex[cardId] = (currentIndex[cardId] + 1) % imageSet[cardId].length;
+            updateCarousel(cardId);
+        }
 
-            filteredSolutions.forEach((solution, index) => {
-                const card = document.createElement('div');
-                card.className = 'solution-card animate-fade-in';
-                card.style.animationDelay = `${index * 0.1}s`;
-                card.onclick = () => showSolutionDetail(solution.id);
+        function jumpToImage(cardId, index) {
+            currentIndex[cardId] = index;
+            updateCarousel(cardId);
+        }
 
-                card.innerHTML = `
-                    <h3 class="text-xl font-bold mb-4">${solution.title}</h3>
-                    <p class="text-gray-400 mb-6">${solution.description}</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        ${solution.tags.map(tag => `
-                            <span class="filter-chip">${tag}</span>
-                        `).join('')}
-                    </div>
-                    <div class="grid grid-cols-3 gap-4 mb-6">
-                        ${Object.entries(solution.metrics).map(([key, value]) => `
-                            <div class="text-center p-3 bg-opacity-10 bg-white rounded-lg">
-                                <div class="text-xl font-bold text-blue-400">${typeof value === 'number' ? value.toFixed(1) : value}${typeof value === 'number' ? '%' : ''}</div>
-                                <div class="text-sm text-gray-400">${key.replace(/([A-Z])/g, ' $1').trim()}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
+        function startCarousel(cardId) {
+            intervals[cardId] = setInterval(() => {
+                nextImage(cardId);
+            }, 3000);
+        }
 
-                grid.appendChild(card);
+        function stopCarousel(cardId) {
+            clearInterval(intervals[cardId]);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            Object.keys(imageSet).forEach(cardId => {
+                updateCarousel(cardId);
+                startCarousel(cardId);
             });
-        }
-
-        // Filter functionality
-        function filterSolutions(filter = 'all') {
-            const filtered = solutions.filter(solution => 
-                filter === 'all' || solution.industry === filter
-            );
-            renderSolutions(filtered);
-        }
+        });
 
         // Modal functionality
         function showSolutionDetail(id) {
-            const solution = solutions.find(s => s.id === id);
             const modal = document.getElementById('solutionModal');
             const content = document.getElementById('modalContent');
 
             content.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <img src="/api/placeholder/400/300" alt="${solution.title}" class="rounded-lg w-full mb-6">
-                        <h2 class="text-2xl font-bold mb-4">${solution.title}</h2>
-                        <p class="text-gray-400 mb-6">${solution.description}</p>
-                        
-                        <h3 class="text-xl font-bold mb-4">Key Features</h3>
-                        <ul class="space-y-2 mb-6">
-                            ${solution.features.map(feature => `
-                                <li class="flex items-center">
-                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    ${feature}
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <div class="chart-container mb-6">
-                            <h3 class="text-xl font-bold mb-4">Performance Metrics</h3>
-                            ${Object.entries(solution.metrics).map(([key, value]) => `
-                                <div class="mb-4">
-                                    <div class="flex justify-between mb-2">
-                                        <span>${key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                                        <span class="text-blue-400">${value}${typeof value === 'number' ? '%' : ''}</span>
-                                    </div>
-                                    <div class="w-full bg-gray-700 rounded-full h-2">
-                                        <div class="bg-blue-500 rounded-full h-2" style="width: ${typeof value === 'number' ? value : 0}%"></div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-
-                        <div class="bg-gray-900 rounded-lg p-6 mb-6">
-                            <h3 class="text-xl font-bold mb-4">${solution.caseStudy.title}</h3>
-                            <div class="grid grid-cols-1 gap-4">
-                                <div class="text-center">
-                                    <div class="text-xl font-bold text-blue-400">${solution.caseStudy.results}</div>
-                                </div>
-                            </div>
-                        </div>
+                        <img src="/api/placeholder/400/300" alt="Placeholder Image" class="rounded-lg w-full mb-6">
+                        <h2 class="text-2xl font-bold mb-4">Title ${id}</h2>
+                        <p class="text-gray-400 mb-6">This is a detailed description for work ${id}.</p>
                     </div>
                 </div>
             `;
@@ -779,15 +767,6 @@
             }, 300);
         }
 
-        // Event Listeners
-        document.querySelectorAll('.filter-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                filterSolutions(chip.dataset.filter);
-            });
-        });
-
         // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('solutionModal');
@@ -800,119 +779,6 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
         });
-
-        // Initialize page with all solutions
-        document.addEventListener('DOMContentLoaded', () => {
-            renderSolutions();
-        });
-        document.addEventListener('DOMContentLoaded', function () {
-            // Mobile Menu Elements
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const hamburger = document.getElementById('hamburger');
-            const close = document.getElementById('close');
-            let isMenuOpen = false;
-
-            // Create and append overlay
-            const overlay = document.createElement('div');
-            overlay.className = 'mobile-menu-overlay';
-            document.body.appendChild(overlay);
-
-            function toggleMenu() {
-                isMenuOpen = !isMenuOpen;
-
-                if (isMenuOpen) {
-                    mobileMenu.classList.remove('hidden');
-                    // Small delay to ensure display: block is applied before transform
-                    setTimeout(() => {
-                        mobileMenu.classList.add('show');
-                    }, 10);
-                } else {
-                    mobileMenu.classList.remove('show');
-                    // Wait for transition to complete before hiding
-                    setTimeout(() => {
-                        mobileMenu.classList.add('hidden');
-                    }, 300);
-                }
-
-                // Toggle other elements
-                hamburger.classList.toggle('hidden');
-                close.classList.toggle('hidden');
-                overlay.style.display = isMenuOpen ? 'block' : 'none';
-                setTimeout(() => overlay.classList.toggle('show'), 10);
-                document.body.style.overflow = isMenuOpen ? 'hidden' : '';
-            }
-
-            mobileMenuBtn.addEventListener('click', toggleMenu);
-            overlay.addEventListener('click', toggleMenu);
-
-            // Currency and Language Management
-            function syncSelectors() {
-                const savedCurrency = localStorage.getItem('selectedCurrency') || 'USD';
-                const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
-
-                // Update currency selectors
-                document.getElementById('currencySelect').value = savedCurrency;
-                document.getElementById('mobileCurrencySelect').value = savedCurrency;
-
-                // Update language selectors
-                document.getElementById('languageSelect').value = savedLanguage;
-                document.getElementById('mobileLanguageSelect').value = savedLanguage;
-
-                // Apply saved language to Google Translate
-                setTimeout(() => {
-                    const translateElement = document.querySelector('.goog-te-combo');
-                    if (translateElement && savedLanguage !== 'en') {
-                        translateElement.value = savedLanguage;
-                        translateElement.dispatchEvent(new Event('change'));
-                    }
-                }, 1000);
-            }
-
-            // Initialize selectors
-            syncSelectors();
-
-            // Event listeners for currency changes
-            ['currencySelect', 'mobileCurrencySelect'].forEach(id => {
-                document.getElementById(id).addEventListener('change', function (e) {
-                    localStorage.setItem('selectedCurrency', e.target.value);
-                    syncSelectors();
-                });
-            });
-
-            // Event listeners for language changes
-            ['languageSelect', 'mobileLanguageSelect'].forEach(id => {
-                document.getElementById(id).addEventListener('change', function (e) {
-                    const lang = e.target.value;
-                    localStorage.setItem('selectedLanguage', lang);
-                    changeLanguage(lang);
-                });
-            });
-        });
-
-        // Language change function
-        function changeLanguage(lang) {
-            localStorage.setItem('selectedLanguage', lang);
-            const translateElement = document.querySelector('.goog-te-combo');
-            if (translateElement) {
-                translateElement.value = lang;
-                translateElement.dispatchEvent(new Event('change'));
-            }
-        }
     </script>
-
-    <script type="text/javascript">
-        // Google Translate Initialization
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,es,fr,de,zh,ar,hi,ja,ru,pt',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript"
-        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

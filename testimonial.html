@@ -684,158 +684,125 @@
         </div>
     </div>
 
-    <!-- Apple-style Solutions Section -->
-<div class="max-w-7xl mx-auto px-4 py-12">
-    <div class="flex flex-wrap gap-3 mb-8">
+    <!-- Improved Solutions Section -->
+<div class="max-w-7xl mx-auto py-12">
+    <div class="flex flex-wrap gap-3 mb-8 px-4">
         <button class="filter-chip active" data-filter="all">All</button>
         <button class="filter-chip" data-filter="education">Education</button>
         <button class="filter-chip" data-filter="technology">Technology</button>
         <button class="filter-chip" data-filter="research">Research</button>
     </div>
 
-    <div class="carousel-wrapper">
+    <div class="carousel-container">
+        <div class="carousel-gradient-left"></div>
+        <div class="carousel-gradient-right"></div>
         <div class="carousel" id="carousel">
             <div class="carousel-track" id="carouselTrack">
                 <div class="carousel-slide">
                     <img src="images/image1a.jpg" alt="AI Features" class="carousel-image">
                     <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">AI Intelligence</h3>
-                        <p class="text-lg text-gray-300">Opening new possibilities</p>
+                        <h3 class="text-xl font-bold mb-2">AI Intelligence</h3>
+                        <p class="text-gray-300">Opening new possibilities</p>
                     </div>
                 </div>
-                <div class="carousel-slide">
-                    <img src="images/image1b.jpg" alt="Camera Features" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Advanced Cameras</h3>
-                        <p class="text-lg text-gray-300">Capture every moment</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image1c.jpg" alt="Performance" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Ultimate Performance</h3>
-                        <p class="text-lg text-gray-300">Power that lasts</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image2a.jpg" alt="Design" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Elegant Design</h3>
-                        <p class="text-lg text-gray-300">Beauty in simplicity</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image2b.jpg" alt="Security" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Enhanced Security</h3>
-                        <p class="text-lg text-gray-300">Protection at its core</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image2c.jpg" alt="Connectivity" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Seamless Connectivity</h3>
-                        <p class="text-lg text-gray-300">Always connected</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image3a.jpg" alt="Innovation" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Revolutionary Innovation</h3>
-                        <p class="text-lg text-gray-300">Breaking boundaries</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image3b.jpg" alt="Ecosystem" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Complete Ecosystem</h3>
-                        <p class="text-lg text-gray-300">Everything works together</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image3c.jpg" alt="Future" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Future Ready</h3>
-                        <p class="text-lg text-gray-300">Ahead of time</p>
-                    </div>
-                </div>
+                <!-- Repeat for all 9 images -->
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .carousel-wrapper {
+    .carousel-container {
         position: relative;
         width: 100%;
-        height: 90vh;
+        height: auto;
         overflow: hidden;
-        background: rgb(0,0,0);
-        perspective: 1000px;
+        background: #000;
     }
 
     .carousel {
         position: relative;
-        height: 100%;
-        overflow: visible;
-        transform-style: preserve-3d;
+        margin: 0 auto;
+        overflow: hidden;
     }
 
     .carousel-track {
         display: flex;
-        height: 100%;
-        transform-style: preserve-3d;
         transition: transform 0.5s ease-out;
-        cursor: grab;
-    }
-
-    .carousel-track:active {
-        cursor: grabbing;
     }
 
     .carousel-slide {
+        flex: 0 0 auto;
+        width: 400px;
+        margin: 0 10px;
         position: relative;
-        flex: 0 0 30%;
-        height: 85vh;
-        margin: 0 1rem;
-        transform-style: preserve-3d;
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        opacity: 0.4;
-        transform: scale(0.9) translateZ(-100px);
+        transition: all 0.5s ease;
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+
+    .carousel-slide.pre-2 {
+        opacity: 0.1;
+        transform: scale(0.7);
+    }
+
+    .carousel-slide.pre-1 {
+        opacity: 0.3;
+        transform: scale(0.8);
     }
 
     .carousel-slide.active {
         opacity: 1;
-        transform: scale(1) translateZ(0);
-        width: 100%;
+        transform: scale(1);
     }
 
-    .carousel-slide:hover {
-        width: auto;
-        max-width: none;
+    .carousel-slide.post-1 {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+
+    .carousel-slide.post-2 {
+        opacity: 0.1;
+        transform: scale(0.7);
     }
 
     .carousel-image {
         width: 100%;
-        height: 100%;
+        height: auto;
+        display: block;
+        border-radius: 12px;
+        aspect-ratio: 16/9;
         object-fit: cover;
-        border-radius: 20px;
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .carousel-slide:hover .carousel-image {
-        transform: scale(1.05);
+    .carousel-gradient-left,
+    .carousel-gradient-right {
+        position: absolute;
+        top: 0;
+        width: 15%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .carousel-gradient-left {
+        left: 0;
+        background: linear-gradient(to right, rgb(0,0,0) 0%, rgba(0,0,0,0) 100%);
+    }
+
+    .carousel-gradient-right {
+        right: 0;
+        background: linear-gradient(to left, rgb(0,0,0) 0%, rgba(0,0,0,0) 100%);
     }
 
     .slide-content {
         position: absolute;
-        bottom: 10%;
-        left: 5%;
+        bottom: 20px;
+        left: 20px;
         color: white;
-        z-index: 2;
         opacity: 0;
         transform: translateY(20px);
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.5s ease;
     }
 
     .carousel-slide.active .slide-content {
@@ -843,10 +810,9 @@
         transform: translateY(0);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .carousel-slide {
-            flex: 0 0 70%;
-            height: 80vh;
+            width: 300px;
         }
     }
 </style>
@@ -858,145 +824,120 @@
             this.track = element.querySelector('.carousel-track');
             this.slides = Array.from(this.track.children);
             
-            // Touch handling
-            this.isDragging = false;
-            this.startPos = 0;
-            this.currentTranslate = 0;
-            this.prevTranslate = 0;
-            this.animationID = 0;
             this.currentIndex = 0;
-            this.touchCount = 0;
-
-            this.initializeCarousel();
+            this.slideWidth = this.slides[0].offsetWidth + 20; // Width + margin
+            
+            this.setupCarousel();
+            this.startAutoPlay();
             this.addEventListeners();
         }
 
-        initializeCarousel() {
-            this.slides[0].classList.add('active');
-            this.track.style.transform = 'translateX(0px)';
+        setupCarousel() {
+            // Clone slides for infinite effect
+            const slidesToClone = 4; // 2 before and 2 after
+            const firstSlideClones = this.slides.slice(0, slidesToClone).map(slide => slide.cloneNode(true));
+            const lastSlideClones = this.slides.slice(-slidesToClone).map(slide => slide.cloneNode(true));
+            
+            firstSlideClones.forEach(clone => this.track.appendChild(clone));
+            lastSlideClones.reverse().forEach(clone => this.track.insertBefore(clone, this.track.firstChild));
+            
+            this.currentIndex = slidesToClone;
+            this.updateSlides();
+        }
+
+        updateSlides() {
+            const offset = -this.currentIndex * this.slideWidth;
+            this.track.style.transform = `translateX(${offset}px)`;
+            
+            this.slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'pre-1', 'pre-2', 'post-1', 'post-2');
+                
+                const position = index - this.currentIndex;
+                
+                if (position === 0) {
+                    slide.classList.add('active');
+                } else if (position === -1) {
+                    slide.classList.add('pre-1');
+                } else if (position === -2) {
+                    slide.classList.add('pre-2');
+                } else if (position === 1) {
+                    slide.classList.add('post-1');
+                } else if (position === 2) {
+                    slide.classList.add('post-2');
+                }
+            });
+        }
+
+        startAutoPlay() {
+            this.autoPlayInterval = setInterval(() => {
+                this.next();
+            }, 5000); // 5 seconds
+        }
+
+        stopAutoPlay() {
+            clearInterval(this.autoPlayInterval);
+        }
+
+        next() {
+            this.currentIndex++;
+            this.updateSlides();
+            
+            // Handle infinite scroll
+            if (this.currentIndex >= this.slides.length - 2) {
+                setTimeout(() => {
+                    this.track.style.transition = 'none';
+                    this.currentIndex = 2;
+                    this.updateSlides();
+                    setTimeout(() => {
+                        this.track.style.transition = 'transform 0.5s ease-out';
+                    }, 50);
+                }, 500);
+            }
+        }
+
+        prev() {
+            this.currentIndex--;
+            this.updateSlides();
+            
+            // Handle infinite scroll
+            if (this.currentIndex <= 1) {
+                setTimeout(() => {
+                    this.track.style.transition = 'none';
+                    this.currentIndex = this.slides.length - 3;
+                    this.updateSlides();
+                    setTimeout(() => {
+                        this.track.style.transition = 'transform 0.5s ease-out';
+                    }, 50);
+                }, 500);
+            }
         }
 
         addEventListeners() {
-            // Mouse Events
-            this.track.addEventListener('mousedown', this.startDragging.bind(this));
-            window.addEventListener('mousemove', this.drag.bind(this));
-            window.addEventListener('mouseup', this.stopDragging.bind(this));
-
-            // Touch Events with multi-touch support
+            this.track.addEventListener('mouseenter', () => this.stopAutoPlay());
+            this.track.addEventListener('mouseleave', () => this.startAutoPlay());
+            
+            // Touch events
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
             this.track.addEventListener('touchstart', (e) => {
-                this.touchCount = e.touches.length;
-                if (this.touchCount === 2) {
-                    this.startDragging(e);
-                }
+                touchStartX = e.touches[0].clientX;
+                this.stopAutoPlay();
             });
-
-            window.addEventListener('touchmove', (e) => {
-                if (this.touchCount === 2) {
-                    e.preventDefault();
-                    this.drag(e);
+            
+            this.track.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].clientX;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        this.next();
+                    } else {
+                        this.prev();
+                    }
                 }
-            });
-
-            window.addEventListener('touchend', (e) => {
-                this.touchCount = e.touches.length;
-                if (this.touchCount < 2) {
-                    this.stopDragging();
-                }
-            });
-
-            // Prevent default touch behavior
-            this.track.addEventListener('touchmove', (e) => {
-                if (this.touchCount === 2) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            // Prevent context menu
-            this.track.addEventListener('contextmenu', e => e.preventDefault());
-        }
-
-        startDragging(event) {
-            this.isDragging = true;
-            this.startPos = this.getPositionX(event);
-            this.animationID = requestAnimationFrame(this.animation.bind(this));
-            this.track.style.cursor = 'grabbing';
-        }
-
-        drag(event) {
-            if (!this.isDragging) return;
-            
-            const currentPosition = this.getPositionX(event);
-            const diff = currentPosition - this.startPos;
-            this.currentTranslate = this.prevTranslate + diff;
-        }
-
-        stopDragging() {
-            this.isDragging = false;
-            cancelAnimationFrame(this.animationID);
-            
-            const movedBy = this.currentTranslate - this.prevTranslate;
-            
-            if (Math.abs(movedBy) > 100) {
-                if (movedBy < 0) this.slideNext();
-                else this.slidePrev();
-            } else {
-                this.snapToPosition();
-            }
-            
-            this.track.style.cursor = 'grab';
-        }
-
-        getPositionX(event) {
-            if (event.type.includes('mouse')) {
-                return event.clientX;
-            }
-            // For two-finger touch, use the middle point between touches
-            if (event.touches.length === 2) {
-                return (event.touches[0].clientX + event.touches[1].clientX) / 2;
-            }
-            return event.touches[0].clientX;
-        }
-
-        animation() {
-            this.setSlidePosition();
-            if (this.isDragging) requestAnimationFrame(this.animation.bind(this));
-        }
-
-        setSlidePosition() {
-            this.track.style.transform = `translateX(${this.currentTranslate}px)`;
-        }
-
-        snapToPosition() {
-            const slideWidth = this.slides[0].offsetWidth + 32; // Width + margin
-            const snapPoint = slideWidth * this.currentIndex;
-            this.currentTranslate = -snapPoint;
-            this.prevTranslate = this.currentTranslate;
-            this.setSlidePosition();
-        }
-
-        slideNext() {
-            if (this.currentIndex < this.slides.length - 1) {
-                this.currentIndex++;
-                this.updateActiveSlide();
-                this.snapToPosition();
-            } else {
-                this.snapToPosition();
-            }
-        }
-
-        slidePrev() {
-            if (this.currentIndex > 0) {
-                this.currentIndex--;
-                this.updateActiveSlide();
-                this.snapToPosition();
-            } else {
-                this.snapToPosition();
-            }
-        }
-
-        updateActiveSlide() {
-            this.slides.forEach((slide, index) => {
-                slide.classList.toggle('active', index === this.currentIndex);
+                
+                this.startAutoPlay();
             });
         }
     }

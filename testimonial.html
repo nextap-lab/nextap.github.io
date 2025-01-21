@@ -696,62 +696,7 @@
                         <p class="text-lg text-gray-300">Opening new possibilities</p>
                     </div>
                 </div>
-                <div class="carousel-slide">
-                    <img src="images/image1b.jpg" alt="Camera Features" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Advanced Cameras</h3>
-                        <p class="text-lg text-gray-300">Capture every moment</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image1c.jpg" alt="Performance" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Ultimate Performance</h3>
-                        <p class="text-lg text-gray-300">Power that lasts</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image2a.jpg" alt="Design" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Elegant Design</h3>
-                        <p class="text-lg text-gray-300">Beauty in simplicity</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image2b.jpg" alt="Security" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Enhanced Security</h3>
-                        <p class="text-lg text-gray-300">Protection at its core</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image2c.jpg" alt="Connectivity" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Seamless Connectivity</h3>
-                        <p class="text-lg text-gray-300">Always connected</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image3a.jpg" alt="Innovation" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Revolutionary Innovation</h3>
-                        <p class="text-lg text-gray-300">Breaking boundaries</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image3b.jpg" alt="Ecosystem" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Complete Ecosystem</h3>
-                        <p class="text-lg text-gray-300">Everything works together</p>
-                    </div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/image3c.jpg" alt="Future" class="carousel-image">
-                    <div class="slide-content">
-                        <h3 class="text-2xl font-bold mb-2">Future Ready</h3>
-                        <p class="text-lg text-gray-300">Ahead of time</p>
-                    </div>
-                </div>
+                <!-- Other slides with same structure -->
             </div>
         </div>
     </div>
@@ -761,7 +706,7 @@
     .carousel-wrapper {
         position: relative;
         width: 100%;
-        height: 70vh;
+        min-height: 100vh;
         overflow: hidden;
         background: rgb(0,0,0);
         perspective: 2000px;
@@ -786,19 +731,21 @@
 
     .carousel-slide {
         position: absolute;
-        width: 60%;
-        height: 80%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
         transition: all 0.5s ease;
         transform-style: preserve-3d;
         cursor: pointer;
     }
 
     .carousel-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
+        max-width: none;
+        max-height: 90vh;
+        width: auto;
+        height: auto;
         transition: all 0.3s ease;
+        border-radius: 10px;
     }
 
     /* Active slide (center) */
@@ -807,35 +754,46 @@
         z-index: 10;
         filter: blur(0);
     }
+    .carousel-slide.active .carousel-image {
+        transform: scale(1);
+    }
 
     /* First pre/post slides */
     .carousel-slide.pre-1 {
-        transform: translateX(-75%) translateZ(-200px) rotateY(25deg);
+        transform: translateX(-100%) translateZ(-200px) rotateY(25deg);
         z-index: 9;
         filter: blur(2px);
-        opacity: 0.8;
+    }
+    .carousel-slide.pre-1 .carousel-image {
+        transform: scale(0.8);
     }
 
     .carousel-slide.post-1 {
-        transform: translateX(75%) translateZ(-200px) rotateY(-25deg);
+        transform: translateX(100%) translateZ(-200px) rotateY(-25deg);
         z-index: 9;
         filter: blur(2px);
-        opacity: 0.8;
+    }
+    .carousel-slide.post-1 .carousel-image {
+        transform: scale(0.8);
     }
 
     /* Second pre/post slides */
     .carousel-slide.pre-2 {
-        transform: translateX(-120%) translateZ(-400px) rotateY(35deg);
+        transform: translateX(-180%) translateZ(-400px) rotateY(35deg);
         z-index: 8;
         filter: blur(4px);
-        opacity: 0.6;
+    }
+    .carousel-slide.pre-2 .carousel-image {
+        transform: scale(0.6);
     }
 
     .carousel-slide.post-2 {
-        transform: translateX(120%) translateZ(-400px) rotateY(-35deg);
+        transform: translateX(180%) translateZ(-400px) rotateY(-35deg);
         z-index: 8;
         filter: blur(4px);
-        opacity: 0.6;
+    }
+    .carousel-slide.post-2 .carousel-image {
+        transform: scale(0.6);
     }
 
     /* Hide other slides */
@@ -865,24 +823,21 @@
     }
 
     @media (max-width: 768px) {
-        .carousel-slide {
-            width: 80%;
+        .carousel-image {
+            max-height: 70vh;
         }
         
         .carousel-slide.pre-1 {
-            transform: translateX(-50%) translateZ(-150px) rotateY(20deg);
+            transform: translateX(-70%) translateZ(-150px) rotateY(20deg);
         }
-        
         .carousel-slide.post-1 {
-            transform: translateX(50%) translateZ(-150px) rotateY(-20deg);
+            transform: translateX(70%) translateZ(-150px) rotateY(-20deg);
         }
-        
         .carousel-slide.pre-2 {
-            transform: translateX(-90%) translateZ(-300px) rotateY(30deg);
+            transform: translateX(-120%) translateZ(-300px) rotateY(30deg);
         }
-        
         .carousel-slide.post-2 {
-            transform: translateX(90%) translateZ(-300px) rotateY(-30deg);
+            transform: translateX(120%) translateZ(-300px) rotateY(-30deg);
         }
     }
 </style>
@@ -892,7 +847,6 @@
         constructor(element) {
             this.carousel = element;
             this.track = element.querySelector('.carousel-track');
-            this.slides = Array.from(this.track.children);
             this.currentIndex = 0;
             this.isMoving = false;
             this.autoPlayInterval = null;
@@ -905,6 +859,30 @@
         }
 
         initializeCarousel() {
+            // Create all slides
+            const slides = [
+                { img: 'images/image1a.jpg', title: 'AI Intelligence', desc: 'Opening new possibilities' },
+                { img: 'images/image1b.jpg', title: 'Advanced Cameras', desc: 'Capture every moment' },
+                { img: 'images/image1c.jpg', title: 'Ultimate Performance', desc: 'Power that lasts' },
+                { img: 'images/image2a.jpg', title: 'Elegant Design', desc: 'Beauty in simplicity' },
+                { img: 'images/image2b.jpg', title: 'Enhanced Security', desc: 'Protection at its core' },
+                { img: 'images/image2c.jpg', title: 'Seamless Connectivity', desc: 'Always connected' },
+                { img: 'images/image3a.jpg', title: 'Revolutionary Innovation', desc: 'Breaking boundaries' },
+                { img: 'images/image3b.jpg', title: 'Complete Ecosystem', desc: 'Everything works together' },
+                { img: 'images/image3c.jpg', title: 'Future Ready', desc: 'Ahead of time' }
+            ];
+
+            this.track.innerHTML = slides.map(slide => `
+                <div class="carousel-slide">
+                    <img src="${slide.img}" alt="${slide.title}" class="carousel-image">
+                    <div class="slide-content">
+                        <h3 class="text-2xl font-bold mb-2">${slide.title}</h3>
+                        <p class="text-lg text-gray-300">${slide.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            this.slides = Array.from(this.track.children);
             this.updateSlidePositions();
         }
 
@@ -923,7 +901,7 @@
         }
 
         startAutoPlay() {
-            this.stopAutoPlay(); // Clear any existing interval
+            this.stopAutoPlay();
             this.autoPlayInterval = setInterval(() => {
                 this.slideNext();
             }, 3000);
@@ -970,7 +948,7 @@
             if (!this.touchStartX || !this.touchEndX) return;
             
             const diff = this.touchStartX - this.touchEndX;
-            if (Math.abs(diff) > 50) { // Minimum swipe distance
+            if (Math.abs(diff) > 50) {
                 if (diff > 0) {
                     this.slideNext();
                 } else {
@@ -983,7 +961,7 @@
         }
 
         addEventListeners() {
-            // Mouse click navigation
+            // Click navigation
             this.slides.forEach((slide, index) => {
                 slide.addEventListener('click', () => {
                     const diff = (index - this.currentIndex + this.slides.length) % this.slides.length;

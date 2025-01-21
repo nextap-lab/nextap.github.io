@@ -581,7 +581,7 @@
 
     <script>
         // Replace with your Apps Script URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgi_RCnIWc_2OOI15ETGG80JlWMkmGmc83Puqkw3mVD0Z3kJvT__0enTbRhLPi2aBs/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMPeKHamllZr3MZwOgJOKA1sxisL7NAKgCPWdOH_txi8Vh41AADl9WBXraQuAgI4t6/exec';
 
         let selectedDate = null;
         let selectedTime = null;
@@ -764,14 +764,15 @@
         function updateTimeSlots() {
             const timeSlotsDiv = document.getElementById('timeSlots');
             timeSlotsDiv.innerHTML = `
-                <h3 class="text-xl font-semibold mb-6">Available Time Slots</h3>
-                <p class="text-gray-400 mb-4">Selected date: ${selectedDate.toLocaleDateString('en-US', {
+        <h3 class="text-xl font-semibold mb-6">Available Time Slots</h3>
+        <p class="text-gray-400 mb-4">Selected date: ${selectedDate.toLocaleDateString('en-US', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             })}</p>
             `;
+
 
             if (!selectedDate) return;
 
@@ -858,143 +859,73 @@
             setTimeout(() => spinner.classList.add('hidden'), 300);
         }
 
-        // Form submission handler
-        document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
+        // Form submission
+        document.getElementById('appointmentForm').onsubmit = async function (e) {
             e.preventDefault();
-            
-try {
-    showSpinner('Scheduling appointment...');
-    
-    // Validate form data
-    const formData = new FormData(e.target);
-    const appointment = {
-        name: formData.get('name')?.trim(),
-        email: formData.get('email')?.trim(),
-        date: selectedDate.toISOString().split('T')[0],
-        time: selectedTime,
-        message: formData.get('message')?.trim() || ''
-    };
+            showSpinner('Scheduling appointment...');
 
-    // Basic validation
-    if (!appointment.name || !appointment.email || !appointment.date || !appointment.time) {
-        throw new Error('Please fill in all required fields');
-    }
+            // Double-check if slot is still available
+            await fetchBookedSlots();
+            const availableSlots = getAvailableTimeSlotsForDate(selectedDate);
+            if (!availableSlots.includes(selectedTime)) {
+                hideSpinner();
+                alert('Sorry, this time slot was just booked. Please select another time.');
+                updateTimeSlots();
+                return;
+            }
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(appointment.email)) {
-        throw new Error('Please enter a valid email address');
-    }
+            const formData = new FormData(e.target);
 
-    // Double-check slot availability
-    await fetchBookedSlots();
-    const availableSlots = getAvailableTimeSlotsForDate(selectedDate);
-    
-    if (!availableSlots.includes(selectedTime)) {
-        throw new Error('This time slot was just booked. Please select another time.');
-    }
+            const appointment = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                date: selectedDate.toISOString().split('T')[0],
+                time: selectedTime,
+                message: formData.get('message') || '',
+                type: 'POST'  // Add type parameter for our modified endpoint
+            };
 
-    // Submit appointment
-    const response = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams(appointment).toString()
-    });
+            // Basic validation
+            if (!appointment.name || !appointment.email || !appointment.date || !appointment.time) {
+                throw new Error('Please fill in all required fields');
+            }
 
-    const result = await response.json();
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(appointment.email)) {
+                throw new Error('Please enter a valid email address');
+            }
 
-    if (!result.success) {
-        throw new Error(result.message || 'Failed to schedule appointment');
-    }
+            // Prepare request parameters
+            const params = new URLSearchParams(appointment);
 
-    // Show success message with notification
-    showNotification('Success!', 'Your appointment has been scheduled. Check your email for confirmation.', 'success');
-    
-    // Reset form and update UI
-    e.target.reset();
-    selectedDate = null;
-    selectedTime = null;
-    
-    // Update calendar and time slots
-    await fetchBookedSlots();
-    updateCalendar();
-    updateTimeSlots();
-    
-    // Reset steps
-    updateSteps(1);
-    
-    // Optional: Reload page after short delay
-    setTimeout(() => {
-        window.location.reload();
-    }, 2000);
+            try {
+                console.log('Sending appointment request:', params);
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: params.toString()
+                });
 
-} catch (error) {
-    console.error('Appointment scheduling error:', error);
-    showNotification('Error', error.message || 'Failed to schedule appointment. Please try again.', 'error');
-    
-    // Update available time slots in case of conflict
-    await fetchBookedSlots();
-    updateTimeSlots();
-} finally {
-    hideSpinner();
-}
 
-        // Helper function for notifications
-function showNotification(title, message, type = 'info') {
-    const notificationDiv = document.createElement('div');
-    notificationDiv.className = `notification notification-${type}`;
-    notificationDiv.innerHTML = `
-        <h4>${title}</h4>
-        <p>${message}</p>
-    `;
-    
-    document.body.appendChild(notificationDiv);
-    
-    // Remove notification after 5 seconds
-    setTimeout(() => notificationDiv.remove(), 5000);
-}
+                const result = await response.json();
 
-// Add this CSS if not already present
-const notificationStyles = `
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px;
-        border-radius: 4px;
-        max-width: 300px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        z-index: 1000;
-        animation: slideIn 0.3s ease-out;
-    }
-
-    .notification-success {
-        background-color: #d4edda;
-        border-color: #c3e6cb;
-        color: #155724;
-    }
-
-    .notification-error {
-        background-color: #f8d7da;
-        border-color: #f5c6cb;
-        color: #721c24;
-    }
-
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-`;
-
-// Add styles to document if not already present
-if (!document.querySelector('#notification-styles')) {
-    const styleSheet = document.createElement('style');
-    styleSheet.id = 'notification-styles';
-    styleSheet.textContent = notificationStyles;
-    document.head.appendChild(styleSheet);
-}
+                if (result.success) {
+                    alert('Appointment scheduled successfully!');
+                    window.location.reload();
+                } else {
+                    alert(result.message || 'Failed to schedule appointment. Please try again.');
+                    updateTimeSlots();
+                }
+            } catch (error) {
+                console.error('Error scheduling appointment:', error);
+                alert('Failed to schedule appointment. Please try again.');
+            } finally {
+                hideSpinner();
+            }
+        };
 
         // Event listeners for month navigation
         document.getElementById('prevMonth').onclick = () => {
@@ -1107,6 +1038,8 @@ if (!document.querySelector('#notification-styles')) {
                 translateElement.dispatchEvent(new Event('change'));
             }
         }
+
+    </script>
 
     </script>
     <script type="text/javascript">

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -232,7 +233,8 @@
         .map-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            padding-top: 56.25%;
+            /* 16:9 Aspect Ratio */
             overflow: hidden;
         }
 
@@ -248,35 +250,39 @@
         .hero-section {
             display: flex;
             align-items: center;
-            min-height: calc(100vh - 64px); /* Adjust this value based on your nav height */
+            min-height: calc(100vh - 64px);
+            /* Adjust this value based on your nav height */
             position: relative;
             overflow: hidden;
-            max-width: 1280px; /* Set a max-width to limit the size */
-            margin: 0 auto; /* Center the hero section */
+            max-width: 1280px;
+            /* Set a max-width to limit the size */
+            margin: 0 auto;
+            /* Center the hero section */
             padding: 2rem;
         }
-    
+
         .hero-content {
             flex: 1;
             padding-right: 2rem;
             z-index: 1;
         }
-    
+
         .hero-content h1 {
             color: #3b82f6;
         }
-    
+
         .hero-content p {
             color: #6b7280;
         }
-    
+
         .video-container {
             flex: 1;
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 aspect ratio */
+            padding-top: 56.25%;
+            /* 16:9 aspect ratio */
         }
-    
+
         #heroVideo {
             position: absolute;
             top: 0;
@@ -287,8 +293,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .animate-fade-in {
@@ -404,12 +417,13 @@
             }
         }
 
-        /* New Styles for Circular Film-like Horizontal Tape */
+        /* Updated Styles for Circular Carousel */
         .solutions-tape {
             position: relative;
             overflow: hidden;
             width: 100%;
-            padding: 3rem 0;
+            padding: 2rem 0;
+            /* Adjust padding as needed */
         }
 
         .tape-controls {
@@ -419,7 +433,6 @@
             display: flex;
             justify-content: space-between;
             transform: translateY(-50%);
-            pointer-events: none; /* Allow clicks only on buttons */
             z-index: 10;
         }
 
@@ -427,14 +440,12 @@
             background-color: rgba(59, 130, 246, 0.8);
             border: none;
             color: white;
-            padding: 15px 20px;
+            padding: 10px 15px;
             border-radius: 50%;
             cursor: pointer;
-            pointer-events: all; /* Enable pointer events for buttons */
             transition: background-color 0.3s ease;
             font-size: 1.5rem;
             line-height: 1;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
         .tape-controls button:hover {
@@ -446,95 +457,164 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.5s ease;
+            /* Smooth transition */
             will-change: transform;
-            /* Adjust the width based on the number of images */
-            width: 100%;
+            /* Optimize for performance */
+            position: relative;
         }
 
         .tape-image {
             flex: 0 0 auto;
             width: 400px;
-            height: 250px;
+            height: 300px;
+            /* Increased size */
             margin: 0 20px;
-            border-radius: 15px;
+            /* Increased margin */
+            border-radius: 16px;
             transition: transform 0.5s ease, filter 0.5s ease, opacity 0.5s ease;
             position: relative;
             cursor: pointer;
             /* Initially non-active images are slightly darker and semi-transparent */
-            filter: brightness(0.6) blur(2px);
-            opacity: 0.5;
+            filter: brightness(0.8);
+            opacity: 0.8;
         }
 
         .tape-image.active {
-            transform: scale(1.2) translateY(-20px);
-            filter: brightness(1) blur(0px);
+            transform: scale(1.1);
+            /* Slight scaling for active image */
+            filter: brightness(1);
             opacity: 1;
             z-index: 2;
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.5);
         }
 
         .tape-image.prev,
         .tape-image.next {
-            transform: scale(1) translateY(0);
-            filter: brightness(0.8) blur(1px);
-            opacity: 0.8;
+            transform: scale(0.9);
+            /* Slight scaling for adjacent images */
+            filter: brightness(0.9);
+            opacity: 0.9;
             z-index: 1;
-        }
-
-        .tape-image.hidden {
-            display: none;
         }
 
         @media (max-width: 1024px) {
             .tape-image {
                 width: 300px;
-                height: 200px;
+                height: 225px;
                 margin: 0 15px;
+            }
+
+            .tape-image.active {
+                transform: scale(1.05);
+            }
+
+            .tape-controls button {
+                padding: 8px 12px;
+                font-size: 1.2rem;
             }
         }
 
         @media (max-width: 768px) {
             .tape-image {
-                width: 200px;
-                height: 130px;
+                width: 250px;
+                height: 187px;
                 margin: 0 10px;
             }
 
             .tape-image.active {
-                transform: scale(1.1) translateY(-15px);
+                transform: scale(1);
             }
 
             .tape-controls button {
-                padding: 10px 15px;
-                font-size: 1.2rem;
+                padding: 6px 10px;
+                font-size: 1rem;
             }
         }
+
     </style>
 </head>
 
-<nav class="fixed w-full z-40 bg-black bg-opacity-90 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="flex justify-between h-16 items-center">
-            <a href="index.html"
-                class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text notranslate">
-                Nextap AI
-            </a>
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="dashboard.html" class="text-gray-300 hover:text-white">Dashboard</a>
+<body class="min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-40 bg-black bg-opacity-90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16 items-center">
+                <a href="index.html"
+                    class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text notranslate">
+                    Nextap AI
+                </a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="dashboard.html" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <!-- <a href="#services" class="text-gray-300 hover:text-white">Services</a> -->
+                    <a href="#testimonials" class="text-gray-300 hover:text-white">Testimonials</a>
+                    <!-- <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a> -->
+
+                    <!-- <a href="admin.html" class="text-gray-300 hover:text-white">Admin</a> -->
+                    <a href="blogs.html" class="text-gray-300 hover:text-white">Blogs</a>
+
+                    <!-- Language and Currency Capsule -->
+                    <div class="lang-currency-capsule">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        <select id="currencySelect" onchange="changeCurrency(this.value)">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                            <option value="AUD">AUD</option>
+                            <option value="JPY">JPY</option>
+                            <option value="AED">AED</option>
+                            <option value="MYR">MYR</option>
+                            <option value="INR">INR</option>
+                            <option value="CAD">CAD</option>
+                            <option value="QAR">QAR</option>
+                            <option value="SAR">SAR</option>
+                            <option value="KWD">KWD</option>
+                        </select>
+                        <select id="languageSelect" onchange="changeLanguage(this.value)">
+                            <option value="en">EN</option>
+                            <option value="es">ES</option>
+                            <option value="fr">FR</option>
+                            <option value="de">DE</option>
+                            <option value="zh">ZH</option>
+                            <option value="ar">AR</option>
+                            <option value="hi">HI</option>
+                            <option value="ja">JA</option>
+                            <option value="ru">RU</option>
+                            <option value="pt">PT</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden text-gray-400 hover:text-white p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="hamburger" class="block" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                        <path id="close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu"
+            class="hidden md:hidden absolute w-full left-0 bg-black bg-opacity-95 border-t border-gray-800">
+            <div class="flex flex-col space-y-4 px-4 py-2">
                 <!-- <a href="#services" class="text-gray-300 hover:text-white">Services</a> -->
                 <a href="#testimonials" class="text-gray-300 hover:text-white">Testimonials</a>
                 <!-- <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a> -->
-
+                <a href="dashboard.html" class="text-gray-300 hover:text-white">Dashboard</a>
                 <!-- <a href="admin.html" class="text-gray-300 hover:text-white">Admin</a> -->
                 <a href="blogs.html" class="text-gray-300 hover:text-white">Blogs</a>
 
-                <!-- Language and Currency Capsule -->
-                <div class="lang-currency-capsule">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <select id="currencySelect" onchange="changeCurrency(this.value)">
+                <!-- Language and Currency Selection in Mobile Menu -->
+                <div class="mt-4">
+                    <label class="block mb-2 text-gray-300">Currency</label>
+                    <select id="mobileCurrencySelect"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white"
+                        onchange="changeCurrency(this.value)">
                         <option value="USD">USD</option>
                         <option value="EUR">EUR</option>
                         <option value="GBP">GBP</option>
@@ -548,86 +628,28 @@
                         <option value="SAR">SAR</option>
                         <option value="KWD">KWD</option>
                     </select>
-                    <select id="languageSelect" onchange="changeLanguage(this.value)">
-                        <option value="en">EN</option>
-                        <option value="es">ES</option>
-                        <option value="fr">FR</option>
-                        <option value="de">DE</option>
-                        <option value="zh">ZH</option>
-                        <option value="ar">AR</option>
-                        <option value="hi">HI</option>
-                        <option value="ja">JA</option>
-                        <option value="ru">RU</option>
-                        <option value="pt">PT</option>
+                </div>
+                <div class="mt-4">
+                    <label class="block mb-2 text-gray-300">Language</label>
+                    <select id="mobileLanguageSelect"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white"
+                        onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="zh">中文</option>
+                        <option value="ar">العربية</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="ja">日本語</option>
+                        <option value="ru">Русский</option>
+                        <option value="pt">Português</option>
                     </select>
                 </div>
             </div>
-            <!-- Mobile Menu Button -->
-            <button id="mobileMenuBtn" class="md:hidden text-gray-400 hover:text-white p-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path id="hamburger" class="block" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6h16M4 12h16M4 18h16" />
-                    <path id="close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
         </div>
-    </div>
+    </nav>
 
-    <!-- Mobile Menu -->
-    <div id="mobileMenu"
-        class="hidden md:hidden absolute w-full left-0 bg-black bg-opacity-95 border-t border-gray-800">
-        <div class="flex flex-col space-y-4 px-4 py-2">
-            <!-- <a href="#services" class="text-gray-300 hover:text-white">Services</a> -->
-            <a href="#testimonials" class="text-gray-300 hover:text-white">Testimonials</a>
-            <!-- <a href="#calculator" class="text-gray-300 hover:text-white">Get Quote</a> -->
-            <a href="dashboard.html" class="text-gray-300 hover:text-white">Dashboard</a>
-            <!-- <a href="admin.html" class="text-gray-300 hover:text-white">Admin</a> -->
-            <a href="blogs.html" class="text-gray-300 hover:text-white">Blogs</a>
-
-            <!-- Language and Currency Selection in Mobile Menu -->
-            <div class="mt-4">
-                <label class="block mb-2 text-gray-300">Currency</label>
-                <select id="mobileCurrencySelect"
-                    class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white"
-                    onchange="changeCurrency(this.value)">
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="AUD">AUD</option>
-                    <option value="JPY">JPY</option>
-                    <option value="AED">AED</option>
-                    <option value="MYR">MYR</option>
-                    <option value="INR">INR</option>
-                    <option value="CAD">CAD</option>
-                    <option value="QAR">QAR</option>
-                    <option value="SAR">SAR</option>
-                    <option value="KWD">KWD</option>
-                </select>
-            </div>
-            <div class="mt-4">
-                <label class="block mb-2 text-gray-300">Language</label>
-                <select id="mobileLanguageSelect"
-                    class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white"
-                    onchange="changeLanguage(this.value)">
-                    <option value="en">English</option>
-                    <option value="es">Español</option>
-                    <option value="fr">Français</option>
-                    <option value="de">Deutsch</option>
-                    <option value="zh">中文</option>
-                    <option value="ar">العربية</option>
-                    <option value="hi">हिन्दी</option>
-                    <option value="ja">日本語</option>
-                    <option value="ru">Русский</option>
-                    <option value="pt">Português</option>
-                </select>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<body class="min-h-screen">
-   
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="hero-content">
@@ -645,7 +667,7 @@
     <div class="bg-black py-16">
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-3xl font-bold mb-8">Global Customer Base</h2>
-            
+
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div class="stats-card">
@@ -656,7 +678,8 @@
                         </div>
                         <div class="text-blue-400">
                             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
                         </div>
                     </div>
@@ -670,7 +693,8 @@
                         </div>
                         <div class="text-blue-400">
                             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
                     </div>
@@ -684,7 +708,8 @@
                         </div>
                         <div class="text-blue-400">
                             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                             </svg>
                         </div>
                     </div>
@@ -694,7 +719,8 @@
             <!-- World Map Section -->
             <div class="world-map-section">
                 <div class="map-container" id="mapContainer">
-                    <img src="https://github.com/nextap-lab/nextap.github.io/blob/main/world-map-nextap.jpg?raw=true" alt="Global Presence Map" class="map-image">
+                    <img src="https://github.com/nextap-lab/nextap.github.io/blob/main/world-map-nextap.jpg?raw=true"
+                        alt="Global Presence Map" class="map-image">
                     <!-- Active region dots will be added via JavaScript -->
                 </div>
             </div>
@@ -711,7 +737,7 @@
             <button class="filter-chip" data-filter="research">Research</button>
         </div>
 
-        <!-- Circular Film-like Horizontal Tape -->
+        <!-- Circular Carousel -->
         <div class="solutions-tape">
             <!-- Navigation Controls -->
             <div class="tape-controls">
@@ -721,7 +747,7 @@
             <!-- Tape Container with All Images -->
             <div class="tape-container" id="tapeContainer">
                 <!-- Images -->
-                <img src="images/image1a.jpg" alt="Image 1a" class="tape-image">
+                <img src="images/image1a.jpg" alt="Image 1a" class="tape-image active">
                 <img src="images/image1b.jpg" alt="Image 1b" class="tape-image">
                 <img src="images/image1c.jpg" alt="Image 1c" class="tape-image">
                 <img src="images/image2a.jpg" alt="Image 2a" class="tape-image">
@@ -739,7 +765,7 @@
         <div class="modal-content">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
             <div id="modalContent"></div>
@@ -758,105 +784,61 @@
             mobileMenuBtn.querySelector('#close').classList.toggle('block');
         });
 
-        // Circular Tape Functionality
+        // Circular Carousel Implementation
         const tapeContainer = document.getElementById('tapeContainer');
         const tapeImages = document.querySelectorAll('.tape-image');
         let currentIndex = 0;
         const totalImages = tapeImages.length;
         let autoScrollInterval;
-        const autoScrollDelay = 4500; // 4.5 seconds
-
-        // Clone first and last images for seamless loop
-        function cloneImages() {
-            const firstClone = tapeImages[0].cloneNode(true);
-            const lastClone = tapeImages[totalImages - 1].cloneNode(true);
-            tapeContainer.appendChild(firstClone);
-            tapeContainer.insertBefore(lastClone, tapeImages[0]);
-        }
-
-        cloneImages();
-
-        // Adjust tapeContainer's initial position to the first original image
-        tapeContainer.style.transform = `translateX(-${currentIndex + 1}00%)`;
+        const autoScrollDelay = 4000; // 4 seconds
 
         function updateTape() {
-            tapeContainer.style.transition = 'transform 0.5s ease';
-            tapeContainer.style.transform = `translateX(-${currentIndex + 1}00%)`;
+            tapeImages.forEach((img, index) => {
+                img.classList.remove('active', 'prev', 'next');
+                if (index === currentIndex) {
+                    img.classList.add('active');
+                } else if (index === (currentIndex - 1 + totalImages) % totalImages) {
+                    img.classList.add('prev');
+                } else if (index === (currentIndex + 1) % totalImages) {
+                    img.classList.add('next');
+                }
+            });
 
-            // Update classes after transition
-            setTimeout(() => {
-                tapeImages.forEach((img, index) => {
-                    img.classList.remove('active', 'prev', 'next', 'hidden');
-                    if (index === currentIndex) {
-                        img.classList.add('active');
-                    } else if (index === currentIndex - 1) {
-                        img.classList.add('prev');
-                    } else if (index === currentIndex + 1) {
-                        img.classList.add('next');
-                    } else {
-                        img.classList.add('hidden');
-                    }
-                });
-            }, 500);
+            // Rotate the tape container to show the active image
+            const slideWidth = tapeImages[0].clientWidth + 40; // Image width + margin
+            tapeContainer.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
         }
 
         function prevImage() {
-            if (currentIndex <= 0) return;
-            currentIndex--;
+            currentIndex = (currentIndex - 1 + totalImages) % totalImages;
             updateTape();
             resetAutoScroll();
         }
 
         function nextImage() {
-            if (currentIndex >= totalImages - 1) return;
-            currentIndex++;
+            currentIndex = (currentIndex + 1) % totalImages;
             updateTape();
             resetAutoScroll();
         }
 
-        // Handle transition end for looping
-        tapeContainer.addEventListener('transitionend', () => {
-            const clonedFirst = tapeContainer.children[0];
-            const clonedLast = tapeContainer.children[tapeContainer.children.length - 1];
-
-            if (tapeContainer.children[currentIndex + 1] === clonedFirst) {
-                tapeContainer.style.transition = 'none';
-                currentIndex = 0;
-                tapeContainer.style.transform = `translateX(-${currentIndex + 1}00%)`;
-            }
-
-            if (tapeContainer.children[currentIndex + 1] === clonedLast) {
-                tapeContainer.style.transition = 'none';
-                currentIndex = totalImages - 1;
-                tapeContainer.style.transform = `translateX(-${currentIndex + 1}00%)`;
-            }
-        });
-
-        // Automatic Scrolling
-        function autoScroll() {
-            autoScrollInterval = setInterval(() => {
-                nextImage();
-            }, autoScrollDelay);
-        }
-
         function resetAutoScroll() {
             clearInterval(autoScrollInterval);
-            autoScroll();
+            autoScrollInterval = setInterval(nextImage, autoScrollDelay);
         }
 
         // Initialize Tape
         document.addEventListener('DOMContentLoaded', () => {
             updateTape();
-            autoScroll();
+            autoScrollInterval = setInterval(nextImage, autoScrollDelay);
+        });
 
-            // Pause auto-scroll on mouse enter and resume on mouse leave
-            document.querySelector('.solutions-tape').addEventListener('mouseenter', () => {
-                clearInterval(autoScrollInterval);
-            });
+        // Pause auto-scroll on mouse enter and resume on mouse leave
+        document.querySelector('.solutions-tape').addEventListener('mouseenter', () => {
+            clearInterval(autoScrollInterval);
+        });
 
-            document.querySelector('.solutions-tape').addEventListener('mouseleave', () => {
-                autoScroll();
-            });
+        document.querySelector('.solutions-tape').addEventListener('mouseleave', () => {
+            resetAutoScroll();
         });
 
         // Modal functionality remains unchanged
@@ -891,7 +873,7 @@
         }
 
         // Close modal when clicking outside
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modal = document.getElementById('solutionModal');
             if (event.target == modal) {
                 closeModal();
@@ -902,6 +884,18 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
         });
+
+        // Placeholder functions for language and currency change
+        function changeCurrency(value) {
+            console.log('Currency changed to:', value);
+            // Implement currency change logic here
+        }
+
+        function changeLanguage(value) {
+            console.log('Language changed to:', value);
+            // Implement language change logic here
+        }
     </script>
 </body>
+
 </html>

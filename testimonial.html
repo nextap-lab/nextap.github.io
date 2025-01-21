@@ -684,311 +684,238 @@
         </div>
     </div>
 
-    <!-- Solutions Section -->
-<section class="solutions-section bg-black py-16">
-    <div class="max-w-7xl mx-auto px-4">
-        <!-- Section Header -->
-        <div class="text-center mb-12">
-            <h2 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text">Our Solutions</h2>
-            <p class="text-gray-400 text-lg">Discover innovative solutions powered by cutting-edge technology</p>
-        </div>
+    <!-- Apple-style Solutions Section -->
+<div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="flex flex-wrap gap-3 mb-8">
+        <button class="filter-chip active" data-filter="all">All</button>
+        <button class="filter-chip" data-filter="education">Education</button>
+        <button class="filter-chip" data-filter="technology">Technology</button>
+        <button class="filter-chip" data-filter="research">Research</button>
+    </div>
 
-        <!-- Filters -->
-        <div class="flex flex-wrap justify-center gap-3 mb-12">
-            <button class="filter-chip active" data-filter="all">
-                All Solutions
-            </button>
-            <button class="filter-chip" data-filter="ai">
-                AI & ML
-            </button>
-            <button class="filter-chip" data-filter="analytics">
-                Analytics
-            </button>
-            <button class="filter-chip" data-filter="cloud">
-                Cloud Services
-            </button>
-            <button class="filter-chip" data-filter="security">
-                Security
-            </button>
-        </div>
-
-        <!-- Carousel Section -->
-        <div class="carousel-wrapper">
-            <div class="carousel-mask left"></div>
-            <div class="carousel" id="carousel">
-                <div class="carousel-track" id="carouselTrack">
-                    <!-- Solution 1: AI Intelligence -->
-                    <div class="carousel-slide" data-category="ai">
-                        <div class="carousel-image-container">
-                            <img src="/api/placeholder/800/600" alt="AI Intelligence Platform" class="carousel-image">
-                        </div>
-                        <div class="slide-content">
-                            <span class="text-blue-400 text-sm font-semibold mb-2 block">AI & ML</span>
-                            <h3 class="text-xl font-bold mb-2">AI Intelligence Platform</h3>
-                            <p class="text-sm text-gray-300">Advanced AI solutions for business automation</p>
-                        </div>
+    <div class="carousel-wrapper">
+        <div class="carousel" id="carousel">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-slide">
+                    <img src="images/image1a.jpg" alt="AI Features" class="carousel-image">
+                    <div class="slide-content">
+                        <h3 class="text-2xl font-bold mb-2">AI Intelligence</h3>
+                        <p class="text-lg text-gray-300">Opening new possibilities</p>
                     </div>
-
-                    <!-- Solution 2: Data Analytics -->
-                    <div class="carousel-slide" data-category="analytics">
-                        <div class="carousel-image-container">
-                            <img src="/api/placeholder/800/600" alt="Data Analytics Suite" class="carousel-image">
-                        </div>
-                        <div class="slide-content">
-                            <span class="text-blue-400 text-sm font-semibold mb-2 block">Analytics</span>
-                            <h3 class="text-xl font-bold mb-2">Data Analytics Suite</h3>
-                            <p class="text-sm text-gray-300">Transform data into actionable insights</p>
-                        </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/image1b.jpg" alt="Camera Features" class="carousel-image">
+                    <div class="slide-content">
+                        <h3 class="text-2xl font-bold mb-2">Advanced Cameras</h3>
+                        <p class="text-lg text-gray-300">Capture every moment</p>
                     </div>
-
-                    <!-- Solution 3: Cloud Platform -->
-                    <div class="carousel-slide" data-category="cloud">
-                        <div class="carousel-image-container">
-                            <img src="/api/placeholder/800/600" alt="Cloud Infrastructure" class="carousel-image">
-                        </div>
-                        <div class="slide-content">
-                            <span class="text-blue-400 text-sm font-semibold mb-2 block">Cloud</span>
-                            <h3 class="text-xl font-bold mb-2">Cloud Infrastructure</h3>
-                            <p class="text-sm text-gray-300">Scalable and secure cloud solutions</p>
-                        </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/image1c.jpg" alt="Performance" class="carousel-image">
+                    <div class="slide-content">
+                        <h3 class="text-2xl font-bold mb-2">Ultimate Performance</h3>
+                        <p class="text-lg text-gray-300">Power that lasts</p>
                     </div>
-
-                    <!-- Solution 4: Security Suite -->
-                    <div class="carousel-slide" data-category="security">
-                        <div class="carousel-image-container">
-                            <img src="/api/placeholder/800/600" alt="Security Solutions" class="carousel-image">
-                        </div>
-                        <div class="slide-content">
-                            <span class="text-blue-400 text-sm font-semibold mb-2 block">Security</span>
-                            <h3 class="text-xl font-bold mb-2">Security Suite</h3>
-                            <p class="text-sm text-gray-300">Enterprise-grade security systems</p>
-                        </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/image2a.jpg" alt="Design" class="carousel-image">
+                    <div class="slide-content">
+                        <h3 class="text-2xl font-bold mb-2">Elegant Design</h3>
+                        <p class="text-lg text-gray-300">Beauty in simplicity</p>
                     </div>
-
-                    <!-- Additional Solutions -->
-                    <div class="carousel-slide" data-category="ai">
-                        <div class="carousel-image-container">
-                            <img src="/api/placeholder/800/600" alt="Machine Learning Tools" class="carousel-image">
-                        </div>
-                        <div class="slide-content">
-                            <span class="text-blue-400 text-sm font-semibold mb-2 block">AI & ML</span>
-                            <h3 class="text-xl font-bold mb-2">Machine Learning Tools</h3>
-                            <p class="text-sm text-gray-300">Powerful ML algorithms and tools</p>
-                        </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/image2b.jpg" alt="Security" class="carousel-image">
+                    <div class="slide-content">
+                        <h3 class="text-2xl font-bold mb-2">Enhanced Security</h3>
+                        <p class="text-lg text-gray-300">Protection at its core</p>
                     </div>
-
-                    <!-- Continue with remaining slides -->
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/image2c.jpg" alt="Connectivity" class="carousel-image">
+                    <div class="slide-content">
+                        <h3 class="text-2xl font-bold mb-2">Seamless Connectivity</h3>
+                        <p class="text-lg text-gray-300">Always connected</p>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/image3a.jpg" alt="Innovation" class="carousel-image">
+                    <div class="slide-content">
+                        <h3 class="text-2xl font-bold mb-2">Revolutionary Innovation</h3>
+                        <p class="text-lg text-gray-300">Breaking boundaries</p>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/image3b.jpg" alt="Ecosystem" class="carousel-image">
+                    <div class="slide-content">
+                        <h3 class="text-2xl font-bold mb-2">Complete Ecosystem</h3>
+                        <p class="text-lg text-gray-300">Everything works together</p>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/image3c.jpg" alt="Future" class="carousel-image">
+                    <div class="slide-content">
+                        <h3 class="text-2xl font-bold mb-2">Future Ready</h3>
+                        <p class="text-lg text-gray-300">Ahead of time</p>
+                    </div>
                 </div>
             </div>
-            <div class="carousel-mask right"></div>
         </div>
     </div>
-</section>
+</div>
 
 <style>
-    .solutions-section {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .filter-chip {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.5rem 1rem;
-        background: rgba(59, 130, 246, 0.1);
-        border: 1px solid rgba(59, 130, 246, 0.2);
-        border-radius: 9999px;
-        color: #93c5fd;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    .filter-chip:hover {
-        background: rgba(59, 130, 246, 0.2);
-        transform: translateY(-1px);
-    }
-
-    .filter-chip.active {
-        background: #3b82f6;
-        color: white;
-    }
-
     .carousel-wrapper {
         position: relative;
         width: 100%;
-        height: auto;
+        height: 600px;
         overflow: hidden;
-        padding: 2rem 0;
+        background: rgb(0,0,0);
+        perspective: 1000px;
     }
 
     .carousel {
         position: relative;
         height: 100%;
+        overflow: visible;
+        transform-style: preserve-3d;
     }
 
     .carousel-track {
         display: flex;
-        align-items: center;
+        height: 100%;
+        transform-style: preserve-3d;
         transition: transform 0.5s ease-out;
+        cursor: grab;
     }
 
     .carousel-slide {
         position: relative;
-        min-width: calc(20% - 2rem);
+        flex: 0 0 800px;
+        height: 600px;
         margin: 0 1rem;
-        transition: all 0.5s ease;
-        opacity: 0.2;
-        transform: scale(0.8);
-    }
-
-    .carousel-image-container {
-        position: relative;
-        width: 100%;
-        padding-top: 75%;
-        overflow: hidden;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    .carousel-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        transform-style: preserve-3d;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0;
+        transform: scale(0.8) translateZ(-200px);
     }
 
     .carousel-slide.pre-2 {
-        opacity: 0.3;
-        transform: scale(0.85);
+        opacity: 0.2;
+        transform: scale(0.8) translateX(-160%) translateZ(-200px);
     }
 
     .carousel-slide.pre-1 {
-        opacity: 0.6;
-        transform: scale(0.9);
+        opacity: 0.4;
+        transform: scale(0.85) translateX(-80%) translateZ(-100px);
     }
 
     .carousel-slide.active {
         opacity: 1;
-        transform: scale(1.1);
-        z-index: 2;
+        transform: scale(1) translateZ(0);
     }
 
     .carousel-slide.post-1 {
-        opacity: 0.6;
-        transform: scale(0.9);
+        opacity: 0.4;
+        transform: scale(0.85) translateX(80%) translateZ(-100px);
     }
 
     .carousel-slide.post-2 {
-        opacity: 0.3;
-        transform: scale(0.85);
+        opacity: 0.2;
+        transform: scale(0.8) translateX(160%) translateZ(-200px);
+    }
+
+    .carousel-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 20px;
     }
 
     .slide-content {
         position: absolute;
-        bottom: -4rem;
-        left: 0;
-        width: 100%;
-        text-align: center;
+        bottom: 10%;
+        left: 5%;
         color: white;
+        z-index: 2;
         opacity: 0;
         transform: translateY(20px);
-        transition: all 0.5s ease;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .carousel-slide.active .slide-content {
         opacity: 1;
         transform: translateY(0);
     }
-
-    .carousel-mask {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 15%;
-        z-index: 3;
-        pointer-events: none;
-    }
-
-    .carousel-mask.left {
-        left: 0;
-        background: linear-gradient(to right, rgb(0,0,0) 0%, transparent 100%);
-    }
-
-    .carousel-mask.right {
-        right: 0;
-        background: linear-gradient(to left, rgb(0,0,0) 0%, transparent 100%);
-    }
-
-    @media (max-width: 768px) {
-        .carousel-slide {
-            min-width: calc(50% - 2rem);
-        }
-
-        .filter-chip {
-            font-size: 0.75rem;
-            padding: 0.375rem 0.75rem;
-        }
-    }
 </style>
 
 <script>
-// Previous carousel JavaScript remains the same
-class Carousel {
-    constructor(element) {
-        this.carousel = element;
-        this.track = element.querySelector('.carousel-track');
-        this.slides = Array.from(this.track.children);
-        this.currentIndex = 0;
-        this.slideInterval = null;
-        this.slideDelay = 5000;
+    class Carousel {
+        constructor(element) {
+            this.carousel = element;
+            this.track = element.querySelector('.carousel-track');
+            this.slides = Array.from(this.track.children);
+            this.currentIndex = 0;
+            this.slideWidth = 800; // Fixed width for slides
+            this.autoPlayInterval = null;
 
-        this.initializeCarousel();
-        this.startAutoSlide();
-        this.addEventListeners();
-        this.initializeFilters();
-    }
+            this.initializeCarousel();
+            this.addEventListeners();
+            this.startAutoPlay();
+        }
 
-    // ... (previous carousel methods remain the same) ...
+        initializeCarousel() {
+            this.updateSlideClasses();
+            this.centerActiveSlide();
+        }
 
-    initializeFilters() {
-        const filterButtons = document.querySelectorAll('.filter-chip');
-        
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                // Add active class to clicked button
-                button.classList.add('active');
-
-                const filter = button.getAttribute('data-filter');
-                this.filterSlides(filter);
+        updateSlideClasses() {
+            this.slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'pre-1', 'pre-2', 'post-1', 'post-2');
+                const diff = (index - this.currentIndex + this.slides.length) % this.slides.length;
+                
+                if (diff === 0) slide.classList.add('active');
+                else if (diff === this.slides.length - 2) slide.classList.add('pre-2');
+                else if (diff === this.slides.length - 1) slide.classList.add('pre-1');
+                else if (diff === 1) slide.classList.add('post-1');
+                else if (diff === 2) slide.classList.add('post-2');
             });
-        });
-    }
+        }
 
-    filterSlides(category) {
-        this.slides.forEach(slide => {
-            if (category === 'all' || slide.getAttribute('data-category') === category) {
-                slide.style.display = 'block';
-            } else {
-                slide.style.display = 'none';
+        centerActiveSlide() {
+            const offset = -this.currentIndex * (this.slideWidth + 32);
+            this.track.style.transform = `translateX(${offset}px)`;
+        }
+
+        startAutoPlay() {
+            this.autoPlayInterval = setInterval(() => {
+                this.slideNext();
+            }, 5000);
+        }
+
+        stopAutoPlay() {
+            if (this.autoPlayInterval) {
+                clearInterval(this.autoPlayInterval);
+                this.autoPlayInterval = null;
             }
-        });
+        }
 
-        // Reset carousel position
-        this.currentIndex = 0;
-        this.updateSlidePositions();
-        this.startAutoSlide();
+        slideNext() {
+            this.currentIndex = (this.currentIndex + 1) % this.slides.length;
+            this.updateSlideClasses();
+            this.centerActiveSlide();
+        }
+
+        addEventListeners() {
+            this.track.addEventListener('mouseenter', () => this.stopAutoPlay());
+            this.track.addEventListener('mouseleave', () => this.startAutoPlay());
+        }
     }
-}
 
-document.addEventListener('DOMContentLoaded', () => {
-    const carousel = new Carousel(document.querySelector('.carousel'));
-});
+    // Initialize carousel when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        const carousel = new Carousel(document.querySelector('.carousel'));
+    });
 </script>
 </body>
 </html>

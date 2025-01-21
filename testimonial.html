@@ -400,6 +400,95 @@
                 display: none;
             }
         }
+
+        /* New Styles for Film-like Horizontal Tape */
+        .solutions-tape {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding: 2rem 0;
+        }
+
+        .tape-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.5s ease;
+        }
+
+        .tape-image {
+            flex: 0 0 auto;
+            width: 300px;
+            height: 200px;
+            margin: 0 15px;
+            border-radius: 10px;
+            transition: transform 0.5s ease, filter 0.5s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .tape-image.active {
+            transform: scale(1.2);
+            filter: blur(0px);
+            z-index: 2;
+        }
+
+        .tape-image.left {
+            filter: blur(3px);
+            transform: scale(0.8);
+        }
+
+        .tape-image.left2 {
+            filter: blur(5px);
+            transform: scale(0.6);
+        }
+
+        .tape-image.right {
+            filter: blur(3px);
+            transform: scale(0.8);
+        }
+
+        .tape-image.right2 {
+            filter: blur(5px);
+            transform: scale(0.6);
+        }
+
+        .tape-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .tape-controls button {
+            background-color: rgba(59, 130, 246, 0.8);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: all;
+            transition: background-color 0.3s ease;
+        }
+
+        .tape-controls button:hover {
+            background-color: rgba(59, 130, 246, 1);
+        }
+
+        @media (max-width: 768px) {
+            .tape-image {
+                width: 200px;
+                height: 130px;
+                margin: 0 10px;
+            }
+
+            .tape-image.active {
+                transform: scale(1.1);
+            }
+        }
     </style>
 </head>
 
@@ -592,9 +681,9 @@
         </div>
     </div>
 
-    <!-- Solutions Grid Section -->
+    <!-- Solutions Tape Section -->
     <div class="max-w-7xl mx-auto px-4 py-12">
-        <!-- Filters -->
+        <!-- Filters (Retained for potential future use) -->
         <div class="flex flex-wrap gap-3 mb-8">
             <button class="filter-chip active" data-filter="all">All</button>
             <button class="filter-chip" data-filter="education">Education</button>
@@ -602,57 +691,27 @@
             <button class="filter-chip" data-filter="research">Research</button>
         </div>
 
-        <!-- Carousel Cards Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Proof of Work Card 1 -->
-            <div class="solution-card animate-fade-in" style="animation-delay: 0.1s;">
-                <div class="carousel">
-                    <img id="carouselImg1" src="path/to/your/image1a.jpg" alt="Carousel 1">
-                    <div class="carousel-buttons">
-                        <button class="carousel-button" onclick="prevImage(1)">&lt;</button>
-                        <button class="carousel-button" onclick="nextImage(1)">&gt;</button>
-                    </div>
-                </div>
-                <div class="dots" id="dots1">
-                    <!-- Dots will be dynamically generated -->
-                </div>
-                <h3 class="text-xl font-bold mt-4">Title 1</h3>
-                <p class="text-gray-400 mt-2">Short description about work 1.</p>
-                <p class="text-blue-400 mt-2 font-bold">Key line about what was significant in this work.</p>
+        <!-- Horizontal Tape -->
+        <div class="solutions-tape">
+            <div class="tape-controls">
+                <button onclick="prevImage()">&lt;</button>
+                <button onclick="nextImage()">&gt;</button>
             </div>
-
-            <!-- Proof of Work Card 2 -->
-            <div class="solution-card animate-fade-in" style="animation-delay: 0.2s;">
-                <div class="carousel">
-                    <img id="carouselImg2" src="path/to/your/image2a.jpg" alt="Carousel 2">
-                    <div class="carousel-buttons">
-                        <button class="carousel-button" onclick="prevImage(2)">&lt;</button>
-                        <button class="carousel-button" onclick="nextImage(2)">&gt;</button>
-                    </div>
-                </div>
-                <div class="dots" id="dots2">
-                    <!-- Dots will be dynamically generated -->
-                </div>
-                <h3 class="text-xl font-bold mt-4">Title 2</h3>
-                <p class="text-gray-400 mt-2">Short description about work 2.</p>
-                <p class="text-blue-400 mt-2 font-bold">Key line about what was significant in this work.</p>
-            </div>
-
-            <!-- Proof of Work Card 3 -->
-            <div class="solution-card animate-fade-in" style="animation-delay: 0.3s;">
-                <div class="carousel">
-                    <img id="carouselImg3" src="path/to/your/image3a.jpg" alt="Carousel 3">
-                    <div class="carousel-buttons">
-                        <button class="carousel-button" onclick="prevImage(3)">&lt;</button>
-                        <button class="carousel-button" onclick="nextImage(3)">&gt;</button>
-                    </div>
-                </div>
-                <div class="dots" id="dots3">
-                    <!-- Dots will be dynamically generated -->
-                </div>
-                <h3 class="text-xl font-bold mt-4">Title 3</h3>
-                <p class="text-gray-400 mt-2">Short description about work 3.</p>
-                <p class="text-blue-400 mt-2 font-bold">Key line about what was significant in this work.</p>
+            <div class="tape-container" id="tapeContainer">
+                <!-- Image Set 1 -->
+                <img src="images/image1a.jpg" alt="Image 1a" class="tape-image active">
+                <img src="images/image1b.jpg" alt="Image 1b" class="tape-image right">
+                <img src="images/image1c.jpg" alt="Image 1c" class="tape-image right2">
+                
+                <!-- Image Set 2 -->
+                <img src="images/image2a.jpg" alt="Image 2a" class="tape-image left2">
+                <img src="images/image2b.jpg" alt="Image 2b" class="tape-image left">
+                <img src="images/image2c.jpg" alt="Image 2c" class="tape-image">
+                
+                <!-- Image Set 3 -->
+                <img src="images/image3a.jpg" alt="Image 3a" class="tape-image">
+                <img src="images/image3b.jpg" alt="Image 3b" class="tape-image">
+                <img src="images/image3c.jpg" alt="Image 3c" class="tape-image">
             </div>
         </div>
     </div>
@@ -670,73 +729,72 @@
     </div>
 
     <script>
-        const imageSet = {
-            1: [
-                'images/image1a.jpg',
-                'images/image1b.jpg',
-                'images/image1c.jpg'
-            ],
-            2: [
-                'images/image2a.jpg',
-                'images/image2b.jpg',
-                'images/image2c.jpg'
-            ],
-            3: [
-                'images/image3a.jpg',
-                'images/image3b.jpg',
-                'images/image3c.jpg'
-            ]
-        };
+        // Previous Carousel Code Removed as it's no longer needed
 
-        let currentIndex = { 1: 0, 2: 0, 3: 0 };
-        let intervals = {};
+        // New Tape Functionality
+        const tapeContainer = document.getElementById('tapeContainer');
+        const tapeImages = document.querySelectorAll('.tape-image');
+        let currentIndex = 0;
+        const totalImages = tapeImages.length;
 
-        function updateCarousel(cardId) {
-            const imgElement = document.getElementById(`carouselImg${cardId}`);
-            imgElement.src = imageSet[cardId][currentIndex[cardId]];
-            updateDots(cardId);
-        }
-
-        function updateDots(cardId) {
-            const dotsContainer = document.getElementById(`dots${cardId}`);
-            dotsContainer.innerHTML = imageSet[cardId].map((_, index) => `
-                <span class="dot ${index === currentIndex[cardId] ? 'active' : ''}" onclick="jumpToImage(${cardId}, ${index})"></span>
-            `).join('');
-        }
-
-        function prevImage(cardId) {
-            currentIndex[cardId] = (currentIndex[cardId] - 1 + imageSet[cardId].length) % imageSet[cardId].length;
-            updateCarousel(cardId);
-        }
-
-        function nextImage(cardId) {
-            currentIndex[cardId] = (currentIndex[cardId] + 1) % imageSet[cardId].length;
-            updateCarousel(cardId);
-        }
-
-        function jumpToImage(cardId, index) {
-            currentIndex[cardId] = index;
-            updateCarousel(cardId);
-        }
-
-        function startCarousel(cardId) {
-            intervals[cardId] = setInterval(() => {
-                nextImage(cardId);
-            }, 3000);
-        }
-
-        function stopCarousel(cardId) {
-            clearInterval(intervals[cardId]);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            Object.keys(imageSet).forEach(cardId => {
-                updateCarousel(cardId);
-                startCarousel(cardId);
+        function updateTape() {
+            tapeImages.forEach((img, index) => {
+                const distance = Math.abs(index - currentIndex);
+                if (distance === 0) {
+                    img.classList.add('active');
+                    img.classList.remove('left', 'right', 'left2', 'right2');
+                } else if (distance === 1) {
+                    img.classList.remove('active', 'left2', 'right2');
+                    if (index < currentIndex) {
+                        img.classList.add('left');
+                        img.classList.remove('right');
+                    } else {
+                        img.classList.add('right');
+                        img.classList.remove('left');
+                    }
+                } else if (distance === 2) {
+                    img.classList.remove('active', 'left', 'right');
+                    if (index < currentIndex) {
+                        img.classList.add('left2');
+                    } else {
+                        img.classList.add('right2');
+                    }
+                } else {
+                    img.classList.remove('active', 'left', 'right', 'left2', 'right2');
+                }
             });
+
+            // Optional: Scroll the tape container to center the active image
+            const activeImage = tapeImages[currentIndex];
+            const containerRect = tapeContainer.getBoundingClientRect();
+            const activeRect = activeImage.getBoundingClientRect();
+            const scrollOffset = activeImage.offsetLeft - (tapeContainer.offsetWidth / 2) + (activeImage.offsetWidth / 2);
+            tapeContainer.scrollTo({
+                left: scrollOffset,
+                behavior: 'smooth'
+            });
+        }
+
+        function prevImage() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateTape();
+            }
+        }
+
+        function nextImage() {
+            if (currentIndex < totalImages - 1) {
+                currentIndex++;
+                updateTape();
+            }
+        }
+
+        // Initialize Tape
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTape();
         });
 
-        // Modal functionality
+        // Modal functionality remains unchanged
         function showSolutionDetail(id) {
             const modal = document.getElementById('solutionModal');
             const content = document.getElementById('modalContent');

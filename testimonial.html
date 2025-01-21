@@ -45,6 +45,7 @@
             width: 100%;
         }
 
+        /* Existing Styles For Solution Cards (Removed Later) */
         .solution-card {
             background: rgba(23, 23, 23, 0.95);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -77,6 +78,7 @@
             transform: scaleX(1);
         }
 
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -242,6 +244,7 @@
             height: 100%;
             object-fit: cover;
         }
+
         .hero-section {
             display: flex;
             align-items: center;
@@ -252,28 +255,28 @@
             margin: 0 auto; /* Center the hero section */
             padding: 2rem;
         }
-    
+
         .hero-content {
             flex: 1;
             padding-right: 2rem;
             z-index: 1;
         }
-    
+
         .hero-content h1 {
             color: #3b82f6;
         }
-    
+
         .hero-content p {
             color: #6b7280;
         }
-    
+
         .video-container {
             flex: 1;
             position: relative;
             width: 100%;
             padding-top: 56.25%; /* 16:9 aspect ratio */
         }
-    
+
         #heroVideo {
             position: absolute;
             top: 0;
@@ -409,50 +412,6 @@
             padding: 2rem 0;
         }
 
-        .tape-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.5s ease;
-        }
-
-        .tape-image {
-            flex: 0 0 auto;
-            width: 300px;
-            height: 200px;
-            margin: 0 15px;
-            border-radius: 10px;
-            transition: transform 0.5s ease, filter 0.5s ease;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .tape-image.active {
-            transform: scale(1.2);
-            filter: blur(0px);
-            z-index: 2;
-        }
-
-        .tape-image.left {
-            filter: blur(3px);
-            transform: scale(0.8);
-        }
-
-        .tape-image.left2 {
-            filter: blur(5px);
-            transform: scale(0.6);
-        }
-
-        .tape-image.right {
-            filter: blur(3px);
-            transform: scale(0.8);
-        }
-
-        .tape-image.right2 {
-            filter: blur(5px);
-            transform: scale(0.6);
-        }
-
         .tape-controls {
             position: absolute;
             top: 50%;
@@ -460,7 +419,8 @@
             display: flex;
             justify-content: space-between;
             transform: translateY(-50%);
-            pointer-events: none;
+            pointer-events: none; /* Allow clicks only on buttons */
+            z-index: 10;
         }
 
         .tape-controls button {
@@ -470,12 +430,55 @@
             padding: 10px 15px;
             border-radius: 50%;
             cursor: pointer;
-            pointer-events: all;
+            pointer-events: all; /* Enable pointer events for buttons */
             transition: background-color 0.3s ease;
+            font-size: 1.5rem;
+            line-height: 1;
         }
 
         .tape-controls button:hover {
             background-color: rgba(59, 130, 246, 1);
+        }
+
+        .tape-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.5s ease;
+            will-change: transform;
+        }
+
+        .tape-image {
+            flex: 0 0 auto;
+            width: 300px;
+            height: 200px;
+            margin: 0 15px;
+            border-radius: 10px;
+            transition: transform 0.5s ease, filter 0.5s ease, opacity 0.5s ease;
+            position: relative;
+            cursor: pointer;
+            /* Initially non-active images are slightly darker and semi-transparent */
+            filter: brightness(0.7);
+            opacity: 0.6;
+        }
+
+        .tape-image.active {
+            transform: scale(1.2);
+            filter: brightness(1);
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .tape-image.prev,
+        .tape-image.next {
+            transform: scale(0.8);
+            filter: brightness(0.8);
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        .tape-image.hidden {
+            display: none;
         }
 
         @media (max-width: 768px) {
@@ -691,24 +694,22 @@
             <button class="filter-chip" data-filter="research">Research</button>
         </div>
 
-        <!-- Horizontal Tape -->
+        <!-- Film-like Horizontal Tape -->
         <div class="solutions-tape">
+            <!-- Navigation Controls -->
             <div class="tape-controls">
-                <button onclick="prevImage()">&lt;</button>
-                <button onclick="nextImage()">&gt;</button>
+                <button onclick="prevImage()" aria-label="Previous Image">&#8249;</button>
+                <button onclick="nextImage()" aria-label="Next Image">&#8250;</button>
             </div>
+            <!-- Tape Container with All Images -->
             <div class="tape-container" id="tapeContainer">
-                <!-- Image Set 1 -->
-                <img src="images/image1a.jpg" alt="Image 1a" class="tape-image active">
-                <img src="images/image1b.jpg" alt="Image 1b" class="tape-image right">
-                <img src="images/image1c.jpg" alt="Image 1c" class="tape-image right2">
-                
-                <!-- Image Set 2 -->
-                <img src="images/image2a.jpg" alt="Image 2a" class="tape-image left2">
-                <img src="images/image2b.jpg" alt="Image 2b" class="tape-image left">
+                <!-- Images -->
+                <img src="images/image1a.jpg" alt="Image 1a" class="tape-image">
+                <img src="images/image1b.jpg" alt="Image 1b" class="tape-image">
+                <img src="images/image1c.jpg" alt="Image 1c" class="tape-image">
+                <img src="images/image2a.jpg" alt="Image 2a" class="tape-image">
+                <img src="images/image2b.jpg" alt="Image 2b" class="tape-image">
                 <img src="images/image2c.jpg" alt="Image 2c" class="tape-image">
-                
-                <!-- Image Set 3 -->
                 <img src="images/image3a.jpg" alt="Image 3a" class="tape-image">
                 <img src="images/image3b.jpg" alt="Image 3b" class="tape-image">
                 <img src="images/image3c.jpg" alt="Image 3c" class="tape-image">
@@ -729,42 +730,40 @@
     </div>
 
     <script>
-        // Previous Carousel Code Removed as it's no longer needed
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
 
-        // New Tape Functionality
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            mobileMenuBtn.querySelector('#hamburger').classList.toggle('hidden');
+            mobileMenuBtn.querySelector('#close').classList.toggle('block');
+        });
+
+        // Automatic Scrolling Setup
         const tapeContainer = document.getElementById('tapeContainer');
         const tapeImages = document.querySelectorAll('.tape-image');
         let currentIndex = 0;
         const totalImages = tapeImages.length;
+        let autoScrollInterval;
+        const autoScrollDelay = 4000; // 4 seconds
 
         function updateTape() {
             tapeImages.forEach((img, index) => {
-                const distance = Math.abs(index - currentIndex);
-                if (distance === 0) {
+                img.classList.remove('active', 'prev', 'next', 'hidden');
+                if (index === currentIndex) {
                     img.classList.add('active');
-                    img.classList.remove('left', 'right', 'left2', 'right2');
-                } else if (distance === 1) {
-                    img.classList.remove('active', 'left2', 'right2');
-                    if (index < currentIndex) {
-                        img.classList.add('left');
-                        img.classList.remove('right');
-                    } else {
-                        img.classList.add('right');
-                        img.classList.remove('left');
-                    }
-                } else if (distance === 2) {
-                    img.classList.remove('active', 'left', 'right');
-                    if (index < currentIndex) {
-                        img.classList.add('left2');
-                    } else {
-                        img.classList.add('right2');
-                    }
+                } else if (index === currentIndex - 1) {
+                    img.classList.add('prev');
+                } else if (index === currentIndex + 1) {
+                    img.classList.add('next');
                 } else {
-                    img.classList.remove('active', 'left', 'right', 'left2', 'right2');
+                    img.classList.add('hidden');
                 }
             });
 
-            // Optional: Scroll the tape container to center the active image
+            // Scroll the tape container to center the active image
             const activeImage = tapeImages[currentIndex];
             const containerRect = tapeContainer.getBoundingClientRect();
             const activeRect = activeImage.getBoundingClientRect();
@@ -778,20 +777,43 @@
         function prevImage() {
             if (currentIndex > 0) {
                 currentIndex--;
-                updateTape();
+            } else {
+                // Loop to last image
+                currentIndex = totalImages - 1;
             }
+            updateTape();
+            resetAutoScroll();
         }
 
         function nextImage() {
             if (currentIndex < totalImages - 1) {
                 currentIndex++;
-                updateTape();
+            } else {
+                // Loop back to first image
+                currentIndex = 0;
             }
+            updateTape();
+            resetAutoScroll();
+        }
+
+        function resetAutoScroll() {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = setInterval(nextImage, autoScrollDelay);
         }
 
         // Initialize Tape
         document.addEventListener('DOMContentLoaded', () => {
             updateTape();
+            autoScrollInterval = setInterval(nextImage, autoScrollDelay);
+        });
+
+        // Pause auto-scroll on mouse enter and resume on mouse leave
+        document.querySelector('.solutions-tape').addEventListener('mouseenter', () => {
+            clearInterval(autoScrollInterval);
+        });
+
+        document.querySelector('.solutions-tape').addEventListener('mouseleave', () => {
+            resetAutoScroll();
         });
 
         // Modal functionality remains unchanged

@@ -414,19 +414,16 @@
             color: var(--secondary-color);
         }
 
-        /* Language and Currency Capsule */
         .lang-currency-capsule {
             display: flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            background: linear-gradient(90deg, #404041, #3b82f6);
             border-radius: 9999px;
             padding: 6px 16px;
             color: white;
-            font-size: 0.875rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
+        
         .lang-currency-capsule select {
             background: transparent;
             border: none;
@@ -434,10 +431,18 @@
             appearance: none;
             cursor: pointer;
             font-size: 0.875rem;
+            padding-right: 12px;
         }
-
+        
         .lang-currency-capsule select:focus {
             outline: none;
+        }
+        
+        /* Add styles for dropdown options */
+        .lang-currency-capsule select option {
+            background-color: #404041;
+            color: white;
+            padding: 8px;
         }
 
         /* Highlight for Calculator Section */
